@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 460759052}
   - component: {fileID: 460759051}
   - component: {fileID: 460759050}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,6 +559,11 @@ MonoBehaviour:
   controller: {fileID: 1313594521}
   speed: 12
   gravity: -9.8
+  groundCheck: {fileID: 1519531086}
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1519531085
 GameObject:
   m_ObjectHideFlags: 0
