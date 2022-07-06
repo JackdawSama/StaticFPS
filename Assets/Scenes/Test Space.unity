@@ -632,7 +632,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 1
+  near clip plane: 0.5
   far clip plane: 100
   field of view: 60
   orthographic: 0
@@ -827,7 +827,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 231438c1511d08d40a6079053aa0282d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canSprint: 1
+  sprintKey: 304
   walkSpeed: 15
+  sprintSpeed: 30
   gravity: 30
   lookSpeedX: 2
   lookSpeedY: 2
