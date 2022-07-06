@@ -6,24 +6,31 @@ public class FPSController : MonoBehaviour
 {
     public bool CanMove { get; private set;} = true;
     private bool IsSprinting => canSprint && Input.GetKey(sprintKey);
+    private bool ShouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded;
 
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
+    [SerializeField] private bool canJump = true;
     
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
     [SerializeField] private float sprintSpeed = 6.0f;
-    [SerializeField] private float gravity = 30.0f;
 
     [Header("Look Parameters")]
     [SerializeField, Range(1,10)] private float lookSpeedX = 2.0f;
     [SerializeField, Range(1,10)] private float lookSpeedY = 2.0f;
     [SerializeField, Range(1,180)] private float upperLookLimit = 80.0f;
     [SerializeField, Range(1,180)] private float lowerLookLimit = 80.0f;
+
+    [Header("Jump Parameters")]
+    [SerializeField] private float jumpForce = 15.0f;
+    [SerializeField] private float gravity = 30.0f;
+
 
     private Camera playerCamera;
     private CharacterController characterController;
@@ -50,6 +57,10 @@ public class FPSController : MonoBehaviour
         {
             HandleMovementInput();
             HandleMouseLook();
+            if(canJump)
+            {
+                HandleJump();
+            }
 
             ApplyFinalMovements();
         }
@@ -72,9 +83,17 @@ public class FPSController : MonoBehaviour
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
     }
 
+    private void HandleJump()
+    {
+        if(ShouldJump)
+        {
+            moveDirection.y = jumpForce;
+        }
+    }
+
     private void ApplyFinalMovements()
     {
-        if(characterController.isGrounded)
+        if(!characterController.isGrounded)
         {
             moveDirection.y -= gravity * Time.deltaTime;
         }

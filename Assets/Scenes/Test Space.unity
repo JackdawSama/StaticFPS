@@ -828,14 +828,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canSprint: 1
+  canJump: 1
   sprintKey: 304
+  jumpKey: 32
   walkSpeed: 15
   sprintSpeed: 30
-  gravity: 30
   lookSpeedX: 2
   lookSpeedY: 2
   upperLookLimit: 80
   lowerLookLimit: 80
+  jumpForce: 12
+  gravity: 30
 --- !u!1 &1519531085
 GameObject:
   m_ObjectHideFlags: 0
