@@ -64,7 +64,7 @@ public class FPSController : MonoBehaviour
     {
         get
         {
-            if(characterController.isGrounded && Physics.Raycast(transform.position, Vector3.down, out RaycastHit slopeHit, 5f))
+            if(characterController.isGrounded && Physics.Raycast(transform.position, Vector3.down, out RaycastHit slopeHit, 3f))
             {
                 hitPointNormal = slopeHit.normal;
                 return Vector3.Angle(hitPointNormal, Vector3.up) > characterController.slopeLimit;
@@ -180,7 +180,7 @@ public class FPSController : MonoBehaviour
 
         if(willSlideOnSlopes && IsSliding)
         {
-            moveDirection = new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSlideSpeed;
+            moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSlideSpeed;
         }
 
         characterController.Move(moveDirection * Time.deltaTime);
