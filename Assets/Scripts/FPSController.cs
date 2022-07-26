@@ -15,6 +15,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] private bool canJump = true;
     [SerializeField] private bool canCrouch = true;
     [SerializeField] private bool canUseHeadBob = true;
+    [SerializeField] private bool willSlideOnSlopes = true;
     
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -24,6 +25,8 @@ public class FPSController : MonoBehaviour
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
     [SerializeField] private float sprintSpeed = 6.0f;
+    [SerializeField] private float crouchSpeed = 1.5f;
+    [SerializeField] private float slopeSlideSpeed = 8.0f;
 
     [Header("Look Parameters")]
     [SerializeField, Range(1,10)] private float lookSpeedX = 2.0f;
@@ -53,6 +56,25 @@ public class FPSController : MonoBehaviour
     [SerializeField] private float crouchBobAmount = 0.025f;
     private float defaultYpos = 0;
     private float timer;
+
+    //SLIDING PARAMETERS
+    private Vector3 hitPointNormal;
+
+    private bool IsSliding
+    {
+        get
+        {
+            if(characterController.isGrounded && Physics.Raycast(transform.position, Vector3.down, out RaycastHit slopeHit, 5f))
+            {
+                hitPointNormal = slopeHit.normal;
+                return Vector3.Angle(hitPointNormal, Vector3.up) > characterController.slopeLimit;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    } 
 
     private Camera playerCamera;
     private CharacterController characterController;
@@ -154,6 +176,11 @@ public class FPSController : MonoBehaviour
         if(!characterController.isGrounded)
         {
             moveDirection.y -= gravity * Time.deltaTime;
+        }
+
+        if(willSlideOnSlopes && IsSliding)
+        {
+            moveDirection = new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSlideSpeed;
         }
 
         characterController.Move(moveDirection * Time.deltaTime);
