@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -61,6 +62,17 @@ public class FPSController : MonoBehaviour
     private float defaultYpos = 0;
     private float timer;
 
+    [Header("Health Parameters")]
+    [SerializeField] private float maxHealth = 100;
+    [SerializeField] private float timeBeforeRegenStarts = 3f;
+    [SerializeField] private float healthValueIncrement = 1f;
+    [SerializeField] private float healthTimeIncrement = 0.1f;
+    private float currentHealth;
+    private Coroutine regeneratingHealth;
+    public static Action<float> OnTakingDamage;
+    public static Action<float> OnDamage;
+    public static Action<float> OnHeal; 
+
     //SLIDING PARAMETERS
     private Vector3 hitPointNormal;
 
@@ -100,6 +112,16 @@ public class FPSController : MonoBehaviour
 
     private float rotationX = 0;
 
+    private void OnEnable()
+    {
+        OnTakingDamage += ApplyDamage;
+    }
+
+    private void OnDisable() 
+    {
+        OnTakingDamage -= ApplyDamage;
+    }
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -107,6 +129,7 @@ public class FPSController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         defaultFOV = playerCamera.fieldOfView;
         defaultYpos = playerCamera.transform.localPosition.y;
+        currentHealth = maxHealth;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -253,6 +276,35 @@ public class FPSController : MonoBehaviour
         }
     }
 
+    private void ApplyDamage(float dmg)
+    {
+        currentHealth -= dmg;
+        OnDamage?.Invoke(currentHealth);
+        
+        if(currentHealth <= 0)
+        {
+            KillPlayer();
+        }
+        else if(regeneratingHealth != null)
+        {
+            StopCoroutine(regeneratingHealth);
+
+            regeneratingHealth = StartCoroutine(RegenrateHealth());
+        }
+    }
+
+    private void KillPlayer()
+    {
+        currentHealth = 0;
+
+        if(regeneratingHealth != null)
+        {
+            StopCoroutine(regeneratingHealth);
+        }
+
+        Debug.Log("Dead");
+    }
+
     private void ApplyFinalMovements()
     {
         if(!characterController.isGrounded)
@@ -309,5 +361,26 @@ public class FPSController : MonoBehaviour
 
         playerCamera.fieldOfView = targetFOV;
         zoomRoutine = null;
+    }
+
+    private IEnumerator RegenrateHealth()
+    {
+        yield return new WaitForSeconds(timeBeforeRegenStarts);
+
+        WaitForSeconds timeToWait = new WaitForSeconds(healthTimeIncrement);
+
+        while(currentHealth < maxHealth)
+        {
+            currentHealth += healthValueIncrement;
+
+            if(currentHealth > maxHealth)
+            {
+                currentHealth = maxHealth;
+            }
+            OnHeal?.Invoke(currentHealth);
+            yield return timeToWait;
+        }
+
+        regeneratingHealth = null;
     }
 }
