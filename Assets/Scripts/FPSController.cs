@@ -19,6 +19,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] private bool willSlideOnSlopes = true;
     [SerializeField] private bool canZoom = true;
     [SerializeField] private bool canInteract = true;
+    [SerializeField] private bool useCharge = true;
     
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -71,7 +72,17 @@ public class FPSController : MonoBehaviour
     private Coroutine regeneratingHealth;
     public static Action<float> OnTakingDamage;
     public static Action<float> OnDamage;
-    public static Action<float> OnHeal; 
+    public static Action<float> OnHeal;
+
+    [Header("Charge Parameter")]
+    [SerializeField] private float maxCharge = 100;
+    [SerializeField] private float chargeUseMultiplier;
+    [SerializeField] private float timeBeforeChargeRegenStarts = 5;
+    [SerializeField] private float chargeValueIncrement = 2;
+    [SerializeField] private float chargeTimeIncrement = 0.1f;
+    private float currentCharge;
+    private Coroutine regeneratingCharge;
+    public static Action<float> OnStaminaChange;
 
     //SLIDING PARAMETERS
     private Vector3 hitPointNormal;
@@ -130,6 +141,7 @@ public class FPSController : MonoBehaviour
         defaultFOV = playerCamera.fieldOfView;
         defaultYpos = playerCamera.transform.localPosition.y;
         currentHealth = maxHealth;
+        currentCharge = maxCharge;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -166,6 +178,10 @@ public class FPSController : MonoBehaviour
             {
                 HandleInteractionCheck();
                 HandleInteractionInput();
+            }
+            if(useCharge)
+            {
+                HandleCharge();
             }
 
             ApplyFinalMovements();
@@ -305,6 +321,36 @@ public class FPSController : MonoBehaviour
         Debug.Log("Dead");
     }
 
+    private void HandleCharge()
+    {
+        if(IsSprinting && currentInput != Vector2.zero)
+        {
+            if(regeneratingCharge != null)
+            {
+                StopCoroutine(regeneratingCharge);
+                regeneratingCharge = null;
+            }
+
+            currentCharge -= chargeUseMultiplier * Time.deltaTime;
+
+            if(currentCharge < 0)
+            {
+                currentCharge = 0;
+            }
+
+            OnStaminaChange?.Invoke(currentCharge);
+
+            if(currentCharge <= 0)
+            {
+                canSprint = false;
+            }
+        }
+        if(!IsSprinting && currentCharge < maxCharge && regeneratingCharge == null)
+        {
+            regeneratingCharge = StartCoroutine(RegenrateCharge());
+        }
+    }
+
     private void ApplyFinalMovements()
     {
         if(!characterController.isGrounded)
@@ -382,5 +428,32 @@ public class FPSController : MonoBehaviour
         }
 
         regeneratingHealth = null;
+    }
+
+    private IEnumerator RegenrateCharge()
+    {
+        yield return new WaitForSeconds(timeBeforeChargeRegenStarts);
+        WaitForSeconds timeToWait = new WaitForSeconds(chargeTimeIncrement);
+
+        while(currentCharge < maxCharge)
+        {
+            if(currentCharge > 0)
+            {
+                canSprint = true;
+            }
+
+            currentCharge += chargeValueIncrement;
+
+            if(currentCharge > maxCharge)
+            {
+                currentCharge = maxCharge;
+            }
+
+            OnStaminaChange?.Invoke(currentCharge);
+
+            yield return timeToWait;
+        }
+
+        regeneratingCharge = null;
     }
 }
