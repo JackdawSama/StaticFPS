@@ -20,6 +20,7 @@ public class FPSController : MonoBehaviour
     [SerializeField] private bool canZoom = true;
     [SerializeField] private bool canInteract = true;
     [SerializeField] private bool useCharge = true;
+    [SerializeField] private bool canShoot = true;
     
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -27,6 +28,14 @@ public class FPSController : MonoBehaviour
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode interactKey = KeyCode.E;
+    [SerializeField] private KeyCode fireKey = KeyCode.Mouse0;
+
+    [Header("Shoot Parameters")]
+    [SerializeField] private Vector3 targetDistance;
+    [SerializeField] private int maxDistance = 100;
+    [SerializeField] private float projectileSpeed = 20f;
+    public GameObject projectile;
+    public Transform firePoint;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -182,6 +191,13 @@ public class FPSController : MonoBehaviour
             if(useCharge)
             {
                 HandleCharge();
+            }
+            if(canShoot)
+            {
+                if(Input.GetKeyDown(fireKey))
+                    {
+                        HandleFire();
+                    }
             }
 
             ApplyFinalMovements();
@@ -349,6 +365,30 @@ public class FPSController : MonoBehaviour
         {
             regeneratingCharge = StartCoroutine(RegenrateCharge());
         }
+    }
+
+    private void HandleFire()
+    {
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+
+        if(Physics.Raycast(ray, out hit))
+        {
+            targetDistance = hit.point;
+        }
+        else
+        {
+            targetDistance = ray.GetPoint(maxDistance);
+        }
+
+        FireProjectile();
+
+    }
+
+    private void FireProjectile()
+    {
+        var projectileObj = Instantiate(projectile, firePoint.position, Quaternion.identity) as GameObject;
+        projectileObj.GetComponent<Rigidbody>().velocity = (targetDistance - firePoint.position).normalized * projectileSpeed;
     }
 
     private void ApplyFinalMovements()

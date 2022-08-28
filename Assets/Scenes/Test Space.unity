@@ -6217,6 +6217,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48489fb4013bcce46990235613c2fa18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1253174642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1253174643}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1253174643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253174642}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.519, y: 0.765, z: 1.979}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1313594520}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1313594519
 GameObject:
   m_ObjectHideFlags: 0
@@ -6250,6 +6280,7 @@ Transform:
   - {fileID: 652748488}
   - {fileID: 1519531086}
   - {fileID: 1155536649}
+  - {fileID: 1253174643}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6291,11 +6322,17 @@ MonoBehaviour:
   canZoom: 1
   canInteract: 1
   useCharge: 1
+  canShoot: 1
   sprintKey: 304
   jumpKey: 32
   crouchKey: 306
   zoomKey: 324
   interactKey: 101
+  fireKey: 323
+  targetDistance: {x: 0, y: 0, z: 0}
+  maxDistance: 100
+  projectile: {fileID: 8547087380103678447, guid: 3de95f121fcf1464fbeaf04928740b22, type: 3}
+  firePoint: {fileID: 1253174643}
   walkSpeed: 10
   sprintSpeed: 15
   crouchSpeed: 5
@@ -6448,7 +6485,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17360
+  m_Name: pb_Mesh17384
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
