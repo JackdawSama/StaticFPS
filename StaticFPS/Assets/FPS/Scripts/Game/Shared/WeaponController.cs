@@ -163,6 +163,8 @@ namespace Unity.FPS.Game
 
         private Queue<Rigidbody> m_PhysicalAmmoPool;
 
+        // public PlayerCharacterController playerCharacterController;
+
         void Awake()
         {
             m_CurrentAmmo = MaxAmmo;
@@ -194,6 +196,9 @@ namespace Unity.FPS.Game
                     m_PhysicalAmmoPool.Enqueue(shell.GetComponent<Rigidbody>());
                 }
             }
+
+            //set reference to player controller in Awake
+            // playerCharacterController = gameObject.GetComponent<playerCharacterController>();
         }
 
         public void AddCarriablePhysicalBullets(int count) => m_CarriedPhysicalBullets = Mathf.Max(m_CarriedPhysicalBullets + count, MaxAmmo);
