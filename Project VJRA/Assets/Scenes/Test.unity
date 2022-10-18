@@ -191,6 +191,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 127597320}
+  speed: 10
+  gravity: 20
+  jumpHeight: 5
 --- !u!1 &247080759
 GameObject:
   m_ObjectHideFlags: 0
