@@ -20,10 +20,12 @@ public class PlayerMovement : MonoBehaviour
     float dashSpeed = 20f;
     Vector3 move;
     Vector3 velocity;
+
+    WeaponManager weaponManager;
     // Start is called before the first frame update
     void Start()
     {
-        
+        weaponManager = GetComponent<WeaponManager>();
     }
 
     // Update is called once per frame

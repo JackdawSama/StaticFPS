@@ -60,15 +60,18 @@ public class WeaponManager : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(playerCamera.transform.position, -playerCamera.transform.forward, out hit, range))
             {
+                Debug.Log(hit.transform.name);
+
                 EnemyController enemy =  hit.transform.GetComponent<EnemyController>();
                 if(enemy != null)
                 {
                     enemy.TakeDamage(damage);
+                    Debug.Log("enemy took damage");
                 }
 
-                TrailRenderer trail = Instantiate(bulletTrail, bulletSpawnPoint.position, Quaternion.identity);
+                //TrailRenderer trail = Instantiate(bulletTrail, bulletSpawnPoint.position, Quaternion.identity);
 
-                StartCoroutine(SpawnTrail(trail, hit));
+                //StartCoroutine(SpawnTrail(trail, hit));
             }
         }
         else
