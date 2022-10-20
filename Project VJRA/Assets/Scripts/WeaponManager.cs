@@ -46,6 +46,8 @@ public class WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HandleReload();
+
         if(Input.GetButton ("Fire1") && Time.time >= nextTimetoFire)
         {
             nextTimetoFire = Time.time + 1f/fireRate;
@@ -56,11 +58,11 @@ public class WeaponManager : MonoBehaviour
     void HandleFire()
     {
 
-        HandleAmmo();
+        HandleAmmoDamage();
 
         if(!noAmmo)
         {
-            //currentAmmo --;
+            currentAmmo --;
             currentAmmoUI.text = currentAmmo.ToString() + " / " + maxAmmo.ToString();
 
         if(currentAmmo <= 0)
@@ -71,20 +73,18 @@ public class WeaponManager : MonoBehaviour
             }
 
             RaycastHit hit;
-            if(Physics.Raycast(playerCamera.transform.position, -playerCamera.transform.forward, out hit, range))
+            if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
             {
-                //Debug.Log(hit.transform.name);
 
                 EnemyController enemy =  hit.transform.GetComponent<EnemyController>();
                 if(enemy != null)
                 {
                     enemy.TakeDamage(damage);
-                    Debug.Log("enemy took damage");
                 }
 
-                //TrailRenderer trail = Instantiate(bulletTrail, bulletSpawnPoint.position, Quaternion.identity);
+                TrailRenderer trail = Instantiate(bulletTrail, bulletSpawnPoint.position, Quaternion.identity);
 
-                //StartCoroutine(SpawnTrail(trail, hit));
+                StartCoroutine(SpawnTrail(trail, hit));
             }
         }
         else
@@ -93,19 +93,38 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    void HandleAmmo()
+    void HandleAmmoDamage()
     {
-        if(player.transform.position != playerLastPos && player.enemyIsNearby)
+        if(player.transform.position != playerLastPos && player.enemyIsNearby && player.isDashing)
         {
             damage = lowDamage;
-            Debug.Log("Low DMG" + damage);
+            //Debug.Log("Low DMG" + damage);
+            playerLastPos = player.transform.position;
+        }
+        else if(player.transform.position != playerLastPos || player.isDashing)
+        {
+            damage = lowDamage;
+            //Debug.Log("Low DMG" + damage);
             playerLastPos = player.transform.position;
         }
         else
         {
             damage = fullDamage;
-            Debug.Log("Full DMG" + damage);
+            //Debug.Log("Full DMG" + damage);
             playerLastPos = player.transform.position;
+        }
+    }
+
+    void HandleReload()
+    {
+        if(player.transform.position != playerLastPos)
+        {
+            currentAmmo++;
+        }
+
+        if(currentAmmo > maxAmmo)
+        {
+            currentAmmo = maxAmmo;
         }
     }
 

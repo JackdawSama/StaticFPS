@@ -25,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask enemyMask;
 
     public bool enemyIsNearby;
+    public bool isDashing;
 
     WeaponManager weaponManager;
     // Start is called before the first frame update
@@ -41,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
         HandleMove();
         HandleDash();
         HandleGravity();
+
+        Debug.Log(controller.velocity.magnitude);
     }
 
     void HandleMove()
@@ -54,10 +57,8 @@ public class PlayerMovement : MonoBehaviour
 
         if(Input.GetButtonDown("Jump") && controller.isGrounded)
         {
-            //Debug.Log(controller.isGrounded);
             velocity.y = Mathf.Sqrt(jumpHeight * 2f * gravity);
         }
-        //Debug.Log(controller.isGrounded);
     }
 
     void HandleGravity()
@@ -67,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
             velocity.y -= gravity * Time.deltaTime;
             controller.Move(velocity * Time.deltaTime);
         }
-        else if(controller.isGrounded && velocity.y < 0)
+        else if(controller.isGrounded && velocity.y <= 0)
         {
             velocity.y = 0;
         }
@@ -83,7 +84,8 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator Dash()
     {
-        Debug.Log("Is Dashing");
+        isDashing = true;
+        //Debug.Log("Is Dashing");
         float startTime = Time.time;
 
         while(Time.time < startTime + dashTime)
@@ -92,5 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
             yield return null;
         }
+
+        isDashing = false;
     }
 }
