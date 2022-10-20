@@ -6,7 +6,13 @@ using UnityEngine;
 public class WeaponManager : MonoBehaviour
 {
     [SerializeField]
-    float damage = 10f;
+    float fullDamage = 10f;
+
+    [SerializeField]
+    float lowDamage = 5f;
+
+    float damage;
+
     [SerializeField]
     float range = 100f;
     [SerializeField]
@@ -25,12 +31,16 @@ public class WeaponManager : MonoBehaviour
     public Transform bulletSpawnPoint;
     public Camera playerCamera;
 
+    public PlayerMovement player;
+    private Vector3 playerLastPos;
+
     private float nextTimetoFire = 0f;
 
     // Start is called before the first frame update
     void Start()
     {
         currentAmmo = maxAmmo;
+        playerLastPos = player.transform.position;
     }
 
     // Update is called once per frame
@@ -45,9 +55,12 @@ public class WeaponManager : MonoBehaviour
 
     void HandleFire()
     {
+
+        HandleAmmo();
+
         if(!noAmmo)
         {
-            currentAmmo --;
+            //currentAmmo --;
             currentAmmoUI.text = currentAmmo.ToString() + " / " + maxAmmo.ToString();
 
         if(currentAmmo <= 0)
@@ -60,7 +73,7 @@ public class WeaponManager : MonoBehaviour
             RaycastHit hit;
             if(Physics.Raycast(playerCamera.transform.position, -playerCamera.transform.forward, out hit, range))
             {
-                Debug.Log(hit.transform.name);
+                //Debug.Log(hit.transform.name);
 
                 EnemyController enemy =  hit.transform.GetComponent<EnemyController>();
                 if(enemy != null)
@@ -77,6 +90,22 @@ public class WeaponManager : MonoBehaviour
         else
         {
             Debug.Log("MOVE TO REFILL");
+        }
+    }
+
+    void HandleAmmo()
+    {
+        if(player.transform.position != playerLastPos && player.enemyIsNearby)
+        {
+            damage = lowDamage;
+            Debug.Log("Low DMG" + damage);
+            playerLastPos = player.transform.position;
+        }
+        else
+        {
+            damage = fullDamage;
+            Debug.Log("Full DMG" + damage);
+            playerLastPos = player.transform.position;
         }
     }
 
