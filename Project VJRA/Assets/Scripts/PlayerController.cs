@@ -6,8 +6,12 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] float moveSpeed;
+    // [SerializeField] float maxSpeed;
 
     [SerializeField] float groundDrag;
+    [SerializeField] float jumpForce;
+
+    bool isJumping = false;
 
     [Header("Ground Check")]
     [SerializeField] float playerHeight;
@@ -38,6 +42,8 @@ public class PlayerController : MonoBehaviour
     {
         HandleMoveInputs();
         GrouundCheck();
+        LimitSpeed();
+        JumpInput();
     }
 
     void FixedUpdate()
@@ -69,6 +75,38 @@ public class PlayerController : MonoBehaviour
         else
         {
             rb.drag = 0;
+        }
+    }
+
+    void LimitSpeed()
+    {
+        Vector3 trueSpeed = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        if(trueSpeed.magnitude > moveSpeed)
+        {
+            Vector3 limitSpeed = trueSpeed.normalized * moveSpeed;
+            rb.velocity = new Vector3(limitSpeed.x, rb.velocity.y, limitSpeed.z);
+        } 
+    }
+
+    void JumpInput()
+    {
+        if(Input.GetButtonDown("Jump") && !isJumping && isGrounded)
+        {
+            isJumping = true;
+
+            HandleJump();
+        }
+    }
+
+    void HandleJump()
+    {
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.y);
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+        if(isGrounded)
+        {
+            isJumping = false;
         }
     }
 }
