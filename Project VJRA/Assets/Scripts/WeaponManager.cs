@@ -19,6 +19,10 @@ public class WeaponManager : MonoBehaviour
     bool noAmmo;
     public Text currentAmmoUI;
 
+    [SerializeField]
+    private TrailRenderer bulletTrail;
+
+    public Transform bulletSpawnPoint;
     public Camera playerCamera;
 
     private float nextTimetoFire = 0f;
@@ -61,11 +65,33 @@ public class WeaponManager : MonoBehaviour
                 {
                     enemy.TakeDamage(damage);
                 }
+
+                TrailRenderer trail = Instantiate(bulletTrail, bulletSpawnPoint.position, Quaternion.identity);
+
+                StartCoroutine(SpawnTrail(trail, hit));
             }
         }
         else
         {
             Debug.Log("MOVE TO REFILL");
         }
+    }
+
+    private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)
+    {
+        float time = 0f;
+        Vector3 startPos = trail.transform.position;
+
+        while(time < 1)
+        {
+            trail.transform.position = Vector3.Lerp(startPos, hit.point, time);
+            time += Time.deltaTime / trail.time;
+
+            yield return null;
+        }
+
+        trail.transform.position = hit.point;
+
+        Destroy(trail.gameObject, trail.time);
     }
 }
