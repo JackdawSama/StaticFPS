@@ -4,12 +4,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement")]
-    [SerializeField] float moveSpeed;
-    // [SerializeField] float maxSpeed;
 
+    [Header("Controls")]
+    [SerializeField] KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] KeyCode crouchKey = KeyCode.LeftControl;
+
+    [Header("Movement")]
+    public float moveSpeed;
+    [SerializeField] float walkSpeed;
+    [SerializeField] float sprintSpeed;
+    [SerializeField] float crouchSpeed;
     [SerializeField] float groundDrag;
     [SerializeField] float jumpForce;
+    [SerializeField] float airMultiplier;
 
     bool isJumping = false;
 
@@ -21,6 +29,9 @@ public class PlayerController : MonoBehaviour
 
     public Transform orientation;
 
+    private float standHeight;
+    private float crouchHeight;
+
     float hInput;
     float vInput;
 
@@ -28,22 +39,34 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody rb;
 
+    public enum MovementState
+    {
+        walking,
+        sprinting,
+        crouching,
+        air
+    }
 
+    [SerializeField] MovementState state;
 
     // Start is called before the first frame update
     void Start()
     {
+        moveSpeed = walkSpeed;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        standHeight = transform.localScale.y;
     }
 
     // Update is called once per frame
     void Update()
     {
         HandleMoveInputs();
-        GrouundCheck();
+        GroundCheck();
         LimitSpeed();
-        JumpInput();
+        StateHandler();
+        Debug.Log(state);
     }
 
     void FixedUpdate()
@@ -55,16 +78,51 @@ public class PlayerController : MonoBehaviour
     {
         hInput = Input.GetAxisRaw("Horizontal");
         vInput = Input.GetAxisRaw("Vertical");
+
+        JumpInput();
+        HandleCrouch();
+
+
+    }
+
+    private void StateHandler()
+    {
+        if(isGrounded && Input.GetKey(sprintKey))
+        {
+            state = MovementState.sprinting;
+            moveSpeed = sprintSpeed;
+        }
+        else if(isGrounded)
+        {
+            state = MovementState.walking;
+            moveSpeed = walkSpeed;
+        }
+        else if(Input.GetKey(crouchKey))
+        {
+            state = MovementState.crouching;
+            moveSpeed = crouchSpeed;
+        }
+        else
+        {
+            state = MovementState.air;
+        }
     }
 
     void MovePlayer()
     {
         moveDir = transform.forward * vInput + transform.right * hInput;
 
-        rb.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
+        if(isGrounded)
+        {
+            rb.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
+        }
+        else if(!isGrounded)
+        {
+            rb.AddForce(moveDir.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
     }
 
-    void GrouundCheck()
+    void GroundCheck()
     {
         isGrounded = Physics.Raycast(transform.position, Vector3.down, (playerHeight * 0.5f) + 0.3f, groundMask);
 
@@ -91,7 +149,7 @@ public class PlayerController : MonoBehaviour
 
     void JumpInput()
     {
-        if(Input.GetButtonDown("Jump") && !isJumping && isGrounded)
+        if(Input.GetKeyDown(jumpKey) && !isJumping && isGrounded)
         {
             isJumping = true;
 
@@ -107,6 +165,20 @@ public class PlayerController : MonoBehaviour
         if(isGrounded)
         {
             isJumping = false;
+        }
+    }
+
+    void HandleCrouch()
+    {
+        if(Input.GetKeyDown(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x,crouchHeight,transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        }
+
+        if(Input.GetKeyUp(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x,standHeight,transform.localScale.z);
         }
     }
 }

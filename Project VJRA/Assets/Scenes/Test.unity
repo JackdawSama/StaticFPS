@@ -14346,6 +14346,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1235437283950116664, guid: 8493b690ed961d74fb275a5b57427349, type: 3}
+      propertyPath: playerRB
+      value: 
+      objectReference: {fileID: 8696352348640118667}
+    - target: {fileID: 1235437283950116664, guid: 8493b690ed961d74fb275a5b57427349, type: 3}
       propertyPath: currentAmmoUI
       value: 
       objectReference: {fileID: 1620883850}
@@ -14422,14 +14426,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54b78a494bac4d5458cc525467caf92b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  jumpKey: 32
+  sprintKey: 304
+  crouchKey: 306
+  moveSpeed: 0
+  walkSpeed: 10
+  sprintSpeed: 14
+  crouchSpeed: 7
   groundDrag: 7
-  jumpForce: 3
+  jumpForce: 8.5
+  airMultiplier: 0.4
   playerHeight: 2
   groundMask:
     serializedVersion: 2
     m_Bits: 64
   orientation: {fileID: 3079965603838751508}
+  state: 0
 --- !u!54 &8696352348640118668
 Rigidbody:
   m_ObjectHideFlags: 0

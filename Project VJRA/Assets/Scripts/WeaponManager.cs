@@ -32,6 +32,7 @@ public class WeaponManager : MonoBehaviour
     public Camera playerCamera;
 
     public PlayerMovement player;
+    public PlayerController playerRB;
     private Vector3 playerLastPos;
 
     private float nextTimetoFire = 0f;
@@ -46,7 +47,7 @@ public class WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HandleReload();
+        //HandleReload();
 
         if(Input.GetButton ("Fire1") && Time.time >= nextTimetoFire)
         {
@@ -62,7 +63,7 @@ public class WeaponManager : MonoBehaviour
 
         if(!noAmmo)
         {
-            currentAmmo --;
+            currentAmmo--;
             currentAmmoUI.text = currentAmmo.ToString() + " / " + maxAmmo.ToString();
 
         if(currentAmmo <= 0)
@@ -117,15 +118,29 @@ public class WeaponManager : MonoBehaviour
 
     void HandleReload()
     {
-        if(player.transform.position != playerLastPos)
+        if(playerRB.moveSpeed > 7)
         {
-            currentAmmo++;
+            Debug.Log("Coroutine started");
+            StartCoroutine("loadAmmo");
+            
+            Debug.Log(currentAmmo);
         }
 
         if(currentAmmo > maxAmmo)
         {
             currentAmmo = maxAmmo;
         }
+
+
+        // if(player.transform.position != playerLastPos)
+        // {
+        //     currentAmmo++;
+        // }
+
+        // if(currentAmmo > maxAmmo)
+        // {
+        //     currentAmmo = maxAmmo;
+        // }
     }
 
     private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)
@@ -144,5 +159,18 @@ public class WeaponManager : MonoBehaviour
         trail.transform.position = hit.point;
 
         Destroy(trail.gameObject, trail.time);
+    }
+
+    private IEnumerator loadAmmo()
+    {
+        float time = 0f;
+
+        while(time < 0.3)
+        {
+            currentAmmo = currentAmmo + 1;
+            time += Time.deltaTime/5;
+        }
+        Debug.Log("Coroutine completed");
+        yield return null;
     }
 }
