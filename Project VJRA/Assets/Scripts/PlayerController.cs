@@ -39,6 +39,11 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody rb;
 
+    public float enemyDistance = 5f;
+    public LayerMask enemyMask;
+
+    public bool enemyIsNearby;
+
     public enum MovementState
     {
         walking,
@@ -47,7 +52,7 @@ public class PlayerController : MonoBehaviour
         air
     }
 
-    [SerializeField] MovementState state;
+    [SerializeField] public MovementState state;
 
     // Start is called before the first frame update
     void Start()
@@ -66,7 +71,7 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         LimitSpeed();
         StateHandler();
-        Debug.Log(state);
+        HandleEnemyCheck();
     }
 
     void FixedUpdate()
@@ -180,5 +185,10 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x,standHeight,transform.localScale.z);
         }
+    }
+
+    void HandleEnemyCheck()
+    {
+        enemyIsNearby = Physics.CheckSphere(transform.position, enemyDistance, enemyMask);
     }
 }

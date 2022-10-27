@@ -35,6 +35,8 @@ public class WeaponManager : MonoBehaviour
     public PlayerController playerRB;
     private Vector3 playerLastPos;
 
+    private bool isReloading;
+
     private float nextTimetoFire = 0f;
 
     // Start is called before the first frame update
@@ -47,7 +49,10 @@ public class WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //HandleReload();
+        if(!isReloading)
+        {
+            HandleReload();
+        }
 
         if(Input.GetButton ("Fire1") && Time.time >= nextTimetoFire)
         {
@@ -69,7 +74,6 @@ public class WeaponManager : MonoBehaviour
         if(currentAmmo <= 0)
             {
                 noAmmo = true;
-                Debug.Log(noAmmo);
                 currentAmmo = 0;
             }
 
@@ -99,19 +103,16 @@ public class WeaponManager : MonoBehaviour
         if(player.transform.position != playerLastPos && player.enemyIsNearby && player.isDashing)
         {
             damage = lowDamage;
-            //Debug.Log("Low DMG" + damage);
             playerLastPos = player.transform.position;
         }
         else if(player.transform.position != playerLastPos || player.isDashing)
         {
             damage = lowDamage;
-            //Debug.Log("Low DMG" + damage);
             playerLastPos = player.transform.position;
         }
         else
         {
             damage = fullDamage;
-            //Debug.Log("Full DMG" + damage);
             playerLastPos = player.transform.position;
         }
     }
@@ -120,16 +121,17 @@ public class WeaponManager : MonoBehaviour
     {
         if(playerRB.moveSpeed > 7)
         {
+            isReloading = true;
             Debug.Log("Coroutine started");
             StartCoroutine("loadAmmo");
             
             Debug.Log(currentAmmo);
         }
 
-        if(currentAmmo > maxAmmo)
-        {
-            currentAmmo = maxAmmo;
-        }
+        // if(currentAmmo > maxAmmo)
+        // {
+        //     currentAmmo = maxAmmo;
+        // }
 
 
         // if(player.transform.position != playerLastPos)
@@ -165,12 +167,19 @@ public class WeaponManager : MonoBehaviour
     {
         float time = 0f;
 
-        while(time < 0.3)
+        while(time < 0.5)
         {
-            currentAmmo = currentAmmo + 1;
+            currentAmmo = currentAmmo + (int)0.01;
+
+            if(currentAmmo > maxAmmo)
+            {
+                currentAmmo = maxAmmo;
+            }
+
             time += Time.deltaTime/5;
         }
         Debug.Log("Coroutine completed");
+        isReloading = false;
         yield return null;
     }
 }
