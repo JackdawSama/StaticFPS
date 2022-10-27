@@ -16,7 +16,7 @@ public class NewWeponManager : MonoBehaviour
         [SerializeField] Color lowDamageUI;
         [SerializeField] Color fullDamageUI;
 
-        bool isHigh = true;
+        bool isHigh;
 
         public Bullet(bool isHigh)
         {
@@ -46,12 +46,12 @@ public class NewWeponManager : MonoBehaviour
     //SECTION END
 
     //SECTION : WEAPON
-    int currentAmmo;
+    [SerializeField] int currentAmmo;
     bool noAmmo;
     bool isReloading;
     float fireCD = 0f;
     [SerializeField] float range = 100f;
-    [SerializeField] float fireRate = 5f;
+    [SerializeField] float fireRate = 2f;
     //SECTION END
 
     //SECTION : OTHER STUFF
@@ -67,9 +67,10 @@ public class NewWeponManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Magazine1 = new List<Bullet>();
         for(int i = 0; i <= maxBullets/2; i++)
         {
-            Magazine1.Add(bullets = new Bullet(true));
+            Magazine1.Add(new Bullet(true));
 
             currentAmmo++;
         }
@@ -78,21 +79,20 @@ public class NewWeponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetButton ("Fire1") && Time.time >= fireCD)
+        {
+            fireCD = Time.time + 1f/fireRate;
+            HandleFire();
+        }
+
+        handleReload();
     }
 
     void HandleFire()
     {
-        if(!noAmmo)
+        if(noAmmo)
         {
-            Magazine1.Remove(bullets);
-            currentAmmo--;
-        }
-
-        if(currentAmmo <= 0)
-        {
-            noAmmo = true;
-            currentAmmo = 0;
+            return;
         }
 
         RaycastHit hit;
@@ -101,24 +101,39 @@ public class NewWeponManager : MonoBehaviour
             EnemyController enemy = hit.transform.GetComponent<EnemyController>();
             if(enemy != null)
             {
-                enemy.TakeDamage(bullets.damage);
+                enemy.TakeDamage(Magazine1[0].damage);
             }
 
             TrailRenderer trail = Instantiate(bulletTrail, bulletSpawnPoint.position, Quaternion.identity);
 
             StartCoroutine(SpawnTrail(trail,hit));
         }
+
+        Magazine1.RemoveAt(0);
+        //currentAmmo--;
+        Debug.Log(Magazine1.Count);
+        
+        if(currentAmmo <= 0)
+        {
+            noAmmo = true;
+            currentAmmo = 0;
+        }
+
+        Debug.Log(playerRB.state);
     }
     void handleReload()
     {
-        if(playerRB.state == PlayerController.MovementState.walking || playerRB.state == PlayerController.MovementState.sprinting)
+
+        if(playerRB.state == PlayerController.MovementState.walking)
         {
-            Magazine1.Add(bullets = new Bullet(true));
+            Magazine1.Add(new Bullet(true));
+            //Debug.Log("Loaded Full DMG");
         }
-        else if(playerRB.state == PlayerController.MovementState.sprinting && playerRB.enemyIsNearby)
-        {
-            Magazine1.Add(bullets = new Bullet(false));
-        }
+        // else if(playerRB.state == PlayerController.MovementState.sprinting && playerRB.enemyIsNearby)
+        // {
+        //     Magazine1.Add(new Bullet(false));
+        //     Debug.Log("Loaded Low DMG");
+        // }
     }
 
     private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)

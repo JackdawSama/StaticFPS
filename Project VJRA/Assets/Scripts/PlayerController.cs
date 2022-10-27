@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
 
     public enum MovementState
     {
+        idle,
         walking,
         sprinting,
         crouching,
@@ -92,25 +93,37 @@ public class PlayerController : MonoBehaviour
 
     private void StateHandler()
     {
-        if(isGrounded && Input.GetKey(sprintKey))
+        //Debug.Log(isGrounded);
+        // Vector3 linearVelocity = new Vector3.Dot(rb.velocity,transform.forward);
+        // if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) == 0)
+        // {
+        //     state = MovementState.idle;
+        //     return;
+        // }
+        if(isGrounded && Input.GetKeyDown(sprintKey))
         {
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
+            return;
         }
-        else if(isGrounded)
+        if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) > 0)
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
+            return;
         }
-        else if(Input.GetKey(crouchKey))
+        if(isGrounded && Input.GetKey(crouchKey))
         {
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
+            return;
         }
-        else
+        if(!isGrounded)
         {
             state = MovementState.air;
+            return;
         }
+        state = MovementState.idle;
     }
 
     void MovePlayer()
