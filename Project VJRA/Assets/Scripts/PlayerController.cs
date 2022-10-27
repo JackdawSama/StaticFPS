@@ -93,20 +93,13 @@ public class PlayerController : MonoBehaviour
 
     private void StateHandler()
     {
-        //Debug.Log(isGrounded);
-        // Vector3 linearVelocity = new Vector3.Dot(rb.velocity,transform.forward);
-        // if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) == 0)
-        // {
-        //     state = MovementState.idle;
-        //     return;
-        // }
+        Debug.Log(rb.velocity);
         if(isGrounded && Input.GetKeyDown(sprintKey))
         {
             state = MovementState.sprinting;
-            moveSpeed = sprintSpeed;
             return;
         }
-        if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) > 0)
+        if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) > 0.1f)
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
@@ -133,6 +126,10 @@ public class PlayerController : MonoBehaviour
         if(isGrounded)
         {
             rb.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
+            if(Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                rb.AddForce(moveDir.normalized * sprintSpeed * 10f, ForceMode.Impulse);
+            }
         }
         else if(!isGrounded)
         {
