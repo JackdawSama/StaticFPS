@@ -48,7 +48,9 @@ public class NewWeponManager : MonoBehaviour
     //SECTION : WEAPON
     [SerializeField] int currentAmmo;
     bool noAmmo;
+    bool magazineFull;
     bool isReloading;
+    float timeToReload;
     float fireCD = 0f;
     [SerializeField] float range = 100f;
     [SerializeField] float fireRate = 2f;
@@ -85,13 +87,24 @@ public class NewWeponManager : MonoBehaviour
             HandleFire();
         }
 
-        handleReload();
+        timeToReload = timeToReload + Time.deltaTime;
+
+        if()
+        {
+            if(timeToReload > 5 && playerRB.state == PlayerController.MovementState.walking || playerRB.state == PlayerController.MovementState.sprinting && !isReloading)
+            {
+                isReloading = false;
+                StartCoroutine(handleReload());
+                timeToReload = 0;
+            }
+        }
     }
 
     void HandleFire()
     {
         if(noAmmo)
         {
+            Debug.Log("No bullets");
             return;
         }
 
@@ -113,27 +126,32 @@ public class NewWeponManager : MonoBehaviour
         //currentAmmo--;
         Debug.Log(Magazine1.Count);
         
-        if(currentAmmo <= 0)
+        if(Magazine1.Count <= 0)
         {
             noAmmo = true;
-            currentAmmo = 0;
         }
 
-        Debug.Log(playerRB.state);
+        Debug.Log(Magazine1.Count);
     }
-    void handleReload()
+    private IEnumerator handleReload()
     {
 
         if(playerRB.state == PlayerController.MovementState.walking)
         {
             Magazine1.Add(new Bullet(true));
             //Debug.Log("Loaded Full DMG");
+            yield return new WaitForSeconds(2);
+            Debug.Log("Added bullet full");
+            yield return null;
         }
-        // else if(playerRB.state == PlayerController.MovementState.sprinting && playerRB.enemyIsNearby)
-        // {
-        //     Magazine1.Add(new Bullet(false));
-        //     Debug.Log("Loaded Low DMG");
-        // }
+        if(playerRB.state == PlayerController.MovementState.sprinting && playerRB.enemyIsNearby)
+        {
+            Magazine1.Add(new Bullet(false));
+            // Debug.Log("Loaded Low DMG");
+            yield return new WaitForSeconds(2);
+            Debug.Log("Added bullet weak");
+            yield return null;
+        }
     }
 
     private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)

@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
 
     private void StateHandler()
     {
-        Debug.Log(rb.velocity);
+        //Debug.Log(rb.velocity);
         if(isGrounded && Input.GetKeyDown(sprintKey))
         {
             state = MovementState.sprinting;
