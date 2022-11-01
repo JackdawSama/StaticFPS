@@ -14754,7 +14754,7 @@ MonoBehaviour:
   enemyDistance: 5
   enemyMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   enemyIsNearby: 0
   state: 0
 --- !u!54 &8696352348640118668
