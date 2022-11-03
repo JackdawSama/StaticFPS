@@ -97,6 +97,7 @@ public class NewWeponManager : MonoBehaviour
         }
     }
 
+    //Takes care of 
     void HandleFire()
     {
         if(noAmmo)
@@ -109,7 +110,7 @@ public class NewWeponManager : MonoBehaviour
         if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
         {
             EnemyController enemy = hit.transform.GetComponent<EnemyController>();
-            
+
             if(Magazine1.Count > 0)
             {
                 Magazine1.RemoveAt(0);
