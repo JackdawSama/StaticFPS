@@ -45,9 +45,11 @@ public class NewWeponManager : MonoBehaviour
     bool magazineFull;
     bool isReloading = false;
     float timeToReload;
-    float fireCD = 0f;
+    [SerializeField] float fireCD = 1f;
+    [SerializeField] float reloadCD = 0.75f;
     [SerializeField] float range = 100f;
     [SerializeField] float fireRate = 2f;
+    [SerializeField] float fireTimer = 2f;
     //SECTION END
 
     //SECTION : OTHER STUFF
@@ -77,21 +79,22 @@ public class NewWeponManager : MonoBehaviour
     void Update()
     {
         handleMagazine();
+
+        fireTimer += Time.deltaTime;
     
-        if(Input.GetButton ("Fire1") && Time.time >= fireCD)
+        if(Input.GetButton ("Fire1") && fireTimer >= fireCD)
         {
-            fireCD = Time.time + 1f/fireRate;
             HandleFire();
+            fireTimer = 0;
         }
 
         if(!magazineFull)
         {
             timeToReload = timeToReload + Time.deltaTime;
 
-            if(timeToReload > 3 && playerRB.state == PlayerController.MovementState.walking || playerRB.state == PlayerController.MovementState.sprinting && !isReloading)
+            if(timeToReload > reloadCD && playerRB.state == PlayerController.MovementState.walking || playerRB.state == PlayerController.MovementState.sprinting)
             {
-                isReloading = true;
-                StartCoroutine(handleReload());
+                handleReload();
                 timeToReload = 0;
             }
         }
@@ -100,7 +103,7 @@ public class NewWeponManager : MonoBehaviour
     //Takes care of 
     void HandleFire()
     {
-        if(noAmmo)
+        if(Magazine1.Count == 0)
         {
             Debug.Log("No bullets");
             return;
@@ -111,28 +114,21 @@ public class NewWeponManager : MonoBehaviour
         {
             EnemyController enemy = hit.transform.GetComponent<EnemyController>();
 
-            if(Magazine1.Count > 0)
-            {
-                Magazine1.RemoveAt(0);
-                Destroy(MagazineUI[0]);
-                MagazineUI.RemoveAt(0);
+            Destroy(MagazineUI[0]);
+            MagazineUI.RemoveAt(0);
 
-                if(enemy != null)
-                {
-                    enemy.TakeDamage(Magazine1[0].damage);
-                }
+            if(enemy != null)
+            {
+                enemy.TakeDamage(Magazine1[0].damage);
             }
+            Debug.Log(Magazine1[0].damage);
+            Magazine1.RemoveAt(0);
 
             TrailRenderer trail = Instantiate(bulletTrail, bulletSpawnPoint.position, Quaternion.identity);
 
             StartCoroutine(SpawnTrail(trail,hit));
         }
         Debug.Log("Debug from HandleFire : " + Magazine1.Count);
-        
-        if(Magazine1.Count <= 0)
-        {
-            noAmmo = true;
-        }
     }
 
     void handleMagazine()
@@ -140,45 +136,28 @@ public class NewWeponManager : MonoBehaviour
         if(Magazine1.Count >= maxBullets)
         {
             magazineFull = true;
-            float magDiff =  0;
-            magDiff = Mathf.Abs(maxBullets - Magazine1.Count);
-            for(int i = 0; i < magDiff; i++)
-            {
-                Magazine1.RemoveAt(Magazine1.Count - 1);
-                Destroy(MagazineUI[MagazineUI.Count - 1]);
-                MagazineUI.RemoveAt(MagazineUI.Count - 1);
-            }
             return;
         }
-        if(Magazine1.Count < maxBullets)
-        {
-            magazineFull = false;
-            return;
-        }
-        Debug.Log("Debug from Handle Mag : " + Magazine1.Count);
+
+        magazineFull = false;
     }
-    private IEnumerator handleReload()
+    private void handleReload()
     {
 
         if(playerRB.state == PlayerController.MovementState.walking)
         {
-            yield return new WaitForSeconds(2);
             Magazine1.Add(new Bullet(true));
             MagazineUI.Add(Instantiate(fullDamageUI, transform.position, transform.rotation) as GameObject);
             MagazineUI[MagazineUI.Count - 1].transform.SetParent(GameObject.FindGameObjectWithTag("MagazineUI").transform, false);
             Debug.Log("Added bullet full");
         }
-        else if(playerRB.state == PlayerController.MovementState.sprinting && playerRB.enemyIsNearby)
+        else if(playerRB.state == PlayerController.MovementState.sprinting)
         {
-            yield return new WaitForSeconds(2);
             Magazine1.Add(new Bullet(false));
             Debug.Log("Added bullet weak");
             MagazineUI.Add(Instantiate(lowDamageUI, transform.position, transform.rotation) as GameObject);
             MagazineUI[MagazineUI.Count - 1].transform.SetParent(GameObject.FindGameObjectWithTag("MagazineUI").transform, false);
         }
-
-        isReloading = false;
-        noAmmo = false;
     }
 
     private IEnumerator SpawnTrail(TrailRenderer trail, RaycastHit hit)
