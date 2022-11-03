@@ -5,11 +5,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
+
+    //SECTION : KEYBINDS
     [Header("Controls")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
     [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] KeyCode crouchKey = KeyCode.LeftControl;
+    //SECTION END
 
+    //SECTION : MOVEMENT VARIABLES
     [Header("Movement")]
     public float moveSpeed;
     [SerializeField] float walkSpeed;
@@ -18,30 +22,28 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float groundDrag;
     [SerializeField] float jumpForce;
     [SerializeField] float airMultiplier;
+    //SECTION END
 
-    bool isJumping = false;
-
+    //SECTION : GROUND CHECK
     [Header("Ground Check")]
     [SerializeField] float playerHeight;
     [SerializeField] LayerMask groundMask;
     bool isGrounded;
+    bool isJumping = false;
+    //SECTION END
 
-
-    public Transform orientation;
-
+    //SECTION : PLAYER VARIABLES
     private float standHeight;
     private float crouchHeight;
 
     float hInput;
     float vInput;
-
     Vector3 moveDir;
 
     Rigidbody rb;
 
     public float enemyDistance = 5f;
     public LayerMask enemyMask;
-
     public bool enemyIsNearby;
 
     public enum MovementState
@@ -52,8 +54,8 @@ public class PlayerController : MonoBehaviour
         crouching,
         air
     }
-
     [SerializeField] public MovementState state;
+    //SECTION END
 
     // Start is called before the first frame update
     void Start()
@@ -93,7 +95,6 @@ public class PlayerController : MonoBehaviour
 
     private void StateHandler()
     {
-        //Debug.Log(rb.velocity);
         if(isGrounded && Input.GetKeyDown(sprintKey))
         {
             state = MovementState.sprinting;
