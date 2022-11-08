@@ -499,6 +499,8 @@ MonoBehaviour:
   groundDrag: 7
   jumpForce: 8.5
   airMultiplier: 0.4
+  walkAudio: {fileID: 8300000, guid: a7c868048cd0b7e48a076e877e3bf28b, type: 3}
+  dashAudio: {fileID: 8300000, guid: 1afe1d8650a4fce4bbe28a376cc06feb, type: 3}
   playerHeight: 2
   groundMask:
     serializedVersion: 2
@@ -524,9 +526,13 @@ MonoBehaviour:
   maxBullets: 8
   lowDamageUI: {fileID: 3009270091886315245, guid: d70dced6685b7a442ab28e9df21154b6, type: 3}
   fullDamageUI: {fileID: 3009270091886315245, guid: 4a7462d53d76cf44eb58f4e664352c48, type: 3}
+  bulletSoundFX: {fileID: 8300000, guid: bdd47696595c47949ae9e0f4aa7f86e5, type: 3}
   currentAmmo: 0
+  fireCD: 1
+  reloadCD: 0.75
   range: 100
   fireRate: 5
+  fireTimer: 2
   playerCamera: {fileID: 2059314807817303369}
   bulletTrail: {fileID: 5006640646837533988, guid: 54de432174e2e2e4a9405fa6d40806e2, type: 3}
   bulletSpawnPoint: {fileID: 2059314808631051538}

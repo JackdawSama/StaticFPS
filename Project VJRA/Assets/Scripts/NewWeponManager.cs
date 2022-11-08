@@ -37,13 +37,15 @@ public class NewWeponManager : MonoBehaviour
     List<GameObject> MagazineUI;
     [SerializeField] public GameObject lowDamageUI;
     [SerializeField] public GameObject fullDamageUI;
+    [SerializeField] AudioClip bulletSoundFX;
+    [SerializeField] AudioSource weponAudio;
     //SECTION END
 
     //SECTION : WEAPON
     [SerializeField] int currentAmmo;
     bool noAmmo;
     bool magazineFull;
-    bool isReloading = false;
+    //bool isReloading = false;
     float timeToReload;
     [SerializeField] float fireCD = 1f;
     [SerializeField] float reloadCD = 0.75f;
@@ -65,6 +67,8 @@ public class NewWeponManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        weponAudio = GetComponent<AudioSource>();
+
         Magazine1 = new List<Bullet>();
         MagazineUI = new List<GameObject>();
         for(int i = 0; i < maxBullets/2; i++)
@@ -85,6 +89,7 @@ public class NewWeponManager : MonoBehaviour
         if(Input.GetButton ("Fire1") && fireTimer >= fireCD)
         {
             HandleFire();
+            weponAudio.Play();
             fireTimer = 0;
         }
 

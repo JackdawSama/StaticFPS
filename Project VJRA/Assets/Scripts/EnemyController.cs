@@ -32,6 +32,14 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision collisionInfo)
+    {
+        if(collisionInfo.collider.tag == "Player")
+        {
+            Die();
+        }
+    }
+
     void Die() 
     {
         Destroy(gameObject);
