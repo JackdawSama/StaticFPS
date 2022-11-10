@@ -25,16 +25,15 @@ public class EnemyController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        //Debug.Log("-10f");
         if(health <= 0f)
         {
             Die();
         }
     }
 
-    void OnCollisionEnter(Collision collisionInfo)
+    void OnTriggerEnter(Collider collisionInfo)
     {
-        if(collisionInfo.collider.tag == "Player")
+        if(collisionInfo.gameObject.tag == "Player")
         {
             Die();
         }

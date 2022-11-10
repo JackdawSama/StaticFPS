@@ -22,10 +22,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float groundDrag;
     [SerializeField] float jumpForce;
     [SerializeField] float airMultiplier;
-
-    [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip walkAudio;
-    [SerializeField] AudioClip dashAudio;
     //SECTION END
 
     //SECTION : GROUND CHECK
@@ -69,8 +65,6 @@ public class PlayerController : MonoBehaviour
         rb.freezeRotation = true;
 
         standHeight = transform.localScale.y;
-
-        //audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -99,6 +93,8 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
+    //handles the states of the player
     private void StateHandler()
     {
         if(isGrounded && Input.GetKeyDown(sprintKey))
@@ -126,6 +122,8 @@ public class PlayerController : MonoBehaviour
         state = MovementState.idle;
     }
 
+
+    //moves the player and switches their states absed on their speed
     void MovePlayer()
     {
         moveDir = transform.forward * vInput + transform.right * hInput;

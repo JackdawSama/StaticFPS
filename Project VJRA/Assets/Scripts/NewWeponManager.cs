@@ -38,7 +38,7 @@ public class NewWeponManager : MonoBehaviour
     [SerializeField] public GameObject lowDamageUI;
     [SerializeField] public GameObject fullDamageUI;
     [SerializeField] AudioClip bulletSoundFX;
-    [SerializeField] AudioSource weponAudio;
+    [SerializeField] AudioSource weaponAudio;
     //SECTION END
 
     //SECTION : WEAPON
@@ -67,7 +67,7 @@ public class NewWeponManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        weponAudio = GetComponent<AudioSource>();
+        weaponAudio = GetComponent<AudioSource>();
 
         Magazine1 = new List<Bullet>();
         MagazineUI = new List<GameObject>();
@@ -89,7 +89,7 @@ public class NewWeponManager : MonoBehaviour
         if(Input.GetButton ("Fire1") && fireTimer >= fireCD)
         {
             HandleFire();
-            weponAudio.Play();
+            weaponAudio.Play();
             fireTimer = 0;
         }
 
