@@ -6,7 +6,7 @@ public class Spawner : MonoBehaviour
 
 {
     [SerializeField] List<GameObject> KWList;
-    [SerializeField] GameObject[] enemyList;
+    [SerializeField] GameObject[] enemies;
     [SerializeField] Transform[] enemySpawnPoints;
     [SerializeField] GameObject enemyObject;
     [SerializeField] float wallSpawnCD;
