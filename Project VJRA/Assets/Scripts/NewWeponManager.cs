@@ -89,7 +89,6 @@ public class NewWeponManager : MonoBehaviour
         if(Input.GetButton ("Fire1") && fireTimer >= fireCD)
         {
             HandleFire();
-            weaponAudio.Play();
             fireTimer = 0;
         }
 
@@ -113,6 +112,8 @@ public class NewWeponManager : MonoBehaviour
             Debug.Log("No bullets");
             return;
         }
+
+        weaponAudio.Play();
 
         RaycastHit hit;
         if(Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, range))
