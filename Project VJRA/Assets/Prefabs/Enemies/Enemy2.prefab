@@ -146,13 +146,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   enemySpeed: 5
-  enemyRadius: 1.5
   wallMask:
     serializedVersion: 2
     m_Bits: 128
   hitWall: 0
   bulletObject: {fileID: 1364946420933588566, guid: 3b5e6c43e91aedf4dbdd7f30d7708b37, type: 3}
-  fireCD: 2
+  fireCD: 1.5
   targetPlayer: {fileID: 0}
 --- !u!54 &5719508933319443948
 Rigidbody:
@@ -262,7 +261,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5719508933501783279}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
