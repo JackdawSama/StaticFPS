@@ -35,13 +35,13 @@ public class TestEnemyController : MonoBehaviour
     {
         if(fireTimer >= fireCD)
         {
-            Instantiate(bulletObject, transform.position, transform.rotation);
+            Instantiate(bulletObject, transform.localPosition, transform.localRotation);
         }
     }
 
     private void moveEnemy()
     {
-        transform.position = transform.position + new Vector3(enemySpeed, 0, 0) * Time.deltaTime;
+        transform.localPosition = transform.localPosition + new Vector3(enemySpeed, 0, 0) * Time.deltaTime;
     }
 
     public void TakeDamage(float damage)
