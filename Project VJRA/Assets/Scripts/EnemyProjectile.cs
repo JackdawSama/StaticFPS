@@ -14,7 +14,7 @@ public class EnemyProjectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.localPosition = transform.localPosition + new Vector3(0, 0, projectileSpeed) * Time.deltaTime;
+        transform.Translate(new Vector3(0, 0, projectileSpeed) * Time.deltaTime, Space.Self);
     }
 
     void deleteBullet()
