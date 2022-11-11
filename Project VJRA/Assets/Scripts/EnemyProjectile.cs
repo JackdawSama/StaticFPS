@@ -28,12 +28,12 @@ public class EnemyProjectile : MonoBehaviour
         if(collisionInfo.gameObject.tag == "Player")
         {
             //minus score from player total
-            GameObject.Destroy(gameObject);
+            deleteBullet();
             return;
         }
-        else if(collisionInfo.gameObject.tag == "Wall")
+        if(collisionInfo.gameObject.tag == "Wall")
         {
-            GameObject.Destroy(gameObject);
+            deleteBullet();
         }
 
     }
