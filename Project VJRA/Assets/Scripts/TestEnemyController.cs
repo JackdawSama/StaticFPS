@@ -6,7 +6,7 @@ public class TestEnemyController : MonoBehaviour
 {
     [SerializeField] float health = 100f;
     [SerializeField] float enemySpeed = 5f;
-    [SerializeField] float enemyRadius = 1.5f;
+    //[SerializeField] float enemyRadius = 1.5f;
     [SerializeField] LayerMask wallMask;
     [SerializeField] bool hitWall;
 
@@ -19,16 +19,15 @@ public class TestEnemyController : MonoBehaviour
     void Start()
     {
         targetPlayer = GameObject.FindGameObjectWithTag("Player");
-        fireCD = 0;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        moveEnemy();
         fireTimer += Time.deltaTime;
-
+        moveEnemy();
+        Shoot();
     }
 
     private void Shoot()
@@ -36,6 +35,7 @@ public class TestEnemyController : MonoBehaviour
         if(fireTimer >= fireCD)
         {
             Instantiate(bulletObject, transform.localPosition, transform.localRotation);
+            fireTimer = 0;
         }
     }
 
@@ -63,7 +63,7 @@ public class TestEnemyController : MonoBehaviour
     {
         if(collisionInfo.gameObject.tag == "Wall")
         {
-            enemySpeed = -enemySpeed;
+            enemySpeed = - enemySpeed;
         }
     }
 }

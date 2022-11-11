@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemyProjectile : MonoBehaviour
 {
     [SerializeField] float projectileSpeed = 12.5f;
-    [SerializeField] GameObject bulletObject;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +14,7 @@ public class EnemyProjectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.localPosition = transform.localPosition + new Vector3(projectileSpeed, 0, 0) * Time.deltaTime;
+        transform.localPosition = transform.localPosition + new Vector3(0, 0, projectileSpeed) * Time.deltaTime;
     }
 
     void deleteBullet()
