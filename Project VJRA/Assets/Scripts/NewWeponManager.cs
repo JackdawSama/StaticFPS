@@ -43,7 +43,7 @@ public class NewWeponManager : MonoBehaviour
 
     //SECTION : WEAPON
     [SerializeField] int currentAmmo;
-    bool noAmmo;
+    //bool noAmmo;
     bool magazineFull;
     //bool isReloading = false;
     float timeToReload;
@@ -96,7 +96,7 @@ public class NewWeponManager : MonoBehaviour
         {
             timeToReload = timeToReload + Time.deltaTime;
 
-            if(timeToReload > reloadCD && playerRB.state == PlayerController.MovementState.walking || playerRB.state == PlayerController.MovementState.sprinting)
+            if(timeToReload > reloadCD && playerRB.state == PlayerController.MovementState.walking || playerRB.state == PlayerController.MovementState.dashing)
             {
                 handleReload();
                 timeToReload = 0;
@@ -157,7 +157,7 @@ public class NewWeponManager : MonoBehaviour
             MagazineUI[MagazineUI.Count - 1].transform.SetParent(GameObject.FindGameObjectWithTag("MagazineUI").transform, false);
             Debug.Log("Added bullet full");
         }
-        else if(playerRB.state == PlayerController.MovementState.sprinting)
+        else if(playerRB.state == PlayerController.MovementState.dashing)
         {
             Magazine1.Add(new Bullet(false));
             Debug.Log("Added bullet weak");

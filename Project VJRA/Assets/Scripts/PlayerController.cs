@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed;
     [SerializeField] float walkSpeed;
-    [SerializeField] float sprintSpeed;
+    [SerializeField] float dashSpeed;
     [SerializeField] float crouchSpeed;
     [SerializeField] float groundDrag;
     [SerializeField] float jumpForce;
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
     {
         idle,
         walking,
-        sprinting,
+        dashing,
         crouching,
         air
     }
@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
     {
         if(isGrounded && Input.GetKeyDown(sprintKey))
         {
-            state = MovementState.sprinting;
+            state = MovementState.dashing;
             return;
         }
         if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) > 0.1f)
@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.LeftShift))
             {
-                rb.AddForce(moveDir.normalized * sprintSpeed * 10f, ForceMode.Impulse);
+                rb.AddForce(moveDir.normalized * dashSpeed * 10f, ForceMode.Impulse);
             }
         }
         else if(!isGrounded)
