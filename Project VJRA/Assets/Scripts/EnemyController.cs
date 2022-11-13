@@ -7,6 +7,27 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] float health = 50f;
     [SerializeField] float shields = 50f;
+    [SerializeField] float detectionRadius = 10f;
+    [SerializeField] float closestApproach;
+    [SerializeField] float farthestApproach;
+    [SerializeField] float lowShieldsclosestApproach;
+    [SerializeField] float lowShieldsfarthestApproach;
+
+    [SerializeField] float lowShieldsOffsetClose;
+    [SerializeField] float lowShieldsOffsetFar;
+
+    private int randomUnit;
+    [SerializeField] float behaviourTimer;
+
+    Transform target;
+
+    enum AIState
+    {
+        idle,
+        move,
+        attack
+    }
+    [SerializeField] AIState state;
 
     NavMeshAgent agent;
     public GameObject player;
@@ -20,7 +41,17 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        agent.SetDestination(player.transform.position);
+        float distance = Vector3.Distance(player.transform.position, transform.position);
+
+        if(distance <= detectionRadius)
+        {
+            agent.SetDestination(player.transform.position);
+
+            if(distance <= agent.stoppingDistance)
+            {
+                FaceTarget();
+            }
+        }
     }
 
     public void TakeDamage(float damage)
@@ -32,6 +63,23 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    public void burnShields(float damage)
+    {
+        shields -= damage;
+    }
+
+    void FaceTarget()
+    {
+        Vector3 direction = (player.transform.position - transform.position).normalized;
+        Quaternion lookRot = Quaternion.LookRotation(new Vector3(direction.x, direction.y, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * 5f);
+    }
+
+    void Die() 
+    {
+        Destroy(gameObject);
+    }
+
     void OnTriggerEnter(Collider collisionInfo)
     {
         if(collisionInfo.gameObject.tag == "Player")
@@ -40,8 +88,4 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void Die() 
-    {
-        Destroy(gameObject);
-    }
 }
