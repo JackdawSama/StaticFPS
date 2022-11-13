@@ -7,27 +7,13 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] float health = 50f;
     [SerializeField] float shields = 50f;
-    [SerializeField] float detectionRadius = 10f;
-    [SerializeField] float closestApproach;
-    [SerializeField] float farthestApproach;
-    [SerializeField] float lowShieldsclosestApproach;
-    [SerializeField] float lowShieldsfarthestApproach;
-
-    [SerializeField] float lowShieldsOffsetClose;
-    [SerializeField] float lowShieldsOffsetFar;
-
-    private int randomUnit;
-    [SerializeField] float behaviourTimer;
-
-    Transform target;
-
-    enum AIState
-    {
-        idle,
-        move,
-        attack
-    }
-    [SerializeField] AIState state;
+    [SerializeField] float detectionRadius = 100f;
+    [SerializeField] float fireTimer;
+    [SerializeField] float fireCD;
+    [SerializeField] GameObject projectile;
+    [SerializeField] Transform projectileSpawn;
+    [SerializeField] float turnRate = 5f;
+    [SerializeField] bool isTurning;
 
     NavMeshAgent agent;
     public GameObject player;
@@ -43,13 +29,20 @@ public class EnemyController : MonoBehaviour
     {
         float distance = Vector3.Distance(player.transform.position, transform.position);
 
+        fireTimer += Time.deltaTime;
+
         if(distance <= detectionRadius)
         {
             agent.SetDestination(player.transform.position);
 
             if(distance <= agent.stoppingDistance)
             {
+                isTurning = true;
                 FaceTarget();
+                if(!isTurning)
+                {
+                    Fire();
+                }
             }
         }
     }
@@ -72,12 +65,22 @@ public class EnemyController : MonoBehaviour
     {
         Vector3 direction = (player.transform.position - transform.position).normalized;
         Quaternion lookRot = Quaternion.LookRotation(new Vector3(direction.x, direction.y, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * 5f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * turnRate);
+        isTurning = false;
     }
 
     void Die() 
     {
         Destroy(gameObject);
+    }
+
+    void Fire()
+    {
+        if(fireTimer >= fireCD)
+        {
+            Instantiate(projectile, projectileSpawn.position, projectileSpawn.rotation);
+            fireTimer = 0f;
+        }
     }
 
     void OnTriggerEnter(Collider collisionInfo)

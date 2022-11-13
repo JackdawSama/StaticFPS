@@ -14,6 +14,7 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] GameObject plasmaProjectile;
     [SerializeField] bool ammoFull_Plasma;
     [SerializeField] float plasmaDamage;
+    [SerializeField] float plasmaRecharge;
     [SerializeField] float plasmaCD;
     [SerializeField] float plasmaFireTimer;
     
@@ -144,13 +145,9 @@ public class WeaponSystem : MonoBehaviour
 
     void HandleRelod()
     {
-        //handles reload for both plasma and kinetic
-        //reloads plasma when moving
-        //reloads kinetic when dashing
-
         if(player.state == PlayerController.MovementState.walking)
         {
-            currentAmmo_Plasma += Time.deltaTime;
+            currentAmmo_Plasma += Time.deltaTime * plasmaRecharge;
         }
         else if(player.state == PlayerController.MovementState.dashing)
         {
