@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1299780843
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1299780844}
+  m_Layer: 0
+  m_Name: BulletSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1299780844
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299780843}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.479, z: 2.612}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5916678848684467506}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5916678848489827952
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +42,7 @@ GameObject:
   - component: {fileID: 5916678848489827956}
   - component: {fileID: 5916678848489827957}
   - component: {fileID: 5916678848489827958}
-  - component: {fileID: 5916678848489827959}
+  - component: {fileID: 1834578024}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -27,7 +58,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5916678848489827952}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -84,8 +115,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &5916678848489827959
-SphereCollider:
+--- !u!136 &1834578024
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,9 +125,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Height: 1.0805917
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.031598043, z: 0}
 --- !u!1 &5916678848684467507
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,6 +140,7 @@ GameObject:
   - component: {fileID: 5916678848684467506}
   - component: {fileID: 5916678848684467505}
   - component: {fileID: 1525906211}
+  - component: {fileID: 1525906212}
   m_Layer: 0
   m_Name: Enemy BIG
   m_TagString: Enemy
@@ -129,6 +162,7 @@ Transform:
   m_Children:
   - {fileID: 5916678848489827956}
   - {fileID: 5916678849909193476}
+  - {fileID: 1299780844}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -145,15 +179,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 50
-  shields: 50
+  shields: 25
+  maxShields: 100
+  shieldRegenRate: 2
   detectionRadius: 35
-  closestApproach: 0
-  farthestApproach: 0
-  lowShieldsclosestApproach: 0
-  lowShieldsfarthestApproach: 0
-  lowShieldsOffsetClose: 0
-  lowShieldsOffsetFar: 0
-  behaviourTimer: 0
+  fireTimer: 0
+  fireCD: 0.5
+  projectile: {fileID: 1364946420933588566, guid: 044b0d03ae793d545a487384eebd2ab8, type: 3}
+  projectileSpawn: {fileID: 1299780844}
+  turnRate: 12
+  isTurning: 0
+  isTakingFire: 0
+  noDamagerTimer: 0
+  noDamagerCD: 0
   player: {fileID: 0}
 --- !u!195 &1525906211
 NavMeshAgent:
@@ -177,6 +215,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!54 &1525906212
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5916678848684467507}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5916678849909193477
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +258,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5916678849909193477}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 2.29}
+  m_LocalPosition: {x: 0, y: 2.5, z: 2.29}
   m_LocalScale: {x: 1.75, y: 0.75, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []

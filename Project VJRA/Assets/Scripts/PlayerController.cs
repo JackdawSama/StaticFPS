@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
             state = MovementState.dashing;
             return;
         }
-        if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) > 0.1f)
+        if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) > 0.1f || Vector3.Dot(rb.velocity,transform.forward) < -0.1f)
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;

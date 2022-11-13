@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] float projectileSpeed = 12.5f;
     [SerializeField] float damage = 10f;
+    [SerializeField] float lifeTime = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +18,13 @@ public class Projectile : MonoBehaviour
     void Update()
     {
         transform.position += transform.forward * projectileSpeed * Time.deltaTime;
+
+        lifeTime = Time.deltaTime;
         
+        if(lifeTime > 2f)
+        {
+            deleteBullet();
+        }
     }
 
     void deleteBullet()
@@ -25,21 +32,22 @@ public class Projectile : MonoBehaviour
         GameObject.Destroy(gameObject);
     }
 
-    void OnCollisionEnter(Collision collisionInfo)
+    void OnTriggerEnter(Collider collider)
     {
-        if(collisionInfo.gameObject.tag == "Player")
+        if(collider.gameObject.tag == "Player")
         {
             //minus score from player total
             deleteBullet();
             return;
         }
-        if(collisionInfo.gameObject.tag == "Wall")
+        if(collider.gameObject.tag == "Wall")
         {
             deleteBullet();
         }
-        if(collisionInfo.gameObject.tag == "Enemy")
+        if(collider.gameObject.tag == "Enemy")
         {
-            collisionInfo.gameObject.GetComponent<EnemyController>().burnShields(damage);
+            collider.gameObject.GetComponent<EnemyController>().burnShields(damage);
+            Debug.Log("Shields damaged");
             deleteBullet();
         }
 

@@ -7,6 +7,8 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] float health = 50f;
     [SerializeField] float shields = 50f;
+    [SerializeField] float maxShields = 100f;
+    [SerializeField] float shieldRegenRate = 2f;
     [SerializeField] float detectionRadius = 100f;
     [SerializeField] float fireTimer;
     [SerializeField] float fireCD;
@@ -14,6 +16,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] Transform projectileSpawn;
     [SerializeField] float turnRate = 5f;
     [SerializeField] bool isTurning;
+    [SerializeField] bool isTakingFire = false;
+    [SerializeField] float noDamagerTimer;
+    [SerializeField] float noDamagerCD;
 
     NavMeshAgent agent;
     public GameObject player;
@@ -31,6 +36,8 @@ public class EnemyController : MonoBehaviour
 
         fireTimer += Time.deltaTime;
 
+        noDamagerTimer = Time.deltaTime;
+
         if(distance <= detectionRadius)
         {
             agent.SetDestination(player.transform.position);
@@ -45,20 +52,55 @@ public class EnemyController : MonoBehaviour
                 }
             }
         }
+
+        if(noDamagerTimer > noDamagerCD && shields <= maxShields)
+        {
+            isTakingFire = false;
+            StartCoroutine(regenShields());
+        }
     }
 
     public void TakeDamage(float damage)
     {
-        health -= damage;
-        if(health <= 0f)
+        isTakingFire = true;
+        if(shields <= 0)
         {
-            Die();
+            health -= damage;
+            if(health <= 0f)
+            {
+                Die();
+            }
         }
     }
 
     public void burnShields(float damage)
     {
+        isTakingFire = true;
         shields -= damage;
+        if(shields < 0)
+        {
+            shields = 0;
+        }
+    }
+
+    IEnumerator regenShields()
+    {
+        if(shields <= 25)
+        {
+            while(shields <= maxShields)
+            {
+                if(!isTakingFire)
+                {
+                    shields += shieldRegenRate;
+                }
+                else break;
+            }
+            if(shields > maxShields)
+            {
+                shields = maxShields;
+            }
+        }
+        yield return null;
     }
 
     void FaceTarget()
@@ -83,12 +125,12 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider collisionInfo)
-    {
-        if(collisionInfo.gameObject.tag == "Player")
-        {
-            Die();
-        }
-    }
+    // void OnTriggerEnter(Collider collisionInfo)
+    // {
+    //     if(collisionInfo.gameObject.tag == "Player")
+    //     {
+    //         Die();
+    //     }
+    // }
 
 }

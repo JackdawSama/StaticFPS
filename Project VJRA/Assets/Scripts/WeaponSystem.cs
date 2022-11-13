@@ -14,7 +14,7 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] GameObject plasmaProjectile;
     [SerializeField] bool ammoFull_Plasma;
     [SerializeField] float plasmaDamage;
-    [SerializeField] float plasmaRecharge;
+    [SerializeField] float plasmaRecharge = 1f;
     [SerializeField] float plasmaCD;
     [SerializeField] float plasmaFireTimer;
     
@@ -78,13 +78,13 @@ public class WeaponSystem : MonoBehaviour
             if(reloadTimer > reloadCD && player.state == PlayerController.MovementState.walking || player.state == PlayerController.MovementState.dashing)
             {
                 HandleRelod();
-                reloadTimer = 0;
             }
         }
     }
 
     void HandleFirePlasma()
     {
+        // plasmaisFiring = true;
         if(currentAmmo_Plasma <= 0)
         {
             currentAmmo_Plasma = 0;
@@ -94,8 +94,7 @@ public class WeaponSystem : MonoBehaviour
 
         Instantiate(plasmaProjectile, projectileSpawn.position, projectileSpawn.rotation);
         currentAmmo_Plasma--;
-        Debug.Log(currentAmmo_Kinetic);
-        Debug.Log("PLASMA FIRE");
+        Debug.Log("Plasma Fire. Ammo Left : " + currentAmmo_Plasma);
     }
 
     void HandleFireKinetic()
@@ -121,8 +120,7 @@ public class WeaponSystem : MonoBehaviour
             TrailRenderer trail = Instantiate(bulletTrail, projectileSpawn.position, Quaternion.identity);
 
             StartCoroutine(KineticProjectile(trail,hit));
-            Debug.Log(currentAmmo_Kinetic);
-            Debug.Log("KINETIC FIRE");
+            Debug.Log("Plasma Fire. Ammo Left : " +  currentAmmo_Kinetic);
         }
     }
 
@@ -147,12 +145,13 @@ public class WeaponSystem : MonoBehaviour
     {
         if(player.state == PlayerController.MovementState.walking)
         {
-            currentAmmo_Plasma += Time.deltaTime * plasmaRecharge;
+            currentAmmo_Plasma += plasmaRecharge;
         }
         else if(player.state == PlayerController.MovementState.dashing)
         {
             currentAmmo_Kinetic++;
         }
+        reloadTimer = 0;
     }
 
     private IEnumerator KineticProjectile(TrailRenderer trail, RaycastHit hit)
