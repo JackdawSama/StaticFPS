@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] float health = 50f;
+    [SerializeField] float shields = 50f;
 
     NavMeshAgent agent;
     public GameObject player;

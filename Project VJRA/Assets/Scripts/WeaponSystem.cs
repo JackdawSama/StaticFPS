@@ -91,7 +91,7 @@ public class WeaponSystem : MonoBehaviour
             return;
         }
 
-        Instantiate(plasmaProjectile, projectileSpawn.position, Quaternion.identity);
+        Instantiate(plasmaProjectile, projectileSpawn.position, projectileSpawn.rotation);
         currentAmmo_Plasma--;
         Debug.Log(currentAmmo_Kinetic);
         Debug.Log("PLASMA FIRE");
