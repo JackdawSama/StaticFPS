@@ -7,10 +7,11 @@ public class WeaponSystem : MonoBehaviour
     //COMMON Weapon Variables
     [SerializeField] float reloadTimer;
     [SerializeField] float reloadCD;
+    [SerializeField] AudioSource audioSource;
 
     //PLASMA Weapon Variables
     [SerializeField] float maxAmmo_Plasma;
-    [SerializeField] float currentAmmo_Plasma;
+    [SerializeField] public float currentAmmo_Plasma;
     [SerializeField] GameObject plasmaProjectile;
     [SerializeField] bool ammoFull_Plasma;
     [SerializeField] float plasmaDamage;
@@ -19,16 +20,18 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] float plasmaFireTimer;
     [SerializeField] float plasmaRange;
     [SerializeField] TrailRenderer bulletTrail_Plasma;
+    [SerializeField] AudioClip plasmaFire;
     
     //KINETIC Weapon variables
     [SerializeField] int maxAmmo_Kinetic;
-    [SerializeField] int currentAmmo_Kinetic;
+    [SerializeField] public int currentAmmo_Kinetic;
     [SerializeField] bool ammoFull_Kinetic;
     [SerializeField] float kineticDamage;
     [SerializeField] float kineticCD;
     [SerializeField] float kineticFireTimer;
     [SerializeField] float kineticRange;
     [SerializeField] TrailRenderer bulletTrail_Kinetic;
+    [SerializeField] AudioClip kineticFire;
 
     //PLAYER variables
     [SerializeField] PlayerController player;
@@ -41,6 +44,8 @@ public class WeaponSystem : MonoBehaviour
     {
         //gets a reference to the PlayerController component
         player = GetComponent<PlayerController>();
+
+        audioSource = GetComponent<AudioSource>();
 
         //sets timers to 0
         plasmaFireTimer = 0;

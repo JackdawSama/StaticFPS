@@ -5,8 +5,8 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] float health = 50f;
-    [SerializeField] float shields = 50f;
+    [SerializeField] public float health = 50f;
+    [SerializeField] public float shields = 50f;
     [SerializeField] float maxShields = 100f;
     [SerializeField] float shieldRegenRate = 2f;
     [SerializeField] float detectionRadius = 100f;
