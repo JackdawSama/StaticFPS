@@ -8,11 +8,11 @@ public class UIController : MonoBehaviour
     [SerializeField] Text kineticAmmo;
     [SerializeField] Text plasmaAmmo;
 
-    Text enemyHealth;
-    Text enemyShields;
+    [SerializeField] Text enemyHealth;
+    [SerializeField] Text enemyShields;
 
-    WeaponSystem weaponRef;
-    EnemyController enemy;
+    [SerializeField] WeaponSystem weaponRef;
+    [SerializeField] EnemyController enemy;
     
     // Start is called before the first frame update
     void Start()
