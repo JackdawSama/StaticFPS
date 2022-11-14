@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] float projectileSpeed = 12.5f;
-    [SerializeField] float damage = 10f;
+    //[SerializeField] float damage = 10f;
     [SerializeField] float lifeTime = 0f;
 
     // Start is called before the first frame update
@@ -19,9 +19,9 @@ public class Projectile : MonoBehaviour
     {
         transform.position += transform.forward * projectileSpeed * Time.deltaTime;
 
-        lifeTime = Time.deltaTime;
+        lifeTime += Time.deltaTime;
         
-        if(lifeTime > 2f)
+        if(lifeTime > 5f)
         {
             deleteBullet();
         }
@@ -46,8 +46,8 @@ public class Projectile : MonoBehaviour
         }
         if(collider.gameObject.tag == "Enemy")
         {
-            collider.gameObject.GetComponent<EnemyController>().burnShields(damage);
-            Debug.Log("Shields damaged");
+            // collider.gameObject.GetComponent<EnemyController>().burnShields(damage);
+            // Debug.Log("Shields damaged");
             deleteBullet();
         }
 

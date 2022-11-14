@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4993630747932557510}
   - component: {fileID: 5006640646837533988}
   m_Layer: 0
-  m_Name: Trail
+  m_Name: PTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +53,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7761a07a71c0894429a0c207bfa25be5, type: 2}
+  - {fileID: 2100000, guid: 9e20c7d4b81803043b5c694d5457d7ba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -4156,6 +4156,14 @@ PrefabInstance:
       propertyPath: kineticFireTimer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5860062848481774092, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
+      propertyPath: bulletTrail_Plasma
+      value: 
+      objectReference: {fileID: 5006640646837533988, guid: d77eebf1278e23148a049fde0dcec90c, type: 3}
+    - target: {fileID: -5860062848481774092, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
+      propertyPath: bulletTrail_Kinetic
+      value: 
+      objectReference: {fileID: 5006640646837533988, guid: 54de432174e2e2e4a9405fa6d40806e2, type: 3}
     - target: {fileID: 2059314808631051538, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.285

@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] Transform projectileSpawn;
     [SerializeField] float turnRate = 5f;
     [SerializeField] bool isTurning;
-    [SerializeField] bool isTakingFire = false;
+    [SerializeField] bool isTakingFire;
     [SerializeField] float noDamagerTimer;
     [SerializeField] float noDamagerCD;
 
@@ -36,7 +36,7 @@ public class EnemyController : MonoBehaviour
 
         fireTimer += Time.deltaTime;
 
-        noDamagerTimer = Time.deltaTime;
+        noDamagerTimer += Time.deltaTime;
 
         if(distance <= detectionRadius)
         {
@@ -52,20 +52,22 @@ public class EnemyController : MonoBehaviour
                 }
             }
         }
-
-        if(noDamagerTimer > noDamagerCD && shields <= maxShields)
+        
+        if(noDamagerTimer > noDamagerCD)
         {
             isTakingFire = false;
-            StartCoroutine(regenShields());
+            regenShields();
         }
     }
 
     public void TakeDamage(float damage)
     {
         isTakingFire = true;
+        noDamagerTimer = 0;
         if(shields <= 0)
         {
             health -= damage;
+            Debug.Log("Health Damage. Health Left : " + health);
             if(health <= 0f)
             {
                 Die();
@@ -76,31 +78,26 @@ public class EnemyController : MonoBehaviour
     public void burnShields(float damage)
     {
         isTakingFire = true;
+        noDamagerTimer = 0;
         shields -= damage;
+        Debug.Log("Shield Damage. Shields Left : " + shields);
         if(shields < 0)
         {
             shields = 0;
         }
     }
 
-    IEnumerator regenShields()
+    void regenShields()
     {
-        if(shields <= 25)
+        if(shields <= maxShields && !isTakingFire)
         {
-            while(shields <= maxShields)
-            {
-                if(!isTakingFire)
-                {
-                    shields += shieldRegenRate;
-                }
-                else break;
-            }
+            shields += Time.deltaTime * shieldRegenRate;
+            
             if(shields > maxShields)
             {
                 shields = maxShields;
             }
         }
-        yield return null;
     }
 
     void FaceTarget()

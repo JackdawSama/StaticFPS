@@ -17,6 +17,8 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] float plasmaRecharge = 1f;
     [SerializeField] float plasmaCD;
     [SerializeField] float plasmaFireTimer;
+    [SerializeField] float plasmaRange;
+    [SerializeField] TrailRenderer bulletTrail_Plasma;
     
     //KINETIC Weapon variables
     [SerializeField] int maxAmmo_Kinetic;
@@ -26,7 +28,7 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] float kineticCD;
     [SerializeField] float kineticFireTimer;
     [SerializeField] float kineticRange;
-    [SerializeField] TrailRenderer bulletTrail;
+    [SerializeField] TrailRenderer bulletTrail_Kinetic;
 
     //PLAYER variables
     [SerializeField] PlayerController player;
@@ -92,9 +94,23 @@ public class WeaponSystem : MonoBehaviour
             return;
         }
 
-        Instantiate(plasmaProjectile, projectileSpawn.position, projectileSpawn.rotation);
-        currentAmmo_Plasma--;
-        Debug.Log("Plasma Fire. Ammo Left : " + currentAmmo_Plasma);
+        RaycastHit hit;
+        if(Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, plasmaRange))
+        {
+            EnemyController enemy = hit.transform.GetComponent<EnemyController>();
+
+
+            if(enemy != null)
+            {
+                enemy.burnShields(plasmaDamage);
+            }
+            currentAmmo_Plasma--;
+
+            TrailRenderer trail = Instantiate(bulletTrail_Plasma, projectileSpawn.position, Quaternion.identity);
+
+            StartCoroutine(KineticProjectile(trail,hit));
+            Debug.Log("Plasma Fire. Ammo Left : " + currentAmmo_Plasma);
+        }
     }
 
     void HandleFireKinetic()
@@ -117,7 +133,7 @@ public class WeaponSystem : MonoBehaviour
             }
             currentAmmo_Kinetic--;
 
-            TrailRenderer trail = Instantiate(bulletTrail, projectileSpawn.position, Quaternion.identity);
+            TrailRenderer trail = Instantiate(bulletTrail_Kinetic, projectileSpawn.position, Quaternion.identity);
 
             StartCoroutine(KineticProjectile(trail,hit));
             Debug.Log("Plasma Fire. Ammo Left : " +  currentAmmo_Kinetic);
