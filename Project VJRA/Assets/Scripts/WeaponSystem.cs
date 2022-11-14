@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class WeaponSystem : MonoBehaviour
 {
+    class Bullet
+    {
+        [SerializeField] float plasmaDamage;
+        [SerializeField] float kineticDamage;
+    }
+
+
+
     //COMMON Weapon Variables
     [SerializeField] float reloadTimer;
     [SerializeField] float reloadCD;
+    [SerializeField] float[] weaponMagazine;
     [SerializeField] AudioSource audioSource;
 
     //PLASMA Weapon Variables
@@ -14,7 +23,7 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] public float currentAmmo_Plasma;
     [SerializeField] GameObject plasmaProjectile;
     [SerializeField] bool ammoFull_Plasma;
-    [SerializeField] float plasmaDamage;
+    
     [SerializeField] float plasmaRecharge = 1f;
     [SerializeField] float plasmaCD;
     [SerializeField] float plasmaFireTimer;
@@ -26,7 +35,7 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] int maxAmmo_Kinetic;
     [SerializeField] public int currentAmmo_Kinetic;
     [SerializeField] bool ammoFull_Kinetic;
-    [SerializeField] float kineticDamage;
+    
     [SerializeField] float kineticCD;
     [SerializeField] float kineticFireTimer;
     [SerializeField] float kineticRange;
