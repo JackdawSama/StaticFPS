@@ -4149,6 +4149,14 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -5860062848481774092, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
+      propertyPath: plasmaRange
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: -5860062848481774092, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
+      propertyPath: kineticRange
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: -5860062848481774092, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
       propertyPath: plasmaRecharge
       value: 1
       objectReference: {fileID: 0}
@@ -4767,6 +4775,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1947379288}
+    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: noDamagerCD
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: shieldRegenRate
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5916678848684467506, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
       propertyPath: m_RootOrder
       value: 5

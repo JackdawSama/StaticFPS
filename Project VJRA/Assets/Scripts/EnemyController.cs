@@ -122,12 +122,4 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    // void OnTriggerEnter(Collider collisionInfo)
-    // {
-    //     if(collisionInfo.gameObject.tag == "Player")
-    //     {
-    //         Die();
-    //     }
-    // }
-
 }
