@@ -50,7 +50,6 @@ public class NewWeponManager : MonoBehaviour
     [SerializeField] float fireCD = 1f;
     [SerializeField] float reloadCD = 0.75f;
     [SerializeField] float range = 100f;
-    [SerializeField] float fireRate = 2f;
     [SerializeField] float fireTimer = 2f;
     //SECTION END
 

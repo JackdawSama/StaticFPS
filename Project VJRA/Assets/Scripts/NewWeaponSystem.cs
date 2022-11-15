@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponSystem : MonoBehaviour
+public class NewWeaponSystem : MonoBehaviour
 {
     //COMMON Weapon Variables
     [SerializeField] float reloadTimer;
     [SerializeField] float reloadCD;
-    [SerializeField] float[] weaponMagazine;
+    [SerializeField] int magSize;
     [SerializeField] AudioSource audioSource;
+
+    Bullet[] Magazine;
 
     //PLASMA Weapon Variables
     [SerializeField] float maxAmmo_Plasma;
@@ -43,6 +45,8 @@ public class WeaponSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Bullet[] Magazine = new Bullet[magSize];
+
         //gets a reference to the PlayerController component
         player = GetComponent<PlayerController>();
 
