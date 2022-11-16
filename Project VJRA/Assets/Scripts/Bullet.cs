@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class Bullet
 {
-    class PlasmaBullet
+    public class PlasmaBullet
     {
         float shieldsDamage;
         float healthDamage;
         float currentAmmo = 12f;
         float maxAmmo = 50f;
         float rechargeRate = 10f;
+
+        bool isFull = false;
 
         void chargeBullet()
         {
@@ -27,11 +29,13 @@ public class Bullet
             if(currentAmmo >= maxAmmo)
             {
                 currentAmmo = maxAmmo;
+                isFull = true;
             }
 
             if(currentAmmo <= 0.5f)
             {
                 currentAmmo = 0;
+                isFull = false;
             }
         }
 

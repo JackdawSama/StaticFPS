@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class NewWeaponSystem : MonoBehaviour
 {
+    //BULLET Classes
+    
     //COMMON Weapon Variables
     [SerializeField] float reloadTimer;
     [SerializeField] float reloadCD;
     [SerializeField] int magSize;
     [SerializeField] AudioSource audioSource;
-
-    Bullet[] Magazine;
+    ArrayList Magazine = new ArrayList();
 
     //PLASMA Weapon Variables
     [SerializeField] float maxAmmo_Plasma;
     [SerializeField] public float currentAmmo_Plasma;
-    [SerializeField] GameObject plasmaProjectile;
     [SerializeField] bool ammoFull_Plasma;
     [SerializeField] float plasmaDamage;
     [SerializeField] float plasmaRecharge = 1f;
     [SerializeField] float plasmaCD;
     [SerializeField] float plasmaFireTimer;
-    [SerializeField] float plasmaRange;
+    [SerializeField] float plasmaRange;  
     [SerializeField] TrailRenderer bulletTrail_Plasma;
     [SerializeField] AudioClip plasmaFire;
     
@@ -45,8 +45,6 @@ public class NewWeaponSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Bullet[] Magazine = new Bullet[magSize];
-
         //gets a reference to the PlayerController component
         player = GetComponent<PlayerController>();
 
