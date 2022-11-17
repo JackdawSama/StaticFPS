@@ -82,7 +82,7 @@ public class NewWeaponSystem : MonoBehaviour
     [SerializeField] int magCursor;
     [SerializeField] int magCounter;
     [SerializeField] bool magIsFull;
-    Bullet[] Magazine;
+    [SerializeField] public Bullet[] Magazine;
 
     //PLASMA Weapon Variables
     [SerializeField] public float plasmaRange;
@@ -108,6 +108,10 @@ public class NewWeaponSystem : MonoBehaviour
         Magazine = new Bullet[magSize];
         Magazine[0] = new Bullet(false);
         Magazine[1] = new Bullet(true);
+        for(int i = 2; i < magSize; i++)
+        {
+            Magazine[i] = null;
+        }
 
         check = true;
 
@@ -132,10 +136,6 @@ public class NewWeaponSystem : MonoBehaviour
     void Update()
     {
         //handleAmmoStatus();
-        if(check)
-        {
-            Debug.Log(magCounter);
-        }
 
         fireTimer += Time.deltaTime;
         reloadTimer += Time.deltaTime;
@@ -145,20 +145,44 @@ public class NewWeaponSystem : MonoBehaviour
         if(Input.GetMouseButton(0) && fireTimer > fireCD)
         {
             HandleFire();
+
+            check = true;
+            if(check)
+            {
+                Debug.Log(magCounter);
+                for(int i =0; i < magSize; i++)
+                {
+                    if(Magazine[i] != null)
+                    {
+                        Debug.Log(Magazine[i]);
+                    }
+                }
+                check = false;
+            }
+
+            Debug.Log(magCounter);
         }
 
         CheckMagSize();
+        if(check)
+        {
+            //Debug.Log(magCounter);
+            for(int i =0; i < magSize; i++)
+            {
+                if(Magazine[i] != null)
+                {
+                    Debug.Log(Magazine[i]);
+                }
+            }
+            check = false;
+        }
 
-        if(reloadTimer > reloadCD && !magIsFull)
+        if(reloadTimer > reloadCD)
         {
             HandleRelod();
         }
+
     }
-
-    // void handleAmmoStatus()
-    // {
-
-    // }
 
     void HandleFire()
     {
@@ -231,11 +255,13 @@ public class NewWeaponSystem : MonoBehaviour
                 }
             }
             AddtoMag(new Bullet(true));
+            magCounter++;
             Debug.Log("Added Plasma");
         }
         else if(player.state == PlayerController.MovementState.dashing)
         {
             AddtoMag(new Bullet(false));
+            magCounter++;
             Debug.Log("Added Kinetic");
         }
         reloadTimer = 0;
@@ -266,9 +292,15 @@ public class NewWeaponSystem : MonoBehaviour
         { 
             for(int i = 0; i < magSize; i++)
             {
+                magCounter =0;
+                
                 if(Magazine[i] != null)
                 {
                     magCounter++;
+                }
+                else if(Magazine[i] == null)
+                {
+                    break;
                 }
             }
 
