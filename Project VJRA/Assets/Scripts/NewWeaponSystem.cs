@@ -98,27 +98,23 @@ public class NewWeaponSystem : MonoBehaviour
     [SerializeField] Camera playerCam;
     [SerializeField] Transform projectileSpawn;
 
-    bool check;
-
 
     // Start is called before the first frame update
     void Start()
     {
         magIsFull = false;
         Magazine = new Bullet[magSize];
-        Magazine[0] = new Bullet(false);
-        Magazine[1] = new Bullet(true);
-        for(int i = 2; i < magSize; i++)
-        {
-            Magazine[i] = null;
-        }
 
-        check = true;
-
-        for(int i =0; i < magSize; i++)
-        if(Magazine[i] != null)
+        for(int i = 0; i < magSize; i++)
         {
-            Debug.Log(Magazine[i]);
+            if(i % 2 == 0)
+            {
+                Magazine[i] = new Bullet(false);
+            }
+            else
+            {
+                Magazine[i] = new Bullet(true);
+            }
         }
 
         //handleAmmoStatus();
@@ -145,37 +141,23 @@ public class NewWeaponSystem : MonoBehaviour
         if(Input.GetMouseButton(0) && fireTimer > fireCD)
         {
             HandleFire();
+        }
 
-            check = true;
-            if(check)
+        CheckMagSize();
+
+        if(Input.GetMouseButtonDown(1))
             {
                 Debug.Log(magCounter);
                 for(int i =0; i < magSize; i++)
                 {
                     if(Magazine[i] != null)
                     {
-                        Debug.Log(Magazine[i]);
+                    Debug.Log(Magazine[i]._isPlasma);
                     }
                 }
-                check = false;
             }
 
             Debug.Log(magCounter);
-        }
-
-        CheckMagSize();
-        if(check)
-        {
-            //Debug.Log(magCounter);
-            for(int i =0; i < magSize; i++)
-            {
-                if(Magazine[i] != null)
-                {
-                    Debug.Log(Magazine[i]);
-                }
-            }
-            check = false;
-        }
 
         if(reloadTimer > reloadCD)
         {
@@ -193,6 +175,7 @@ public class NewWeaponSystem : MonoBehaviour
             if(Magazine[0]._plasmaIsEmpty)
             {
                 RemovefromMag();
+                Debug.Log("Removed Plasma");
                 return;
             }
             Debug.Log("Fired Plasma");
@@ -236,6 +219,7 @@ public class NewWeaponSystem : MonoBehaviour
                 StartCoroutine(Projectile(trail,hit));
             }
             RemovefromMag();
+            Debug.Log("Removed Kinetic");
             fireTimer = 0;
         }
     }
@@ -292,15 +276,11 @@ public class NewWeaponSystem : MonoBehaviour
         { 
             for(int i = 0; i < magSize; i++)
             {
-                magCounter =0;
-                
+                magCounter = 0;
+
                 if(Magazine[i] != null)
                 {
                     magCounter++;
-                }
-                else if(Magazine[i] == null)
-                {
-                    break;
                 }
             }
 
