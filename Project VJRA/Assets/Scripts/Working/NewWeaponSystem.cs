@@ -10,7 +10,7 @@ public class NewWeaponSystem : MonoBehaviour
     {
         public float shieldsDamage;
         public float healthDamage;
-        float _plasmaAmmoMax = 50f;
+        float _plasmaAmmoMax = 100f;
         public float _plasmaAmmoCurrent;
         float _plasmaRechargeRate = 5f;
         public bool _isPlasma;
@@ -78,7 +78,7 @@ public class NewWeaponSystem : MonoBehaviour
     [SerializeField] AudioSource audioSource;
 
     //MAGAZINE Variables
-    [SerializeField] int magSize = 8;
+    [SerializeField] public int magSize = 8;
     [SerializeField] int magCursor;
     [SerializeField] int magCounter;
     [SerializeField] bool magIsFull;
@@ -304,6 +304,7 @@ public class NewWeaponSystem : MonoBehaviour
                 magCursor = i;
             }
         }
+        Debug.Log("Cursor at : " + magCursor);
     }
     void AddtoMag(Bullet bulletType)
     {

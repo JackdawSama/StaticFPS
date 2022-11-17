@@ -7177,10 +7177,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 458452264999cbc4793688aa7ee15978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MagazineUI: []
-  plasmaBullet: {fileID: 0}
+  MagazineUI_Plasma:
+  - {fileID: 884617429}
+  - {fileID: 258856943}
+  - {fileID: 1711316256}
+  - {fileID: 766543268}
+  - {fileID: 919172043}
+  - {fileID: 1604282792}
+  - {fileID: 1382805500}
+  - {fileID: 1895755481}
+  MagazineUI_Kinetic:
+  - {fileID: 1843835583}
+  - {fileID: 1328851425}
+  - {fileID: 1343945970}
+  - {fileID: 306159251}
+  - {fileID: 1384540584}
+  - {fileID: 1432636238}
+  - {fileID: 849103682}
+  - {fileID: 1211162862}
   Gun: {fileID: 1947379289}
-  kineticBullet: {fileID: 0}
+  plasmaSlider:
+  - {fileID: 884617433}
+  - {fileID: 258856945}
+  - {fileID: 1711316258}
+  - {fileID: 766543270}
+  - {fileID: 919172045}
+  - {fileID: 1604282794}
+  - {fileID: 1382805502}
+  - {fileID: 1895755483}
 --- !u!224 &2646400126453972672
 RectTransform:
   m_ObjectHideFlags: 0
