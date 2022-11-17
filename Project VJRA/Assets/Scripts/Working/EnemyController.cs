@@ -70,20 +70,28 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float healthDamage, float shieldDamage)
     {
         isTakingFire = true;
         noDamagerTimer = 0;
-        if(shields <= 0)
+        
+        if(shields >= 0)
         {
-            health -= damage;
-            //Debug.Log("Health Damage. Health Left : " + health);
-            if(health <= 0f)
-            {
-                Die();
-            }
+            shields -= shieldDamage;
         }
-        else{shields -= damage;}
+        else if(shields <= 0)
+        {
+            shields = 0;
+
+            health -= healthDamage;
+        }
+
+        if(health <= 0)
+        {
+            health = 0;
+
+            Die();
+        }
     }
 
     public void burnShields(float damage)

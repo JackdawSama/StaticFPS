@@ -124,7 +124,7 @@ public class NewWeponManager : MonoBehaviour
 
             if(enemy != null)
             {
-                enemy.TakeDamage(Magazine1[0].damage);
+                enemy.TakeDamage(Magazine1[0].damage, Magazine1[0].damage);
             }
             Debug.Log(Magazine1[0].damage);
             Magazine1.RemoveAt(0);

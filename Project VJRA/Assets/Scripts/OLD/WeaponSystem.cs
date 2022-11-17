@@ -135,7 +135,7 @@ public class WeaponSystem : MonoBehaviour
 
             if(enemy != null)
             {
-                enemy.TakeDamage(kineticDamage);
+                enemy.TakeDamage(kineticDamage, kineticDamage);
             }
             currentAmmo_Kinetic--;
 

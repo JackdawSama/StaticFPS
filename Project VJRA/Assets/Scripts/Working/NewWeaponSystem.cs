@@ -11,7 +11,7 @@ public class NewWeaponSystem : MonoBehaviour
         public float shieldsDamage;
         public float healthDamage;
         float _plasmaAmmoMax = 10f;
-        public float _plasmaAmmoCurrent = 0f;
+        public float _plasmaAmmoCurrent = 10f;
         float _plasmaRechargeRate = 1f;
         public bool _isPlasma;
         public bool _plasmaIsFull = false;
@@ -36,25 +36,25 @@ public class NewWeaponSystem : MonoBehaviour
                 tag = "Kinetic";
             }
         }
-        public void chargeBullet()
-        {
-            if(_plasmaAmmoCurrent < _plasmaAmmoMax)
-            {
-                _plasmaAmmoCurrent += Time.deltaTime * _plasmaRechargeRate;
-            }
+        // public void chargeBullet()
+        // {
+        //     if(_plasmaAmmoCurrent < _plasmaAmmoMax)
+        //     {
+        //         _plasmaAmmoCurrent += Time.deltaTime * _plasmaRechargeRate;
+        //     }
 
-            LimitCharge();
-        }
+        //     LimitCharge();
+        // }
 
-        public void LimitCharge()
-        {
-            if(_plasmaAmmoCurrent >= _plasmaAmmoMax)
-            {
-                _plasmaAmmoCurrent = _plasmaAmmoMax;
-                _plasmaIsFull = true;
-                canFire = true;
-            }
-        }
+        // public void LimitCharge()
+        // {
+        //     if(_plasmaAmmoCurrent >= _plasmaAmmoMax)
+        //     {
+        //         _plasmaAmmoCurrent = _plasmaAmmoMax;
+        //         _plasmaIsFull = true;
+        //         canFire = true;
+        //     }
+        // }
 
         public void EmptyCheck()
         {
@@ -71,8 +71,7 @@ public class NewWeaponSystem : MonoBehaviour
             _plasmaAmmoCurrent--;
         }
     }
-    
-
+    //END of BULLET Class
 
     //COMMON Weapon Variables
     [SerializeField] float reloadTimer;
@@ -85,7 +84,6 @@ public class NewWeaponSystem : MonoBehaviour
     //MAGAZINE Variables
     [SerializeField] public int magSize = 8;
     [SerializeField] int magCursor;
-    [SerializeField] int magCounter;
     [SerializeField] bool magIsFull;
     [SerializeField] public Bullet[] Magazine;
 
@@ -110,20 +108,6 @@ public class NewWeaponSystem : MonoBehaviour
         magIsFull = false;
         Magazine = new Bullet[magSize];
 
-        for(int i = 0; i < magSize/2; i++)
-        {
-            if(i % 2 == 0)
-            {
-                Magazine[i] = new Bullet(true);
-            }
-            else
-            {
-                Magazine[i] = new Bullet(false);
-            }
-        }
-
-        //handleAmmoStatus();
-
         //gets a reference to the PlayerController component
         player = GetComponent<PlayerController>();
 
@@ -136,40 +120,38 @@ public class NewWeaponSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //handleAmmoStatus();
 
         fireTimer += Time.deltaTime;
-        reloadTimer += Time.deltaTime;
-
-
+        //reloadTimer += Time.deltaTime;
 
         if(Input.GetMouseButton(0) && fireTimer > fireCD)
         {
             HandleFire();
         }
 
-        CheckMagSize();
+        SetMagCursor();
 
         if(Input.GetMouseButtonDown(1))
-            {
-                Debug.Log(magCounter);
-                for(int i =0; i < magSize; i++)
-                {
-                    if(Magazine[i] != null)
-                    {
-                    Debug.Log("Bullet No. " + (i+1) + ". " + Magazine[i]._isPlasma);
-                    }
-                }
-                if(Magazine[0].tag == "Plasma")
-                {
-                    Debug.Log("Plasma Charge at : " + Magazine[0]._plasmaAmmoCurrent);
-                }
-                Debug.Log("Cursor at : " + magCursor);
-            }
-
-        if(reloadTimer > reloadCD)
         {
-            HandleRelod();
+            for(int i =0; i < magSize; i++)
+            {
+                if(Magazine[i] != null)
+                {
+                Debug.Log("Bullet No. " + (i+1) + ". " + Magazine[i]._isPlasma);
+                }
+            }
+            if(Magazine[0].tag == "Plasma")
+            {
+                Debug.Log("Plasma Charge at : " + Magazine[0]._plasmaAmmoCurrent);
+            }
+            Debug.Log("Cursor at : " + magCursor);
+        }
+
+        HandleKineticReload();
+
+        if(!magIsFull)
+        {
+            HandlePlasmaRelod();
         }
 
     }
@@ -178,13 +160,14 @@ public class NewWeaponSystem : MonoBehaviour
     {
         //check for bullet type and fire
         CheckBulletType();
-        if(isTypePlasma && Magazine[0].canFire)
+
+        if(isTypePlasma /*&& Magazine[0].canFire*/)
         {
             if(Magazine[0]._plasmaIsEmpty)
             {
                 RemovefromMag();
                 Debug.Log("Removed Plasma");
-                magCounter--;
+                magCursor--;
                 return;
             }
             Debug.Log("Fired Plasma");
@@ -197,7 +180,7 @@ public class NewWeaponSystem : MonoBehaviour
 
                 if(enemy != null)
                 {
-                    enemy.TakeDamage(Magazine[0].shieldsDamage);
+                    enemy.TakeDamage(Magazine[0].healthDamage,Magazine[0].shieldsDamage);
                     Debug.Log("Hit Enemy");
                 }
 
@@ -219,7 +202,7 @@ public class NewWeaponSystem : MonoBehaviour
 
                 if(enemy != null)
                 {
-                    enemy.TakeDamage(Magazine[0].healthDamage);
+                    enemy.TakeDamage(Magazine[0].healthDamage,Magazine[0].shieldsDamage);
                     Debug.Log("Hit Enemy");
                 }
 
@@ -229,36 +212,45 @@ public class NewWeaponSystem : MonoBehaviour
             }
             RemovefromMag();
             Debug.Log("Removed Kinetic");
-            magCounter--;
+            magCursor--;
             fireTimer = 0;
         }
     }
 
-    void HandleRelod()
+    void HandlePlasmaRelod()
     {
-        CheckBulletType();
+        // if(Magazine != null)
+        // {
+        //     CheckBulletType();
+        // }
+
         if(player.state == PlayerController.MovementState.walking)
         {
-            if(isTypePlasma)
-            {
-                if(!Magazine[0]._plasmaIsFull)
-                {
-                    //Debug.Log("Charging Plasma");
-                    Magazine[0].chargeBullet();
-                    return;
-                }
-            }
+            // if(isTypePlasma)
+            // {
+            //     if(!Magazine[0]._plasmaIsFull)
+            //     {
+            //         //Debug.Log("Charging Plasma");
+            //         Magazine[0].chargeBullet();
+            //         return;
+            //     }
+            // }
+            reloadTimer += Time.deltaTime;
             AddtoMag(new Bullet(true));
-            magCounter++;
+            magCursor++;
             Debug.Log("Added Plasma");
         }
-        else if(player.state == PlayerController.MovementState.dashing)
+        reloadTimer = 0;
+    }
+
+    void HandleKineticReload()
+    {
+        if(player.state == PlayerController.MovementState.dashing)
         {
             AddtoMag(new Bullet(false));
-            magCounter++;
+            magCursor++;
             Debug.Log("Added Kinetic");
         }
-        reloadTimer = 0;
     }
 
     void CheckBulletType()
@@ -273,37 +265,17 @@ public class NewWeaponSystem : MonoBehaviour
         }
     }
 
-    void CheckMagSize()
-    {
-        if(Magazine == null)
-        {
-            magIsFull = false;
-            magCounter = 0;
-            return;
-        }
-
-        for(int i = 0; i < magSize; i++)
-        {
-            magCounter = 5;
-
-            if(Magazine[i] != null)
-            {
-                magCounter++;
-            }
-
-            if(magCounter < magSize)
-            {
-                magIsFull = false;
-            }
-        }
-
-        if(magCounter >= magSize)
-        {
-            magCounter = magSize;
-            magIsFull = true;
-        }
-        
-    }
+    // void CheckMagSize()
+    // {
+    //     magCounter = 0;
+    //     for(int i = 0; i < magSize; i++)
+    //     {
+    //         if(Magazine[i] == null)
+    //         {
+    //             magCounter
+    //         }
+    //     }
+    // }
 
     void SetMagCursor()
     {
@@ -319,6 +291,16 @@ public class NewWeaponSystem : MonoBehaviour
             else if(Magazine[i].tag == "Kinetic" || Magazine[i].tag == "Plasma")
             {
                 magCursor++;
+            }
+
+            if(magCursor >= magSize)
+            {
+                magCursor = magSize - 1;
+                magIsFull = true;
+            }
+            else if(magCursor < magSize)
+            {
+                magIsFull = false;
             }
         }
         //Debug.Log("Cursor at : " + magCursor);
