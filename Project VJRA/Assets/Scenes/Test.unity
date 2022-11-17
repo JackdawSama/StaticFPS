@@ -7298,6 +7298,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7222508859386211124}
     - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: Shields
+      value: 
+      objectReference: {fileID: 1142270331}
+    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
       propertyPath: noDamagerCD
       value: 3
       objectReference: {fileID: 0}
