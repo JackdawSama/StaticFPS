@@ -219,28 +219,18 @@ public class NewWeaponSystem : MonoBehaviour
 
     void HandlePlasmaRelod()
     {
-        // if(Magazine != null)
-        // {
-        //     CheckBulletType();
-        // }
-
         if(player.state == PlayerController.MovementState.walking)
         {
-            // if(isTypePlasma)
-            // {
-            //     if(!Magazine[0]._plasmaIsFull)
-            //     {
-            //         //Debug.Log("Charging Plasma");
-            //         Magazine[0].chargeBullet();
-            //         return;
-            //     }
-            // }
             reloadTimer += Time.deltaTime;
-            AddtoMag(new Bullet(true));
-            magCursor++;
-            Debug.Log("Added Plasma");
+
+            if(reloadTimer > reloadCD)
+            {
+                AddtoMag(new Bullet(true));
+                magCursor++;
+                Debug.Log("Added Plasma");
+                reloadTimer = 0;
+            }
         }
-        reloadTimer = 0;
     }
 
     void HandleKineticReload()

@@ -29,9 +29,13 @@ public class NewUI : MonoBehaviour
     void Update()
     {
         UpdateMagUI();
-        if(RefMag[0] == "Plasma")
-        {
-            SetPlasmaAmmo(Gun.Magazine[0]._plasmaAmmoCurrent);
+            
+        if(RefMag[0] != null)
+        {    
+            if(RefMag[0] == "Plasma")
+            {
+                SetPlasmaAmmo(Gun.Magazine[0]._plasmaAmmoCurrent);
+            }
         }
     }
 
@@ -62,12 +66,6 @@ public class NewUI : MonoBehaviour
 
         for(int i = 0; i < Gun.magSize; i++)
         {
-            if(RefMag == null)
-            {
-                MagazineUI_Plasma[i].SetActive(false);
-                MagazineUI_Kinetic[i].SetActive(false);
-                return;
-            }
             if(RefMag[i] == "Kinetic")
             {
                 MagazineUI_Plasma[i].SetActive(false);
@@ -76,6 +74,11 @@ public class NewUI : MonoBehaviour
             else if(RefMag[i] == "Plasma")
             {
                 MagazineUI_Plasma[i].SetActive(true);
+                MagazineUI_Kinetic[i].SetActive(false);
+            }
+            else
+            {
+                MagazineUI_Plasma[i].SetActive(false);
                 MagazineUI_Kinetic[i].SetActive(false);
             }
         }
