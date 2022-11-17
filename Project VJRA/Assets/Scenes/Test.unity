@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: e24d302652ba5e444b105ea71a26e33e, type: 2}
+--- !u!20 &25680775 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 2059314807817303369, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
+  m_PrefabInstance: {fileID: 1947379287}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &277841557
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,6 +980,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!4 &534483161 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2059314808631051538, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
+  m_PrefabInstance: {fileID: 1947379287}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &637027429
 GameObject:
   m_ObjectHideFlags: 0
@@ -4149,6 +4159,10 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -5860062848481774092, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -5860062848481774092, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
       propertyPath: plasmaRange
       value: 75
       objectReference: {fileID: 0}
@@ -4255,6 +4269,49 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7222508861196930403, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
   m_PrefabInstance: {fileID: 1947379287}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1947379289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947379288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6663bdba3be964419df6fa7fcc791ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reloadTimer: 0
+  reloadCD: 0.5
+  isTypePlasma: 0
+  fireTimer: 0
+  fireCD: 0.5
+  audioSource: {fileID: 0}
+  magSize: 8
+  magCursor: 0
+  magIsFull: 0
+  plasmaRange: 0
+  bulletTrail_Plasma: {fileID: 5006640646837533988, guid: d77eebf1278e23148a049fde0dcec90c, type: 3}
+  kineticRange: 0
+  ammoFull_Kinetic: 0
+  bulletTrail_Kinetic: {fileID: 5006640646837533988, guid: 54de432174e2e2e4a9405fa6d40806e2, type: 3}
+  player: {fileID: 1947379291}
+  playerCam: {fileID: 25680775}
+  projectileSpawn: {fileID: 534483161}
+  Kinetics: 0
+  Plasmas: 0
+  ammoInMag: 0
+--- !u!114 &1947379291 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7222508861196930402, guid: c1320aec65214e84c8efb6bfd46c7c0f, type: 3}
+  m_PrefabInstance: {fileID: 1947379287}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1947379288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54b78a494bac4d5458cc525467caf92b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1965928994
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,9 +10,9 @@ public class NewWeaponSystem : MonoBehaviour
     {
         float shieldsDamage;
         float healthDamage;
-        float _plasmaAmmoMax;
-        float _plasmaAmmoCurrent;
-        float _plasmaRechargeRate;
+        float _plasmaAmmoMax = 50f;
+        public float _plasmaAmmoCurrent;
+        float _plasmaRechargeRate = 5f;
         public bool _isPlasma;
         public bool _plasmaIsFull = false;
         public bool _plasmaIsEmpty = false;
@@ -80,15 +80,16 @@ public class NewWeaponSystem : MonoBehaviour
     //MAGAZINE Variables
     [SerializeField] int magSize = 8;
     [SerializeField] int magCursor;
+    [SerializeField] int magCounter;
     [SerializeField] bool magIsFull;
     Bullet[] Magazine;
 
     //PLASMA Weapon Variables
-    [SerializeField] public float currentAmmo_Plasma;
+    [SerializeField] public float plasmaRange;
     [SerializeField] TrailRenderer bulletTrail_Plasma;
     
     //KINETIC Weapon variables
-    [SerializeField] public int currentAmmo_Kinetic;
+    [SerializeField] public float kineticRange;
     [SerializeField] bool ammoFull_Kinetic;
     [SerializeField] TrailRenderer bulletTrail_Kinetic;
 
@@ -97,19 +98,26 @@ public class NewWeaponSystem : MonoBehaviour
     [SerializeField] Camera playerCam;
     [SerializeField] Transform projectileSpawn;
 
-    [SerializeField] int Kinetics;
-    [SerializeField] int Plasmas;
-    [SerializeField] int ammoInMag;
+    bool check;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        magIsFull = false;
         Magazine = new Bullet[magSize];
-        Magazine[0] = new Bullet(true);
-        Magazine[1] = new Bullet(false);
+        Magazine[0] = new Bullet(false);
+        Magazine[1] = new Bullet(true);
 
-        handleAmmoStatus();
+        check = true;
+
+        for(int i =0; i < magSize; i++)
+        if(Magazine[i] != null)
+        {
+            Debug.Log(Magazine[i]);
+        }
+
+        //handleAmmoStatus();
 
         //gets a reference to the PlayerController component
         player = GetComponent<PlayerController>();
@@ -124,56 +132,33 @@ public class NewWeaponSystem : MonoBehaviour
     void Update()
     {
         //handleAmmoStatus();
+        if(check)
+        {
+            Debug.Log(magCounter);
+        }
+
+        fireTimer += Time.deltaTime;
+        reloadTimer += Time.deltaTime;
+
+
 
         if(Input.GetMouseButton(0) && fireTimer > fireCD)
         {
             HandleFire();
         }
 
-        // if(Input.GetMouseButton(1)/*&& fireTimer > fireCD*/)
-        // {
-        //     HandleFire();
-        // }
+        CheckMagSize();
 
-        if(!magIsFull && reloadTimer > reloadCD)
+        if(reloadTimer > reloadCD && !magIsFull)
         {
             HandleRelod();
         }
     }
 
-    /*void HandleFirePlasma()
-    {
-        // plasmaisFiring = true;
-        if(currentAmmo_Plasma <= 0)
-        {
-            currentAmmo_Plasma = 0;
-            Debug.Log("Plasma Rifle Empty");
-            return;
-        }
+    // void handleAmmoStatus()
+    // {
 
-        RaycastHit hit;
-        if(Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, plasmaRange))
-        {
-            EnemyController enemy = hit.transform.GetComponent<EnemyController>();
-
-
-            if(enemy != null)
-            {
-                //enemy.burnShields(plasmaDamage);
-            }
-            currentAmmo_Plasma--;
-
-            TrailRenderer trail = Instantiate(bulletTrail_Kinetic, projectileSpawn.position, Quaternion.identity);
-
-            StartCoroutine(KineticProjectile(trail,hit));
-            Debug.Log("Plasma Fire. Ammo Left : " +  currentAmmo_Kinetic);
-        }
-    }*/
-
-    void handleAmmoStatus()
-    {
-
-    }
+    // }
 
     void HandleFire()
     {
@@ -188,11 +173,44 @@ public class NewWeaponSystem : MonoBehaviour
             }
             Debug.Log("Fired Plasma");
             Magazine[0].FireCharge();
+            RaycastHit hit;
+            if(Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, plasmaRange))
+            {
+                EnemyController enemy = hit.transform.GetComponent<EnemyController>();
+
+
+                if(enemy != null)
+                {
+                    //enemy.burnShields(plasmaDamage);
+                    Debug.Log("Hit Enemy");
+                }
+
+                TrailRenderer trail = Instantiate(bulletTrail_Plasma, projectileSpawn.position, Quaternion.identity);
+
+                StartCoroutine(Projectile(trail,hit));
+            }
             fireTimer = 0;
+
         }
         else if(!isTypePlasma)
         {
             Debug.Log("Fired Kinetic");
+            RaycastHit hit;
+            if(Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, kineticRange))
+            {
+                EnemyController enemy = hit.transform.GetComponent<EnemyController>();
+
+
+                if(enemy != null)
+                {
+                    //enemy.burnShields(plasmaDamage);
+                    Debug.Log("Hit Enemy");
+                }
+
+                TrailRenderer trail = Instantiate(bulletTrail_Kinetic, projectileSpawn.position, Quaternion.identity);
+
+                StartCoroutine(Projectile(trail,hit));
+            }
             RemovefromMag();
             fireTimer = 0;
         }
@@ -207,7 +225,7 @@ public class NewWeaponSystem : MonoBehaviour
             {
                 if(!Magazine[0]._plasmaIsFull)
                 {
-                    Debug.Log("Charging Plasma");
+                    //Debug.Log("Charging Plasma");
                     Magazine[0].chargeBullet();
                     return;
                 }
@@ -235,6 +253,37 @@ public class NewWeaponSystem : MonoBehaviour
         }
     }
 
+    void CheckMagSize()
+    {
+        if(Magazine == null)
+        {
+            magIsFull = false;
+            magCounter = 0;
+            return;
+        }
+
+        if(!magIsFull)
+        { 
+            for(int i = 0; i < magSize; i++)
+            {
+                if(Magazine[i] != null)
+                {
+                    magCounter++;
+                }
+            }
+
+            if(magCounter < magSize)
+            {
+                magIsFull = false;
+            }
+            else if(magCounter >= magSize)
+            {
+                magCounter = magSize;
+                magIsFull = true;
+            }
+        }
+        
+    }
 
     void SetMagCursor()
     {
@@ -264,7 +313,7 @@ public class NewWeaponSystem : MonoBehaviour
         Magazine[magSize - 1] = null;
     }
 
-    private IEnumerator KineticProjectile(TrailRenderer trail, RaycastHit hit)
+    private IEnumerator Projectile(TrailRenderer trail, RaycastHit hit)
     {
         float time = 0f;
         Vector3 startPos = trail.transform.position;
