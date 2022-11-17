@@ -6820,6 +6820,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: reloadCD
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7829387699759657795, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: m_RootOrder
       value: 1
