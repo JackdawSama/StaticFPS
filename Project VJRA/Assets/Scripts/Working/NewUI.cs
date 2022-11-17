@@ -9,10 +9,19 @@ public class NewUI : MonoBehaviour
     [SerializeField] GameObject[] MagazineUI_Kinetic;
     [SerializeField] NewWeaponSystem Gun;
     [SerializeField] Slider[] plasmaSlider;
+
+    string[] RefMag;
+
     // Start is called before the first frame update
     void Start()
     {
-        //Gun = GetComponent<NewWeaponSystem>();
+        RefMag = new string[Gun.magSize];
+
+        for(int i = 0; i < Gun.magSize; i++)
+        {
+            MagazineUI_Kinetic[i].SetActive(false);
+            MagazineUI_Plasma[i].SetActive(false);
+        }
 
     }
 
@@ -31,21 +40,36 @@ public class NewUI : MonoBehaviour
         }
     }
 
-    public void UpdateMagUI()
+    public void RefMagUpdate()
     {
         for(int i = 0; i < Gun.magSize; i++)
         {
-            if(Gun.Magazine[i]._isPlasma)
+            if(Gun.Magazine[i] != null)
             {
-                MagazineUI_Plasma[i].SetActive(true);
-                MagazineUI_Kinetic[i].SetActive(false);
+                RefMag[i] = Gun.Magazine[i].tag;
+                // Debug.Log("Updated REF Mag");
             }
-            else if(!Gun.Magazine[i]._isPlasma)
+            else return;
+        }
+    }
+
+    public void UpdateMagUI()
+    {
+        RefMagUpdate();
+
+        for(int i = 0; i < Gun.magSize; i++)
+        {
+            if(RefMag[i] == "Kinetic")
             {
                 MagazineUI_Plasma[i].SetActive(false);
                 MagazineUI_Kinetic[i].SetActive(true);
             }
-            else if(Gun.Magazine[i] == null)
+            else if(RefMag[i] == "Plasma")
+            {
+                MagazineUI_Plasma[i].SetActive(true);
+                MagazineUI_Kinetic[i].SetActive(false);
+            }
+            else
             {
                 MagazineUI_Plasma[i].SetActive(false);
                 MagazineUI_Kinetic[i].SetActive(false);

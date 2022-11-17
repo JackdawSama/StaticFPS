@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float fireCD;
     [SerializeField] GameObject projectile;
     [SerializeField] Transform projectileSpawn;
+    [SerializeField] GameObject Shields;
     [SerializeField] float turnRate = 5f;
     [SerializeField] bool isTurning;
     [SerializeField] bool isTakingFire;
@@ -57,6 +58,15 @@ public class EnemyController : MonoBehaviour
         {
             isTakingFire = false;
             regenShields();
+        }
+
+        if(shields <= 0)
+        {
+            Shields.SetActive(false);
+        }
+        else if(shields > 0)
+        {
+            Shields.SetActive(true);
         }
     }
 

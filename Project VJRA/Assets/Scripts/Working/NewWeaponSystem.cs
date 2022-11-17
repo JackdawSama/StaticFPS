@@ -10,13 +10,14 @@ public class NewWeaponSystem : MonoBehaviour
     {
         public float shieldsDamage;
         public float healthDamage;
-        float _plasmaAmmoMax = 100f;
-        public float _plasmaAmmoCurrent;
-        float _plasmaRechargeRate = 5f;
+        float _plasmaAmmoMax = 10f;
+        public float _plasmaAmmoCurrent = 0f;
+        float _plasmaRechargeRate = 1f;
         public bool _isPlasma;
         public bool _plasmaIsFull = false;
         public bool _plasmaIsEmpty = false;
         public bool canFire = false;
+        public string tag;
         public Bullet(bool isTypePlasma)
         {
 
@@ -25,12 +26,14 @@ public class NewWeaponSystem : MonoBehaviour
                 _isPlasma = true;
                 shieldsDamage = 12f;
                 healthDamage = 5f;
+                tag = "Plasma";
             }
             else if(!isTypePlasma)
             {
                 _isPlasma = false;
                 shieldsDamage = 5f;
                 healthDamage = 15f;
+                tag = "Kinetic";
             }
         }
         public void chargeBullet()
@@ -105,15 +108,15 @@ public class NewWeaponSystem : MonoBehaviour
         magIsFull = false;
         Magazine = new Bullet[magSize];
 
-        for(int i = 0; i < magSize; i++)
+        for(int i = 0; i < magSize/2; i++)
         {
             if(i % 2 == 0)
             {
-                Magazine[i] = new Bullet(false);
+                Magazine[i] = new Bullet(true);
             }
             else
             {
-                Magazine[i] = new Bullet(true);
+                Magazine[i] = new Bullet(false);
             }
         }
 
@@ -152,9 +155,14 @@ public class NewWeaponSystem : MonoBehaviour
                 {
                     if(Magazine[i] != null)
                     {
-                    Debug.Log(Magazine[i]._isPlasma);
+                    Debug.Log("Bullet No. " + (i+1) + ". " + Magazine[i]._isPlasma);
                     }
                 }
+                if(Magazine[0].tag == "Plasma")
+                {
+                    Debug.Log("Plasma Charge at : " + Magazine[0]._plasmaAmmoCurrent);
+                }
+                Debug.Log("Cursor at : " + magCursor);
             }
 
         if(reloadTimer > reloadCD)
@@ -297,14 +305,20 @@ public class NewWeaponSystem : MonoBehaviour
 
     void SetMagCursor()
     {
+        magCursor = 0;
+
         for(int i = 0; i < magSize; i++)
         {
-            if(Magazine[i] == null)
+            if(Magazine[i] != null)
+            {
+                magCursor++;
+            }
+            else if(Magazine[i] == null)
             {
                 magCursor = i;
             }
         }
-        Debug.Log("Cursor at : " + magCursor);
+        //Debug.Log("Cursor at : " + magCursor);
     }
     void AddtoMag(Bullet bulletType)
     {
