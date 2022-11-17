@@ -8,8 +8,8 @@ public class NewWeaponSystem : MonoBehaviour
     //BULLET Class
     public class Bullet
     {
-        float shieldsDamage;
-        float healthDamage;
+        public float shieldsDamage;
+        public float healthDamage;
         float _plasmaAmmoMax = 50f;
         public float _plasmaAmmoCurrent;
         float _plasmaRechargeRate = 5f;
@@ -157,8 +157,6 @@ public class NewWeaponSystem : MonoBehaviour
                 }
             }
 
-            Debug.Log(magCounter);
-
         if(reloadTimer > reloadCD)
         {
             HandleRelod();
@@ -176,6 +174,7 @@ public class NewWeaponSystem : MonoBehaviour
             {
                 RemovefromMag();
                 Debug.Log("Removed Plasma");
+                magCounter--;
                 return;
             }
             Debug.Log("Fired Plasma");
@@ -188,7 +187,7 @@ public class NewWeaponSystem : MonoBehaviour
 
                 if(enemy != null)
                 {
-                    //enemy.burnShields(plasmaDamage);
+                    enemy.TakeDamage(Magazine[0].shieldsDamage);
                     Debug.Log("Hit Enemy");
                 }
 
@@ -210,7 +209,7 @@ public class NewWeaponSystem : MonoBehaviour
 
                 if(enemy != null)
                 {
-                    //enemy.burnShields(plasmaDamage);
+                    enemy.TakeDamage(Magazine[0].healthDamage);
                     Debug.Log("Hit Enemy");
                 }
 
@@ -220,6 +219,7 @@ public class NewWeaponSystem : MonoBehaviour
             }
             RemovefromMag();
             Debug.Log("Removed Kinetic");
+            magCounter--;
             fireTimer = 0;
         }
     }
@@ -272,27 +272,25 @@ public class NewWeaponSystem : MonoBehaviour
             return;
         }
 
-        if(!magIsFull)
-        { 
-            for(int i = 0; i < magSize; i++)
-            {
-                magCounter = 0;
+        for(int i = 0; i < magSize; i++)
+        {
+            magCounter = 5;
 
-                if(Magazine[i] != null)
-                {
-                    magCounter++;
-                }
+            if(Magazine[i] != null)
+            {
+                magCounter++;
             }
 
             if(magCounter < magSize)
             {
                 magIsFull = false;
             }
-            else if(magCounter >= magSize)
-            {
-                magCounter = magSize;
-                magIsFull = true;
-            }
+        }
+
+        if(magCounter >= magSize)
+        {
+            magCounter = magSize;
+            magIsFull = true;
         }
         
     }

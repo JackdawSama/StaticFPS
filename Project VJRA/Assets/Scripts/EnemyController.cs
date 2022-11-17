@@ -73,6 +73,7 @@ public class EnemyController : MonoBehaviour
                 Die();
             }
         }
+        else{shields -= damage;}
     }
 
     public void burnShields(float damage)
