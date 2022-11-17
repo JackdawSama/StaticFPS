@@ -72,6 +72,8 @@ public class NewWeaponSystem : MonoBehaviour
         }
     }
     
+
+
     //COMMON Weapon Variables
     [SerializeField] float reloadTimer;
     [SerializeField] float reloadCD;
@@ -309,13 +311,14 @@ public class NewWeaponSystem : MonoBehaviour
 
         for(int i = 0; i < magSize; i++)
         {
-            if(Magazine[i] != null)
-            {
-                magCursor++;
-            }
-            else if(Magazine[i] == null)
+            if (Magazine[i] == null)
             {
                 magCursor = i;
+                break;
+            }
+            else if(Magazine[i].tag == "Kinetic" || Magazine[i].tag == "Plasma")
+            {
+                magCursor++;
             }
         }
         //Debug.Log("Cursor at : " + magCursor);

@@ -77,7 +77,7 @@ public class EnemyController : MonoBehaviour
         if(shields <= 0)
         {
             health -= damage;
-            Debug.Log("Health Damage. Health Left : " + health);
+            //Debug.Log("Health Damage. Health Left : " + health);
             if(health <= 0f)
             {
                 Die();
@@ -91,7 +91,7 @@ public class EnemyController : MonoBehaviour
         isTakingFire = true;
         noDamagerTimer = 0;
         shields -= damage;
-        Debug.Log("Shield Damage. Shields Left : " + shields);
+        //Debug.Log("Shield Damage. Shields Left : " + shields);
         if(shields < 0)
         {
             shields = 0;
