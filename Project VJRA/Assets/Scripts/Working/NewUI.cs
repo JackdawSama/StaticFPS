@@ -30,18 +30,17 @@ public class NewUI : MonoBehaviour
     {
         UpdateMagUI();
             
-        if(RefMag[0] != null)
+        if(RefMag[0] != "Null")
         {    
-            if(RefMag[0] == "Plasma")
-            {
-                SetPlasmaAmmo(Gun.Magazine[0]._plasmaAmmoCurrent);
-            }
+           SetPlasmaAmmo(Gun.Magazine[0]._plasmaAmmoCurrent);
         }
     }
 
     public void SetPlasmaAmmo(float ammo)
     {
-        if(Gun.Magazine[0]._isPlasma)
+        RefMagUpdate();
+
+        if(RefMag[0] == "Plasma")
         {
             plasmaSlider[0].value = ammo;
         }
@@ -56,7 +55,10 @@ public class NewUI : MonoBehaviour
                 RefMag[i] = Gun.Magazine[i].tag;
                 // Debug.Log("Updated REF Mag");
             }
-            else return;
+            else if(Gun.Magazine[i] == null)
+            {
+                RefMag[i] = "Null";
+            }
         }
     }
 
@@ -76,7 +78,7 @@ public class NewUI : MonoBehaviour
                 MagazineUI_Plasma[i].SetActive(true);
                 MagazineUI_Kinetic[i].SetActive(false);
             }
-            else
+            else if(RefMag[i] == "Null")
             {
                 MagazineUI_Plasma[i].SetActive(false);
                 MagazineUI_Kinetic[i].SetActive(false);

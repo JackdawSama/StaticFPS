@@ -159,6 +159,12 @@ public class NewWeaponSystem : MonoBehaviour
     void HandleFire()
     {
         //check for bullet type and fire
+        if(Magazine == null)
+        {
+            Debug.Log("Mag is EMPTY");
+            return;
+        }
+        
         CheckBulletType();
 
         if(isTypePlasma /*&& Magazine[0].canFire*/)
