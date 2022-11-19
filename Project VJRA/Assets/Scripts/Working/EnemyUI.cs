@@ -13,11 +13,6 @@ public class EnemyUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //healthText.text = GetComponent<TextMeshProUGUI>().text;
-        //shieldsText.text = GetComponent<TextMeshProUGUI>().text;
-
-        //enemy = GetComponent<EnemyController>();
-
         setEnemyUI();
     }
 

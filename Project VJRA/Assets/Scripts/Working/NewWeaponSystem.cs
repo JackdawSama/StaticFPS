@@ -36,29 +36,10 @@ public class NewWeaponSystem : MonoBehaviour
                 tag = "Kinetic";
             }
         }
-        // public void chargeBullet()
-        // {
-        //     if(_plasmaAmmoCurrent < _plasmaAmmoMax)
-        //     {
-        //         _plasmaAmmoCurrent += Time.deltaTime * _plasmaRechargeRate;
-        //     }
-
-        //     LimitCharge();
-        // }
-
-        // public void LimitCharge()
-        // {
-        //     if(_plasmaAmmoCurrent >= _plasmaAmmoMax)
-        //     {
-        //         _plasmaAmmoCurrent = _plasmaAmmoMax;
-        //         _plasmaIsFull = true;
-        //         canFire = true;
-        //     }
-        // }
 
         public void EmptyCheck()
         {
-            if(_plasmaAmmoCurrent <= 0.5f)
+            if(_plasmaAmmoCurrent < 1f)
             {
                 _plasmaAmmoCurrent = 0;
                 _plasmaIsEmpty = true;
@@ -68,7 +49,10 @@ public class NewWeaponSystem : MonoBehaviour
         public void FireCharge()
         {
             EmptyCheck();
-            _plasmaAmmoCurrent--;
+            if(!_plasmaIsEmpty)
+            {
+                _plasmaAmmoCurrent--;
+            }
         }
     }
     //END of BULLET Class
@@ -131,8 +115,27 @@ public class NewWeaponSystem : MonoBehaviour
 
         SetMagCursor();
 
+        DebugCheck();
+
+        HandleKineticReload();
+
+        if(!magIsFull)
+        {
+            HandlePlasmaRelod();
+        }
+
+    }
+
+    void DebugCheck()
+    {
         if(Input.GetMouseButtonDown(1))
         {
+            if(Magazine[0] == null)
+            {
+                Debug.Log("Mag is EMPTY");
+                return;
+            }
+
             for(int i =0; i < magSize; i++)
             {
                 if(Magazine[i] != null)
@@ -146,20 +149,12 @@ public class NewWeaponSystem : MonoBehaviour
             }
             Debug.Log("Cursor at : " + magCursor);
         }
-
-        HandleKineticReload();
-
-        if(!magIsFull)
-        {
-            HandlePlasmaRelod();
-        }
-
     }
 
     void HandleFire()
     {
         //check for bullet type and fire
-        if(Magazine == null)
+        if(Magazine[0] == null)
         {
             Debug.Log("Mag is EMPTY");
             return;
@@ -279,16 +274,6 @@ public class NewWeaponSystem : MonoBehaviour
 
         for(int i = 0; i < magSize; i++)
         {
-            if (Magazine[i] == null)
-            {
-                magCursor = i;
-                break;
-            }
-            else if(Magazine[i].tag == "Kinetic" || Magazine[i].tag == "Plasma")
-            {
-                magCursor++;
-            }
-
             if(magCursor >= magSize)
             {
                 magCursor = magSize - 1;
@@ -297,6 +282,16 @@ public class NewWeaponSystem : MonoBehaviour
             else if(magCursor < magSize)
             {
                 magIsFull = false;
+            }
+
+            if (Magazine[i] == null)
+            {
+                magCursor = i;
+                break;
+            }
+            else if(Magazine[i].tag == "Kinetic" || Magazine[i].tag == "Plasma")
+            {
+                magCursor++;
             }
         }
         //Debug.Log("Cursor at : " + magCursor);
