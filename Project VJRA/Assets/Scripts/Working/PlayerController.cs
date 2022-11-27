@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
     //handles the states of the player
     private void StateHandler()
     {
-        if(isGrounded && Input.GetKeyDown(sprintKey))
+        if(isGrounded && Input.GetKeyDown(sprintKey) && rb.velocity.magnitude > 0)
         {
             state = MovementState.dashing;
             return;

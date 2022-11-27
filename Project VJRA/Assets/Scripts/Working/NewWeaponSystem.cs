@@ -117,11 +117,12 @@ public class NewWeaponSystem : MonoBehaviour
 
         DebugCheck();
 
-        HandleKineticReload();
+        // HandleKineticReload();
 
         if(!magIsFull)
         {
             HandlePlasmaRelod();
+            HandleKineticReload();
         }
 
     }
@@ -185,10 +186,13 @@ public class NewWeaponSystem : MonoBehaviour
                     Debug.Log("Hit Enemy");
                 }
 
-                TrailRenderer trail = Instantiate(bulletTrail_Plasma, projectileSpawn.position, Quaternion.identity);
+                // TrailRenderer trail = Instantiate(bulletTrail_Plasma, projectileSpawn.position, Quaternion.identity);
 
-                StartCoroutine(Projectile(trail,hit));
+                // StartCoroutine(Projectile(trail,hit));
             }
+
+            TrailRenderer trail = Instantiate(bulletTrail_Plasma, projectileSpawn.position, Quaternion.identity);
+            StartCoroutine(Projectile(trail,hit));
             fireTimer = 0;
 
         }
@@ -207,10 +211,13 @@ public class NewWeaponSystem : MonoBehaviour
                     Debug.Log("Hit Enemy");
                 }
 
-                TrailRenderer trail = Instantiate(bulletTrail_Kinetic, projectileSpawn.position, Quaternion.identity);
+                // TrailRenderer trail = Instantiate(bulletTrail_Kinetic, projectileSpawn.position, Quaternion.identity);
 
-                StartCoroutine(Projectile(trail,hit));
+                // StartCoroutine(Projectile(trail,hit));
             }
+            TrailRenderer trail = Instantiate(bulletTrail_Kinetic, projectileSpawn.position, Quaternion.identity);
+            StartCoroutine(Projectile(trail,hit));
+
             RemovefromMag();
             Debug.Log("Removed Kinetic");
             magCursor--;
@@ -274,16 +281,6 @@ public class NewWeaponSystem : MonoBehaviour
 
         for(int i = 0; i < magSize; i++)
         {
-            if(magCursor >= magSize)
-            {
-                magCursor = magSize - 1;
-                magIsFull = true;
-            }
-            else if(magCursor < magSize)
-            {
-                magIsFull = false;
-            }
-
             if (Magazine[i] == null)
             {
                 magCursor = i;
@@ -293,14 +290,27 @@ public class NewWeaponSystem : MonoBehaviour
             {
                 magCursor++;
             }
+
+            if(magCursor >= magSize)
+            {
+                magCursor = magSize - 1;
+                magIsFull = true;
+                return;
+            }
+            else if(magCursor < magSize)
+            {
+                magIsFull = false;
+            }
         }
         //Debug.Log("Cursor at : " + magCursor);
     }
     void AddtoMag(Bullet bulletType)
     {
         SetMagCursor();
-
-        Magazine[magCursor] = bulletType;
+        if(!magIsFull)
+        {
+            Magazine[magCursor] = bulletType;
+        }
     }
 
     void RemovefromMag()

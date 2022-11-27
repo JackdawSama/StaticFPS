@@ -5,24 +5,36 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
+    //HEALTH & SHIELD VARIABLES
     [SerializeField] public float health = 50f;
     [SerializeField] public float shields = 50f;
     [SerializeField] float maxShields = 100f;
     [SerializeField] float shieldRegenRate = 2f;
-    [SerializeField] float detectionRadius = 100f;
-    [SerializeField] float fireTimer;
-    [SerializeField] float fireCD;
-    [SerializeField] GameObject projectile;
-    [SerializeField] Transform projectileSpawn;
     [SerializeField] GameObject Shields;
-    [SerializeField] float turnRate = 5f;
+    //SECTION END
+
+    //AWARNESS VARIABLES
+    [SerializeField] float detectionRadius = 100f;
     [SerializeField] bool isTurning;
     [SerializeField] bool isTakingFire;
     [SerializeField] float noDamagerTimer;
     [SerializeField] float noDamagerCD;
+    //SECTION END
 
+    //ATTACK VARIABLES
+    [SerializeField] float fireTimer;
+    [SerializeField] float fireCD;
+    [SerializeField] GameObject projectile;
+    [SerializeField] Transform projectileSpawn;
+    //SECTION END
+    
+    //ENEMY VARIABLES
+    [SerializeField] float turnRate = 5f;
     NavMeshAgent agent;
     public GameObject player;
+    [SerializeField] float safeDistance;
+    float distance;
+    //SECTION END
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +45,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distance = Vector3.Distance(player.transform.position, transform.position);
+        distance = Vector3.Distance(player.transform.position, transform.position);
 
         fireTimer += Time.deltaTime;
 
@@ -43,15 +55,15 @@ public class EnemyController : MonoBehaviour
         {
             agent.SetDestination(player.transform.position);
 
-            if(distance <= agent.stoppingDistance)
-            {
+            //if(distance <= agent.stoppingDistance)
+            //{
                 isTurning = true;
                 FaceTarget();
                 if(!isTurning)
                 {
                     Fire();
                 }
-            }
+            //}
         }
         
         if(noDamagerTimer > noDamagerCD)
@@ -125,6 +137,14 @@ public class EnemyController : MonoBehaviour
         Quaternion lookRot = Quaternion.LookRotation(new Vector3(direction.x, direction.y, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * turnRate);
         isTurning = false;
+    }
+
+    void putDistance()
+    {
+        if(distance <= safeDistance)
+        {
+            //set enemy to move to a safe distance from the player
+        }
     }
 
     void Die() 
