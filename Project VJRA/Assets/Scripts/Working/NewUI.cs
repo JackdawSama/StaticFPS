@@ -53,7 +53,6 @@ public class NewUI : MonoBehaviour
             if(Gun.Magazine[i] != null)
             {
                 RefMag[i] = Gun.Magazine[i].tag;
-                // Debug.Log("Updated REF Mag");
             }
             else if(Gun.Magazine[i] == null)
             {
