@@ -8,7 +8,7 @@ public class NewUI : MonoBehaviour
     [SerializeField] GameObject[] MagazineUI_Plasma;
     [SerializeField] GameObject[] MagazineUI_Kinetic;
     [SerializeField] NewWeaponSystem Gun;
-    [SerializeField] Slider[] plasmaSlider;
+    [SerializeField] Slider plasmaSlider;
 
     string[] RefMag;
 
@@ -42,7 +42,7 @@ public class NewUI : MonoBehaviour
 
         if(RefMag[0] == "Plasma")
         {
-            plasmaSlider[0].value = ammo;
+            plasmaSlider.value = ammo;
         }
     }
 
