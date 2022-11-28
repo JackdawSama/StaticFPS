@@ -42,9 +42,9 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody rb;
 
-    public float enemyDistance = 5f;
-    public LayerMask enemyMask;
-    public bool enemyIsNearby;
+    //public float enemyDistance = 5f;
+    //public LayerMask enemyMask;
+    //public bool enemyIsNearby;
 
     public enum MovementState
     {
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         LimitSpeed();
         StateHandler();
-        HandleEnemyCheck();
+        //HandleEnemyCheck();
     }
 
     void FixedUpdate()
@@ -203,8 +203,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void HandleEnemyCheck()
-    {
-        enemyIsNearby = Physics.CheckSphere(transform.position, enemyDistance, enemyMask);
-    }
+    // void HandleEnemyCheck()
+    // {
+    //     enemyIsNearby = Physics.CheckSphere(transform.position, enemyDistance, enemyMask);
+    // }
 }
