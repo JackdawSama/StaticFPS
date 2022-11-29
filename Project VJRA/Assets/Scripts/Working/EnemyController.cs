@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float maxShields = 100f;
     [SerializeField] float shieldRegenRate = 2f;
     [SerializeField] GameObject Shields;
+    [SerializeField] bool shieldsActive = true;
     //SECTION END
 
     //AWARNESS VARIABLES
@@ -34,6 +35,17 @@ public class EnemyController : MonoBehaviour
     public GameObject player;
     [SerializeField] float safeDistance;
     float distance;
+
+    [SerializeField] MeshRenderer meshRenderer;
+    public float blinkIntensity;
+    public float blinkDuration;
+    float blinkTimer;
+
+    [SerializeField] float moveToTimer;
+    [SerializeField] float maxMoveTimer = 1f;
+    [SerializeField] float closeRangeCheckDist = 1f;
+
+
     //SECTION END
 
     // Start is called before the first frame update
@@ -51,19 +63,20 @@ public class EnemyController : MonoBehaviour
 
         noDamagerTimer += Time.deltaTime;
 
-        if(distance <= detectionRadius)
+        moveToTimer += Time.deltaTime;
+
+        if(distance <= detectionRadius && moveToTimer >= maxMoveTimer)
         {
             agent.SetDestination(player.transform.position);
 
-            //if(distance <= agent.stoppingDistance)
-            //{
-                isTurning = true;
-                FaceTarget();
-                if(!isTurning)
-                {
-                    Fire();
-                }
-            //}
+            moveToTimer = 0;
+
+            isTurning = true;
+            FaceTarget();
+            if(!isTurning)
+            {
+                Fire();
+            }
         }
         
         if(noDamagerTimer > noDamagerCD)
@@ -75,11 +88,15 @@ public class EnemyController : MonoBehaviour
         if(shields <= 0)
         {
             Shields.SetActive(false);
+            shieldsActive = false;
         }
         else if(shields > 0)
         {
             Shields.SetActive(true);
+            shieldsActive = true;
         }
+
+        BlinkOnDamage();
     }
 
     public void TakeDamage(float healthDamage, float shieldDamage)
@@ -87,11 +104,11 @@ public class EnemyController : MonoBehaviour
         isTakingFire = true;
         noDamagerTimer = 0;
         
-        if(shields >= 0)
+        if(shieldsActive)
         {
             shields -= shieldDamage;
         }
-        else if(shields <= 0)
+        else if(!shieldsActive)
         {
             shields = 0;
 
@@ -104,6 +121,8 @@ public class EnemyController : MonoBehaviour
 
             Die();
         }
+
+        blinkTimer = blinkDuration;
     }
 
     public void burnShields(float damage)
@@ -111,7 +130,6 @@ public class EnemyController : MonoBehaviour
         isTakingFire = true;
         noDamagerTimer = 0;
         shields -= damage;
-        //Debug.Log("Shield Damage. Shields Left : " + shields);
         if(shields < 0)
         {
             shields = 0;
@@ -159,6 +177,14 @@ public class EnemyController : MonoBehaviour
             Instantiate(projectile, projectileSpawn.position, projectileSpawn.rotation);
             fireTimer = 0f;
         }
+    }
+
+    void BlinkOnDamage()
+    {
+        blinkTimer -= Time.deltaTime;
+        float lerp = Mathf.Clamp01(blinkTimer/blinkDuration);
+        float intensity = lerp * blinkIntensity + 1f;
+        meshRenderer.material.color = Color.red * intensity;
     }
 
 }

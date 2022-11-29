@@ -199,6 +199,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133657923}
   m_CullTransparentMesh: 1
+--- !u!23 &230353628 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5916678848489827958, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+  m_PrefabInstance: {fileID: 5916678850180603411}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &258856943
 GameObject:
   m_ObjectHideFlags: 0
@@ -6605,10 +6610,38 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 404410395}
+    - target: {fileID: 1525906211, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: m_Acceleration
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1525906211, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 360
+      objectReference: {fileID: 0}
+    - target: {fileID: 1525906211, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: m_ObstacleAvoidanceType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 7222508859386211124}
+    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: maxMoveTimer
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: meshRenderer
+      value: 
+      objectReference: {fileID: 230353628}
+    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: blinkDuration
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
+      propertyPath: blinkIntensity
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5916678848684467506, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
       propertyPath: m_RootOrder
       value: 4

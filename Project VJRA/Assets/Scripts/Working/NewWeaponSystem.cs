@@ -72,13 +72,17 @@ public class NewWeaponSystem : MonoBehaviour
     [SerializeField] public Bullet[] Magazine;
 
     //PLASMA Weapon Variables
+    [SerializeField] public float plasmaCD;
     [SerializeField] public float plasmaRange;
     [SerializeField] TrailRenderer bulletTrail_Plasma;
+    [SerializeField] AudioClip[] plasmaSounds;
     
     //KINETIC Weapon variables
+    [SerializeField] public float kineticCD;
     [SerializeField] public float kineticRange;
     [SerializeField] bool ammoFull_Kinetic;
     [SerializeField] TrailRenderer bulletTrail_Kinetic;
+    [SerializeField] AudioClip kineticSound;
 
     //PLAYER variables
     [SerializeField] PlayerController player;
@@ -109,8 +113,21 @@ public class NewWeaponSystem : MonoBehaviour
         fireTimer += Time.deltaTime;
         //reloadTimer += Time.deltaTime;
 
+        if(Magazine[0] != null)
+        {
+            if(Magazine[0]._isPlasma)
+            {
+                fireCD = plasmaCD;
+            }
+            else if(!Magazine[0]._isPlasma)
+            {
+                fireCD = kineticCD;
+            }
+        }
+
         if(Input.GetMouseButton(0) && fireTimer > fireCD)
         {
+            Debug.Log("Entered Fire State");
             HandleFire();
         }
 
