@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     //SECTION : PLAYER VARIABLES
     private float standHeight;
     private float crouchHeight;
+    [SerializeField] float customGravity;
 
     float hInput;
     float vInput;
@@ -165,6 +166,7 @@ public class PlayerController : MonoBehaviour
         else if(!isGrounded)
         {
             rb.AddForce(moveDir.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            rb.AddForce(new Vector3(0, -1f, 0) * rb.mass * customGravity);
         }
     }
 
