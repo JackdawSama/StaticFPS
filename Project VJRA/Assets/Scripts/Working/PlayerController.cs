@@ -57,9 +57,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public MovementState state;
     //SECTION END
 
+    [Header("Footsteps Audio")]
+    float footStepTimer;
+    [SerializeField] float footstepCD = 0.35f;
+    AudioSource audioSource;
+    [SerializeField] AudioClip[] Footsteps;
+    [SerializeField] AudioClip jump;
+    [SerializeField] AudioClip dash;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         moveSpeed = walkSpeed;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -74,7 +85,13 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         LimitSpeed();
         StateHandler();
-        //HandleEnemyCheck();
+
+        footStepTimer += Time.deltaTime;
+
+        if(footStepTimer >= footstepCD)
+        {
+            HandleFootstepsAudio();
+        }
     }
 
     void FixedUpdate()
@@ -89,8 +106,15 @@ public class PlayerController : MonoBehaviour
 
         JumpInput();
         HandleCrouch();
+    }
 
-
+    void HandleFootstepsAudio()
+    {
+        if(state == MovementState.walking)
+        {
+            audioSource.PlayOneShot(Footsteps[Random.Range(0,Footsteps.Length - 1)]);
+        }
+        footStepTimer = 0;
     }
 
 
@@ -135,6 +159,7 @@ public class PlayerController : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.LeftShift))
             {
                 rb.AddForce(moveDir.normalized * dashSpeed * 10f, ForceMode.Impulse);
+                audioSource.PlayOneShot(dash);
             }
         }
         else if(!isGrounded)
@@ -175,6 +200,8 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
 
             HandleJump();
+
+            audioSource.PlayOneShot(jump);
         }
     }
 
@@ -202,9 +229,4 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(transform.localScale.x,standHeight,transform.localScale.z);
         }
     }
-
-    // void HandleEnemyCheck()
-    // {
-    //     enemyIsNearby = Physics.CheckSphere(transform.position, enemyDistance, enemyMask);
-    // }
 }

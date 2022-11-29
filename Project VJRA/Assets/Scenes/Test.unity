@@ -6235,8 +6235,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: plasmaCD
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: reloadCD
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: kineticCD
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: plasmaRange
@@ -6246,6 +6254,26 @@ PrefabInstance:
       propertyPath: kineticRange
       value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: kineticSound
+      value: 
+      objectReference: {fileID: 8300000, guid: bdd47696595c47949ae9e0f4aa7f86e5, type: 3}
+    - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: plasmaSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: plasmaSounds.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: a93bbcd29c4ee36488b18135f5b007d4, type: 3}
+    - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: plasmaSounds.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: ca6b2011b4b60444eaa28d3361230984, type: 3}
+    - target: {fileID: 620391926192782900, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: plasmaSounds.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: f10388b26478a6d4faebf59063be0f74, type: 3}
     - target: {fileID: 7829387699759657795, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -6290,6 +6318,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: dash
+      value: 
+      objectReference: {fileID: 8300000, guid: 8eea938f24138b04b8b1211ffe5efc38, type: 3}
+    - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: jump
+      value: 
+      objectReference: {fileID: 8300000, guid: 11d4158658afb6c49ba4cf7506fe553a, type: 3}
+    - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: Footsteps.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: Footsteps.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: ae5f55dfd2db9ee4e9717274701c5e09, type: 3}
+    - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: Footsteps.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 73cd9d74393e6564cabd5ff9016c05d6, type: 3}
+    - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: Footsteps.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: b331d6864057c594da7acab16cddda94, type: 3}
     - target: {fileID: 7829387699759657817, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: m_Name
       value: PlayerRB Updated
@@ -6697,3 +6749,99 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7829387699759657817, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
   m_PrefabInstance: {fileID: 620391924245665901}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &7222508859386211128
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7222508859386211124}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

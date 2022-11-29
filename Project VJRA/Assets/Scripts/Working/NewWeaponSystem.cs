@@ -198,6 +198,8 @@ public class NewWeaponSystem : MonoBehaviour
                     }
                 }
 
+                audioSource.PlayOneShot(plasmaSounds[Random.Range(0,plasmaSounds.Length - 1)]);
+
                 TrailRenderer trail = Instantiate(bulletTrail_Plasma, projectileSpawn.position, Quaternion.identity);
                 StartCoroutine(Projectile(trail,hit));
                 fireTimer = 0;
@@ -220,6 +222,9 @@ public class NewWeaponSystem : MonoBehaviour
                 }
 
             }
+
+            audioSource.PlayOneShot(kineticSound);
+
             TrailRenderer trail = Instantiate(bulletTrail_Kinetic, projectileSpawn.position, Quaternion.identity);
             StartCoroutine(Projectile(trail,hit));
 
