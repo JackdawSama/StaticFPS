@@ -6641,8 +6641,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 11d4158658afb6c49ba4cf7506fe553a, type: 3}
     - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: dashSpeed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: jumpForce
-      value: 10
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: walkSpeed
@@ -6650,7 +6654,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: airMultiplier
-      value: 2
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: customGravity
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 7829387699759657816, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: Footsteps.Array.size
@@ -6671,6 +6679,14 @@ PrefabInstance:
     - target: {fileID: 7829387699759657817, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
       propertyPath: m_Name
       value: PlayerRB Updated
+      objectReference: {fileID: 0}
+    - target: {fileID: 7829387699759657823, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: m_Mass
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7829387699759657823, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b154728811e7c024ca77a6f776ccf83b, type: 3}
