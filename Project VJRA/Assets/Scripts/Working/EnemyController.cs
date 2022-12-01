@@ -43,7 +43,7 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] float moveToTimer;
     [SerializeField] float maxMoveTimer = 1f;
-    [SerializeField] float closeRangeCheckDist = 1f;
+    //[SerializeField] float closeRangeCheckDist = 1f;
 
 
     //SECTION END

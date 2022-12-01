@@ -11,7 +11,7 @@ public class NewWeaponSystem : MonoBehaviour
         public float shieldsDamage;
         public float healthDamage;
         //int _plasmaAmmoMax = 10;
-        public float _plasmaAmmoCurrent = 25;
+        public float _plasmaAmmoCurrent = 12f;
         public bool _isPlasma;
         public bool _plasmaIsFull = false;
         public bool _plasmaIsEmpty = false;
@@ -23,15 +23,15 @@ public class NewWeaponSystem : MonoBehaviour
             if(isTypePlasma)
             {
                 _isPlasma = true;
-                shieldsDamage = 3f;
-                healthDamage = 1f;
+                shieldsDamage = 8f;
+                healthDamage = 3f;
                 tag = "Plasma";
             }
             else if(!isTypePlasma)
             {
                 _isPlasma = false;
-                shieldsDamage = 5f;
-                healthDamage = 15f;
+                shieldsDamage = 20f;
+                healthDamage = 40f;
                 tag = "Kinetic";
             }
         }
@@ -83,6 +83,7 @@ public class NewWeaponSystem : MonoBehaviour
     [SerializeField] bool ammoFull_Kinetic;
     [SerializeField] TrailRenderer bulletTrail_Kinetic;
     [SerializeField] AudioClip kineticSound;
+    [SerializeField] ParticleSystem muzzleFlash;
 
     //PLAYER variables
     [SerializeField] PlayerController player;
@@ -224,6 +225,7 @@ public class NewWeaponSystem : MonoBehaviour
             }
 
             audioSource.PlayOneShot(kineticSound);
+            muzzleFlash.Play();
 
             TrailRenderer trail = Instantiate(bulletTrail_Kinetic, projectileSpawn.position, Quaternion.identity);
             StartCoroutine(Projectile(trail,hit));
