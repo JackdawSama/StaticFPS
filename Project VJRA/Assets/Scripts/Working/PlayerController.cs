@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -36,6 +37,9 @@ public class PlayerController : MonoBehaviour
     private float standHeight;
     private float crouchHeight;
     [SerializeField] float customGravity;
+
+    float playerMaxHP = 100;
+    public float playerHP;
 
     float hInput;
     float vInput;
@@ -77,6 +81,8 @@ public class PlayerController : MonoBehaviour
         rb.freezeRotation = true;
 
         standHeight = transform.localScale.y;
+
+        playerHP = playerMaxHP;
     }
 
     // Update is called once per frame
@@ -107,6 +113,21 @@ public class PlayerController : MonoBehaviour
 
         JumpInput();
         HandleCrouch();
+    }
+
+    public void HandlePlayerDamage(float damage)
+    {
+        playerHP = playerHP - damage;
+
+        if(playerHP <= 0)
+        {
+            HandleDeath();
+        }
+    }
+
+    void HandleDeath()
+    {
+        Destroy(gameObject);
     }
 
     void HandleFootstepsAudio()
