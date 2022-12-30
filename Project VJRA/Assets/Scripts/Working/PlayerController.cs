@@ -180,6 +180,7 @@ public class PlayerController : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.LeftShift))
             {
+                Debug.Log("Dash has been initialised");
                 rb.AddForce(moveDir.normalized * dashSpeed * 10f, ForceMode.Impulse);
                 audioSource.PlayOneShot(dash);
             }
