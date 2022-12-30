@@ -149,6 +149,7 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    //LOOK INTO TRANFORM.LOOKAT(). Looks like a better way to do it than FaceTarget()
     void FaceTarget()
     {
         Vector3 direction = (player.transform.position - transform.position).normalized;
