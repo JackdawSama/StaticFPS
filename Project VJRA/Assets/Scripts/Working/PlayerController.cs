@@ -178,7 +178,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
 
-            if(Input.GetKeyDown(KeyCode.LeftShift))
+            if(state == MovementState.dashing)
             {
                 Debug.Log("Dash has been initialised");
                 rb.AddForce(moveDir.normalized * dashSpeed * 10f, ForceMode.Impulse);

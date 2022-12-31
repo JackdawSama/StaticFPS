@@ -52,7 +52,9 @@ public class EnemyAI : MonoBehaviour
         switch(currentState)
         {
             case EnemyState.idle:
-            Debug.Log("In state Idle");
+            meshRenderer.material.color = Color.gray;
+            isDetected = false;
+            // Debug.Log("In state Idle");
             if(distance <= detectionRadius)
             {
                 currentState = EnemyState.detect;
@@ -60,7 +62,7 @@ public class EnemyAI : MonoBehaviour
             }
             break;
             case EnemyState.detect:
-            Debug.Log("In state Detected");
+            // Debug.Log("In state Detected");
             if(isDetected)
             {
                 meshRenderer.material.color = Color.red;
@@ -69,7 +71,7 @@ public class EnemyAI : MonoBehaviour
             }
             break;
             case EnemyState.attack:
-            Debug.Log("In state Attack");
+            // Debug.Log("In state Attack");
             if(distance <= detectionRadius && isDetected == true)
             {
                 MoveEnemytoTarget();
@@ -82,8 +84,6 @@ public class EnemyAI : MonoBehaviour
             break;
             default:
             currentState = EnemyState.idle;
-            meshRenderer.material.color = Color.gray;
-            isDetected = false;
             break;
         }
     }
