@@ -18,6 +18,9 @@ public class EnemyAI : MonoBehaviour
     public MeshRenderer meshRenderer;
     bool isDetected;
 
+    [SerializeField] float critterHP = 3f;
+    [SerializeField] float critterDamage = 5f;
+
     NavMeshAgent agent;
 
     float distance;
@@ -91,5 +94,34 @@ public class EnemyAI : MonoBehaviour
     void MoveEnemytoTarget()
     {
         agent.SetDestination(player.transform.position);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if(critterHP <= 0)
+        {
+            critterHP = 0;
+
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if(collider.gameObject.tag == "Player")
+        {
+            if(player != null)
+            {
+                Debug.Log("Took DMG");
+                player.HandlePlayerDamage(critterDamage);
+                Die();
+                return;
+            }
+        }
     }
 }

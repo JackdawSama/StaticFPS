@@ -190,12 +190,18 @@ public class NewWeaponSystem : MonoBehaviour
                 if(Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, plasmaRange))
                 {
                     EnemyController enemy = hit.transform.GetComponent<EnemyController>();
+                    EnemyAI critterEnemy = hit.transform.GetComponent<EnemyAI>();
 
 
                     if(enemy != null)
                     {
                         enemy.TakeDamage(Magazine[0].healthDamage,Magazine[0].shieldsDamage);
                         Debug.Log("Hit Enemy");
+                    }
+                    else if(critterEnemy != null)
+                    {
+                        critterEnemy.TakeDamage(Magazine[0].healthDamage);
+                        Debug.Log("Hit Critter");
                     }
                 }
 
@@ -214,12 +220,18 @@ public class NewWeaponSystem : MonoBehaviour
             if(Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, kineticRange))
             {
                 EnemyController enemy = hit.transform.GetComponent<EnemyController>();
+                EnemyAI critterEnemy = hit.transform.GetComponent<EnemyAI>();
 
 
                 if(enemy != null)
                 {
                     enemy.TakeDamage(Magazine[0].healthDamage,Magazine[0].shieldsDamage);
                     Debug.Log("Hit Enemy");
+                }
+                else if(critterEnemy != null)
+                {
+                    critterEnemy.TakeDamage(Magazine[0].healthDamage);
+                    Debug.Log("Hit Critter");
                 }
 
             }
