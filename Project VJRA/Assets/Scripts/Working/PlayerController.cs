@@ -10,19 +10,32 @@ public class PlayerController : MonoBehaviour
     //SECTION : KEYBINDS
     [Header("Controls")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
-    [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] KeyCode crouchKey = KeyCode.LeftControl;
     //SECTION END
 
     //SECTION : MOVEMENT VARIABLES
-    [Header("Movement")]
+    [Header("Basic Movement")]
     public float moveSpeed;
+    float desiredSpeed;
+    float lastDesiredSpeed;
+    bool desiredSpeedChanged;
+    float speedChangeFactor;
     [SerializeField] float walkSpeed;
-    [SerializeField] float dashSpeed;
     [SerializeField] float crouchSpeed;
     [SerializeField] float groundDrag;
+    bool keepMomentum;
+
+    [Header("Jump")]
     [SerializeField] float jumpForce;
     [SerializeField] float airMultiplier;
+    [SerializeField] float customGravity;
+    [SerializeField] float gravRef;
+
+    [Header("Dash")]
+    [SerializeField] float dashSpeed;
+    [SerializeField] float dashSpeedChangeFactor;
+    public bool isDashing = false;
+
     //SECTION END
 
     //SECTION : GROUND CHECK
@@ -34,9 +47,9 @@ public class PlayerController : MonoBehaviour
     //SECTION END
 
     //SECTION : PLAYER VARIABLES
+    [SerializeField] Transform orientation;
     private float standHeight;
-    private float crouchHeight;
-    [SerializeField] float customGravity;
+    [SerializeField] float crouchHeight;
 
     float playerMaxHP = 100;
     public float playerHP;
@@ -47,10 +60,6 @@ public class PlayerController : MonoBehaviour
 
     Rigidbody rb;
 
-    //public float enemyDistance = 5f;
-    //public LayerMask enemyMask;
-    //public bool enemyIsNearby;
-
     public enum MovementState
     {
         idle,
@@ -60,15 +69,15 @@ public class PlayerController : MonoBehaviour
         air
     }
     [SerializeField] public MovementState state;
+    [SerializeField] MovementState lastState;
     //SECTION END
 
-    [Header("Footsteps Audio")]
+    [Header("Audio")]
     float footStepTimer;
     [SerializeField] float footstepCD = 0.35f;
     AudioSource audioSource;
     [SerializeField] AudioClip[] Footsteps;
     [SerializeField] AudioClip jump;
-    [SerializeField] AudioClip dash;
 
 
     // Start is called before the first frame update
@@ -81,6 +90,7 @@ public class PlayerController : MonoBehaviour
         rb.freezeRotation = true;
 
         standHeight = transform.localScale.y;
+        crouchHeight = transform.localScale.y/2;
 
         playerHP = playerMaxHP;
     }
@@ -106,7 +116,8 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
     }
 
-    void HandleMoveInputs()
+    //PLAYER INPUT SECTION
+    void HandleMoveInputs()                                                         //Handles Input from player for movement, crouching and jumping
     {
         hInput = Input.GetAxisRaw("Horizontal");
         vInput = Input.GetAxisRaw("Vertical");
@@ -115,75 +126,40 @@ public class PlayerController : MonoBehaviour
         HandleCrouch();
     }
 
-    public void HandlePlayerDamage(float damage)
+    void JumpInput()                                                                //Jump Input handle function
     {
-        playerHP = playerHP - damage;
-
-        if(playerHP <= 0)
+        if(Input.GetKeyDown(jumpKey) && !isJumping && isGrounded)
         {
-            HandleDeath();
+            isJumping = true;
+
+            HandleJump();
+
+            audioSource.PlayOneShot(jump);
         }
     }
-
-    void HandleDeath()
+    void HandleCrouch()                                                             //Crouch Input handle function
     {
-        Destroy(gameObject);
+        if(Input.GetKeyDown(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x,crouchHeight,transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        }
+
+        if(Input.GetKeyUp(crouchKey))
+        {
+            transform.localScale = new Vector3(transform.localScale.x,standHeight,transform.localScale.z);
+        }
     }
+    //END OF SECTION
 
-    void HandleFootstepsAudio()
+    //PLAYER MOVEMENT SECTION
+    void MovePlayer()                                                               //Player movement
     {
-        if(state == MovementState.walking)
-        {
-            audioSource.PlayOneShot(Footsteps[Random.Range(0,Footsteps.Length - 1)]);
-        }
-        footStepTimer = 0;
-    }
-
-
-    //handles the states of the player
-    private void StateHandler()
-    {
-        if(isGrounded && Input.GetKeyDown(sprintKey) && rb.velocity.magnitude > 0)
-        {
-            state = MovementState.dashing;
-            return;
-        }
-        if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) > 0.1f || Vector3.Dot(rb.velocity,transform.forward) < -0.1f)
-        {
-            state = MovementState.walking;
-            moveSpeed = walkSpeed;
-            return;
-        }
-        if(isGrounded && Input.GetKey(crouchKey))
-        {
-            state = MovementState.crouching;
-            moveSpeed = crouchSpeed;
-            return;
-        }
-        if(!isGrounded)
-        {
-            state = MovementState.air;
-            return;
-        }
-        state = MovementState.idle;
-    }
-
-
-    //moves the player and switches their states absed on their speed
-    void MovePlayer()
-    {
-        moveDir = transform.forward * vInput + transform.right * hInput;
+        moveDir = orientation.forward * vInput + orientation.right * hInput;
 
         if(isGrounded)
         {
             rb.AddForce(moveDir.normalized * moveSpeed * 10f, ForceMode.Force);
-
-            if(state == MovementState.dashing)
-            {
-                Debug.Log("Dash has been initialised");
-                rb.AddForce(moveDir.normalized * dashSpeed * 10f, ForceMode.Impulse);
-                audioSource.PlayOneShot(dash);
-            }
         }
         else if(!isGrounded)
         {
@@ -192,9 +168,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void HandleJump()                                                               //Player jump
+    {
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.y);
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+
+        if(isGrounded)
+        {
+            isJumping = false;
+        }
+    }
+
+    //PLAYER MOVEMENT SECTION
+
+    //PLAYER MOVEMENT CHECK SECTION
     void GroundCheck()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, (playerHeight * 0.5f) + 0.3f, groundMask);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, (playerHeight * 0.5f) + 0.15f, groundMask);
+
+        if(isDashing)return;                                                      //if player is dashing don't apply drag
 
         if(isGrounded)
         {
@@ -216,41 +208,124 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(limitSpeed.x, rb.velocity.y, limitSpeed.z);
         } 
     }
+    //END OF SECTION
 
-    void JumpInput()
+    //PLAYER HEALTH SECTION
+    public void HandlePlayerDamage(float damage)
     {
-        if(Input.GetKeyDown(jumpKey) && !isJumping && isGrounded)
+        playerHP = playerHP - damage;
+
+        if(playerHP <= 0)
         {
-            isJumping = true;
-
-            HandleJump();
-
-            audioSource.PlayOneShot(jump);
+            HandleDeath();
         }
     }
 
-    void HandleJump()
+    void HandleDeath()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.y);
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        Destroy(gameObject);
+    }
+    //END OF SECTION
 
-        if(isGrounded)
+    //AUDIO SECTION
+    void HandleFootstepsAudio()
+    {
+        if(state == MovementState.walking)
         {
-            isJumping = false;
+            audioSource.PlayOneShot(Footsteps[Random.Range(0,Footsteps.Length - 1)]);
         }
+        footStepTimer = 0;
+    }
+    //END OF SECTION
+
+    //STATE SECTION
+    private void StateHandler()
+    {
+        if(isDashing)
+        {
+            state = MovementState.dashing;
+            desiredSpeed = dashSpeed;
+            speedChangeFactor = dashSpeedChangeFactor;
+
+            CacheDesiredData();
+            return;
+        }
+        if(!isGrounded)
+        {
+            state = MovementState.air;
+
+            if(desiredSpeed < dashSpeed)
+            {
+                desiredSpeed = walkSpeed;
+            }
+
+            CacheDesiredData();
+            return;
+        }
+        if(isGrounded && Input.GetKey(crouchKey))
+        {
+            state = MovementState.crouching;
+            desiredSpeed = crouchSpeed;
+
+            CacheDesiredData();
+            return;
+        }
+        if(isGrounded && Vector3.Dot(rb.velocity,transform.forward) > 0.1f || Vector3.Dot(rb.velocity,transform.forward) < -0.1f)
+        {
+            state = MovementState.walking;
+            desiredSpeed = walkSpeed;
+
+            CacheDesiredData();
+            return;
+        }
+        state = MovementState.idle;
+
+        CacheDesiredData();
+    }
+    //END OF SECTION
+
+    void CacheDesiredData()
+    {
+        desiredSpeedChanged = desiredSpeed != lastDesiredSpeed;
+        if(lastState == MovementState.dashing) keepMomentum = true;
+
+        if(desiredSpeedChanged)
+        {
+            if(keepMomentum)
+            {
+                StopAllCoroutines();
+                StartCoroutine(SmoothlyLerpMoveSpeed());
+            }
+            else
+            {
+                StopAllCoroutines();
+                moveSpeed = desiredSpeed;
+            }
+        }
+
+        lastDesiredSpeed = desiredSpeed;
+        lastState = state;    
     }
 
-    void HandleCrouch()
+    private IEnumerator SmoothlyLerpMoveSpeed()
     {
-        if(Input.GetKeyDown(crouchKey))
+        float time = 0;
+        float difference = Mathf.Abs(desiredSpeed - moveSpeed);
+        float startValue = moveSpeed;
+
+        float boostFactor = speedChangeFactor;
+
+        while(time < difference)
         {
-            transform.localScale = new Vector3(transform.localScale.x,crouchHeight,transform.localScale.z);
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+            moveSpeed = Mathf.Lerp(startValue, desiredSpeed, time/difference);
+
+            time += Time.deltaTime * boostFactor;
+
+            yield return null;
         }
 
-        if(Input.GetKeyUp(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x,standHeight,transform.localScale.z);
-        }
+        moveSpeed = desiredSpeed;
+        speedChangeFactor = 1f;
+        keepMomentum = false;
     }
 }

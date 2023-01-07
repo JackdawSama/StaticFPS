@@ -112,7 +112,6 @@ public class NewWeaponSystem : MonoBehaviour
         HandlePlasmaChecks();
 
         fireTimer += Time.deltaTime;
-        //reloadTimer += Time.deltaTime;
 
         if(Magazine[0] != null)
         {
@@ -128,7 +127,6 @@ public class NewWeaponSystem : MonoBehaviour
 
         if(Input.GetMouseButton(0) && fireTimer > fireCD)
         {
-            Debug.Log("Entered Fire State");
             HandleFire();
         }
 
