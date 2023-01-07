@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class PlayerDash : MonoBehaviour
 {
@@ -21,6 +22,13 @@ public class PlayerDash : MonoBehaviour
     Vector3 delayedForce;
     [SerializeField] AudioClip dash;
     AudioSource audioSource;
+
+    [Header("Golden Gun")]
+    bool GGisActive;
+    [SerializeField] float perfectDodgeRadius;
+    [SerializeField] LayerMask dodgeLayer;
+
+
 
     [Header("CameraEffects")]
     [SerializeField] PlayerCamera cam;
@@ -125,6 +133,13 @@ public class PlayerDash : MonoBehaviour
         }
 
         return direction.normalized;
+    }
+
+    void OnDrawGizmos()
+    {
+        // Draw a yellow sphere at the transform's position
+        Handles.color = Color.cyan;
+        Handles.DrawWireDisc(transform.position, Vector3.up, perfectDodgeRadius);
     }
 }
 
