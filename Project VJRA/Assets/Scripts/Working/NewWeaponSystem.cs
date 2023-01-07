@@ -279,7 +279,8 @@ public class NewWeaponSystem : MonoBehaviour
 
     void HandleKineticReload()
     {
-        if(player.state == PlayerController.MovementState.dashing)
+        //TODO : LEFT SHIFT IS HARDCODED HERE BUT NOT IN DASHING SCRIPT! REMEMBER TO PROPERLY SET THIS UP IN FUTURE!
+        if(Input.GetKeyDown(KeyCode.LeftShift))
         {
             AddtoMag(new Bullet(false));
             magCursor++;
