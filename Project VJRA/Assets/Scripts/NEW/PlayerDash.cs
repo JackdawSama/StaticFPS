@@ -28,9 +28,9 @@ public class PlayerDash : MonoBehaviour
 
 
     [Header("Settings")]
-    [SerializeField] bool useCameraForward = true;
+    [SerializeField] bool useCameraForward = false;
     [SerializeField] bool allowAllDirections = true;
-    [SerializeField] bool disableGravity = false;
+    //[SerializeField] bool disableGravity = false;
     [SerializeField] bool resetVel = true;
 
     void Start()

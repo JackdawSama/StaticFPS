@@ -643,7 +643,7 @@ MonoBehaviour:
   dashTimer: 0
   dash: {fileID: 8300000, guid: 8eea938f24138b04b8b1211ffe5efc38, type: 3}
   cam: {fileID: 1721042491}
-  dashFOV: 60
+  dashFOV: 75
   useCameraForward: 0
   allowAllDirections: 1
   disableGravity: 0
