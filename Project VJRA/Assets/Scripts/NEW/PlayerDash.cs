@@ -25,6 +25,7 @@ public class PlayerDash : MonoBehaviour
 
     [Header("Golden Gun")]
     bool GGisActive;
+    bool perfectDodge;
     [SerializeField] float perfectDodgeRadius;
     [SerializeField] LayerMask dodgeLayer;
 
@@ -133,6 +134,16 @@ public class PlayerDash : MonoBehaviour
         }
 
         return direction.normalized;
+    }
+
+    void PerfectDodgeCheck()
+    {
+        perfectDodge = Physics.CheckSphere(transform.position, perfectDodgeRadius, dodgeLayer);
+
+        if(perfectDodge && Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Debug.Log("Perfect Dodge");
+        }
     }
 
     void OnDrawGizmos()
