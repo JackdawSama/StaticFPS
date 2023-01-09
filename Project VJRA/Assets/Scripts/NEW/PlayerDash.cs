@@ -66,6 +66,7 @@ public class PlayerDash : MonoBehaviour
             player.isDashing = true;
             
             HandleDash();
+            PerfectDodgeCheck();
         }
     }
     void HandleDash()
@@ -140,7 +141,7 @@ public class PlayerDash : MonoBehaviour
     {
         perfectDodge = Physics.CheckSphere(transform.position, perfectDodgeRadius, dodgeLayer);
 
-        if(perfectDodge && Input.GetKeyDown(KeyCode.LeftShift))
+        if(perfectDodge && player.isDashing)
         {
             Debug.Log("Perfect Dodge");
         }
