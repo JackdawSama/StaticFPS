@@ -18,7 +18,7 @@ public class EnemyAI : MonoBehaviour
     public MeshRenderer meshRenderer;
     bool isDetected;
 
-    [SerializeField] float critterHP = 3f;
+    [SerializeField] float critterHP = 2f;
     [SerializeField] float critterDamage = 5f;
 
     NavMeshAgent agent;
@@ -57,7 +57,6 @@ public class EnemyAI : MonoBehaviour
             case EnemyState.idle:
             meshRenderer.material.color = Color.gray;
             isDetected = false;
-            // Debug.Log("In state Idle");
             if(distance <= detectionRadius)
             {
                 currentState = EnemyState.detect;
@@ -65,7 +64,6 @@ public class EnemyAI : MonoBehaviour
             }
             break;
             case EnemyState.detect:
-            // Debug.Log("In state Detected");
             if(isDetected)
             {
                 meshRenderer.material.color = Color.red;
@@ -74,7 +72,6 @@ public class EnemyAI : MonoBehaviour
             }
             break;
             case EnemyState.attack:
-            // Debug.Log("In state Attack");
             if(distance <= detectionRadius && isDetected == true)
             {
                 MoveEnemytoTarget();
@@ -84,9 +81,6 @@ public class EnemyAI : MonoBehaviour
                 isDetected = false;
                 currentState = EnemyState.idle;
             }
-            break;
-            default:
-            currentState = EnemyState.idle;
             break;
         }
     }
@@ -98,6 +92,8 @@ public class EnemyAI : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        critterHP -= damage;
+        
         if(critterHP <= 0)
         {
             critterHP = 0;
