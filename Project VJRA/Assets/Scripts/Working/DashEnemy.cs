@@ -9,11 +9,20 @@ public class DashEnemy : MonoBehaviour
     [SerializeField] float enemyDMG;
     [SerializeField] PlayerController player;
 
+    [SerializeField] float roamRadius;
+    [SerializeField] Vector3 roamPoint;
+    [SerializeField] float roamTimer;
+    [SerializeField] float roamCD;
+    bool isRoaming;
+
     public float detectionRadius;
     public MeshRenderer meshRenderer;
     bool isDetected;
 
     NavMeshAgent agent;
+    [SerializeField] NavMeshSurface surface;
+    NavMeshData data;
+    bool inBounds;
 
     float distance;
 
@@ -33,13 +42,19 @@ public class DashEnemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        agent = GetComponent<NavMeshAgent>();
+        currentState = EnemyState.idle;
+
+        data = surface.navMeshData;
+        setRoamPos();
+
+        agent.SetDestination(roamPoint);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        StateHandler();
     }
 
     void StateHandler()
@@ -48,6 +63,22 @@ public class DashEnemy : MonoBehaviour
         {
             case EnemyState.idle:
             //IDLE STATE. Randomise points within a radius and have enemy roam it.
+            roamTimer += Time.deltaTime;
+
+            if(roamTimer > roamCD)
+            {
+                Debug.Log("Entered Roam Reset");
+                setRoamPos();
+                agent.SetDestination(roamPoint);
+                roamTimer = 0;
+            }
+
+            // if(isDetected)
+            // {
+            //     currentState = EnemyState.detected;
+            //     roamTimer = 0;
+
+            // }
             break;
 
             case EnemyState.detected:
@@ -89,6 +120,35 @@ public class DashEnemy : MonoBehaviour
     {
         Destroy(gameObject);
     }
+
+    Vector3 setRoamPos()
+    {
+        float xPos = Random.Range(-roamRadius,roamRadius);
+        float zPos = Random.Range(-roamRadius,roamRadius);
+
+        Debug.Log(" X: " + xPos);
+        Debug.Log(" Z: " + zPos);
+
+        Vector3 roamPos = new Vector3(xPos, transform.position.y, zPos);
+        roamPoint = roamPos;
+
+        Debug.Log(roamPoint);
+
+        return roamPoint;
+    }
+
+    bool checkBounds(Vector3 position)
+    {
+        if(position.x <= data.sourceBounds.max.x && position.x >= data.sourceBounds.min.x && position.z <= data.sourceBounds.max.z && position.z >= data.sourceBounds.min.z)
+        {
+            inBounds = true;
+        }
+        else inBounds = false;
+
+        return inBounds;
+    }
+
+    
 
     void OnTriggerEnter(Collider collider)
     {
