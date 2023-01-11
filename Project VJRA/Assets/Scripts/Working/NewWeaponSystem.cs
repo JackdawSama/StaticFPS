@@ -189,6 +189,7 @@ public class NewWeaponSystem : MonoBehaviour
                 {
                     EnemyController enemy = hit.transform.GetComponent<EnemyController>();
                     EnemyAI critterEnemy = hit.transform.GetComponent<EnemyAI>();
+                    DashEnemy dashEnemy = hit.transform.GetComponent<DashEnemy>();
 
 
                     if(enemy != null)
@@ -200,6 +201,11 @@ public class NewWeaponSystem : MonoBehaviour
                     {
                         critterEnemy.TakeDamage(Magazine[0].healthDamage);
                         Debug.Log("Hit Critter");
+                    }
+                    else if(dashEnemy != null)
+                    {
+                        dashEnemy.TakeDamage(Magazine[0].healthDamage);
+                        Debug.Log("Hit Dasher");
                     }
                 }
 
@@ -219,6 +225,7 @@ public class NewWeaponSystem : MonoBehaviour
             {
                 EnemyController enemy = hit.transform.GetComponent<EnemyController>();
                 EnemyAI critterEnemy = hit.transform.GetComponent<EnemyAI>();
+                DashEnemy dashEnemy = hit.transform.GetComponent<DashEnemy>();
 
 
                 if(enemy != null)
@@ -230,6 +237,11 @@ public class NewWeaponSystem : MonoBehaviour
                 {
                     critterEnemy.TakeDamage(Magazine[0].healthDamage);
                     Debug.Log("Hit Critter");
+                }
+                else if(dashEnemy != null)
+                {
+                    dashEnemy.TakeDamage(Magazine[0].healthDamage);
+                    Debug.Log("Hit Dasher");
                 }
 
             }
@@ -286,6 +298,11 @@ public class NewWeaponSystem : MonoBehaviour
             magCursor++;
             Debug.Log("Added Kinetic");
         }
+    }
+
+    void HandleGoldenGun()
+    {
+        //TODO Add Golden Gun functionality.
     }
 
     void CheckBulletType()

@@ -7,22 +7,27 @@ public class DashEnemy : MonoBehaviour
 {
     [SerializeField] float enemyHP;
     [SerializeField] float enemyDMG;
+    [SerializeField] float enemySpeed;
+    [SerializeField] float enemyDashSpeed;
     [SerializeField] PlayerController player;
+    [SerializeField] Vector3 playerLastPos;
 
     [SerializeField] float roamRadius;
+    [SerializeField] float repositionRadius;
     [SerializeField] Vector3 roamPoint;
     [SerializeField] float roamTimer;
     [SerializeField] float roamCD;
-    bool isRoaming;
+    bool isActive = false;
+
 
     public float detectionRadius;
     public MeshRenderer meshRenderer;
     bool isDetected;
 
     NavMeshAgent agent;
-    [SerializeField] NavMeshSurface surface;
-    NavMeshData data;
-    bool inBounds;
+    // [SerializeField] NavMeshSurface surface;
+    // NavMeshData data;
+    // bool inBounds;
 
     float distance;
 
@@ -43,17 +48,23 @@ public class DashEnemy : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        enemySpeed = agent.speed;
         currentState = EnemyState.idle;
+        meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer.material.color = Color.gray;
 
-        data = surface.navMeshData;
-        setRoamPos();
+        //data = surface.navMeshData;
+        setPos(roamRadius);
 
         agent.SetDestination(roamPoint);
+
+        isDetected = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        distance = Vector3.Distance(player.transform.position, transform.position);
         StateHandler();
     }
 
@@ -63,42 +74,59 @@ public class DashEnemy : MonoBehaviour
         {
             case EnemyState.idle:
             //IDLE STATE. Randomise points within a radius and have enemy roam it.
+            
+            //Debug.Log("Entered Idle");
+            //isActive = false;
+            meshRenderer.material.color = Color.gray;
             roamTimer += Time.deltaTime;
 
             if(roamTimer > roamCD)
             {
                 Debug.Log("Entered Roam Reset");
-                setRoamPos();
+                setPos(roamRadius);
                 agent.SetDestination(roamPoint);
                 roamTimer = 0;
             }
 
-            // if(isDetected)
-            // {
-            //     currentState = EnemyState.detected;
-            //     roamTimer = 0;
-
-            // }
+            if(distance <= detectionRadius)
+            {
+                currentState = EnemyState.detected;
+                isDetected = true;
+            }
             break;
 
             case EnemyState.detected:
             //IF player is wihtin a radius have the enemy detect the player and go into attack/dash mode
             //Future iterations change radius around player to vision cone
+
+            if(isDetected)
+            {
+                meshRenderer.material.color = Color.red;
+                currentState = EnemyState.dash;
+                playerLastPos = player.transform.position;
+            }
+
             break;
 
             case EnemyState.dash:
-            //Take the player's lasy known position at the time of state change and dash to that point at high speeds.
-            break;
+            agent.speed = enemyDashSpeed;
 
-            case EnemyState.reposition:
-            //post dash have the enmy choose arandom point in a vicinity roam to it and do a dash again.
-            //Do this till enemy dead or till player is out of attack radius
-            break;
+            if(isDetected && distance <= detectionRadius)
+            {
+                agent.SetDestination(playerLastPos);
 
-            case EnemyState.dead:
-            //a death state for the enemy.
+                if(transform.position.x == playerLastPos.x && transform.position.z == playerLastPos.z)
+                {
+                    playerLastPos = player.transform.position;
+                }
+            }
+            else if(distance > detectionRadius)
+            {
+                isDetected = false;
+                agent.speed = enemySpeed;
+                currentState = EnemyState.idle;
+            }
             break;
-            
             default:
             break;
         }
@@ -121,10 +149,10 @@ public class DashEnemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    Vector3 setRoamPos()
+    Vector3 setPos(float nearRadius)
     {
-        float xPos = Random.Range(-roamRadius,roamRadius);
-        float zPos = Random.Range(-roamRadius,roamRadius);
+        float xPos = Random.Range(-nearRadius, nearRadius);
+        float zPos = Random.Range(-nearRadius, nearRadius);
 
         Debug.Log(" X: " + xPos);
         Debug.Log(" Z: " + zPos);
@@ -137,18 +165,39 @@ public class DashEnemy : MonoBehaviour
         return roamPoint;
     }
 
-    bool checkBounds(Vector3 position)
+    // bool checkBounds(Vector3 position)
+    // {
+    //     if(position.x <= data.sourceBounds.max.x && position.x >= data.sourceBounds.min.x && position.z <= data.sourceBounds.max.z && position.z >= data.sourceBounds.min.z)
+    //     {
+    //         inBounds = true;
+    //     }
+    //     else inBounds = false;
+
+    //     return inBounds;
+    // }
+
+    private IEnumerator MovetoPos(Vector3 targetPos)
     {
-        if(position.x <= data.sourceBounds.max.x && position.x >= data.sourceBounds.min.x && position.z <= data.sourceBounds.max.z && position.z >= data.sourceBounds.min.z)
+        isActive = true;
+        playerLastPos = player.transform.position;
+
+        while(!Physics.CheckSphere(playerLastPos, 0.5f, 3))
         {
-            inBounds = true;
+            agent.SetDestination(playerLastPos);
         }
-        else inBounds = false;
+        yield return null;
 
-        return inBounds;
-    }
-
-    
+        if(currentState == EnemyState.dash)
+        {
+            Debug.Log("Exiting Dash");
+            currentState = EnemyState.reposition;
+        }
+        else if(currentState == EnemyState.reposition)
+        {
+            currentState = EnemyState.dash;
+        }
+        isActive = false;
+    }  
 
     void OnTriggerEnter(Collider collider)
     {
@@ -156,10 +205,7 @@ public class DashEnemy : MonoBehaviour
         {
             if(player != null)
             {
-                Debug.Log("Took DMG");
-                player.HandlePlayerDamage(enemyDMG);
-                Die();
-                return;
+                Debug.Log("Tagged Player");
             }
         }
     }
