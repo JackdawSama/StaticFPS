@@ -149,7 +149,7 @@ public class PlayerDash : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        // Draw a yellow sphere at the transform's position
+        // Draw a cyan wirecircle at the transform's position
         Handles.color = Color.cyan;
         Handles.DrawWireDisc(transform.position, Vector3.up, perfectDodgeRadius);
     }

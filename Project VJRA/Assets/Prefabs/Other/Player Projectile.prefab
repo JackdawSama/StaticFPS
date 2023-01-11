@@ -111,8 +111,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65d6c18e678f3c54c87f003432be4e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileSpeed: 35
+  projectileSpeed: 55
+  damage: 15
   lifeTime: 0
+  player: {fileID: 0}
 --- !u!54 &-6025872576340126151
 Rigidbody:
   m_ObjectHideFlags: 0

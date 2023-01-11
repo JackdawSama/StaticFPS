@@ -223,7 +223,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleDeath()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
     //END OF SECTION
 

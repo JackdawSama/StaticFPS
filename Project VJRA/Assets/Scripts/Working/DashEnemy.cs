@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor;
 
 public class DashEnemy : MonoBehaviour
 {
@@ -17,14 +18,16 @@ public class DashEnemy : MonoBehaviour
     [SerializeField] Vector3 roamPoint;
     [SerializeField] float roamTimer;
     [SerializeField] float roamCD;
-    bool isActive = false;
+    //bool isActive = false;
 
 
     public float detectionRadius;
     public MeshRenderer meshRenderer;
     bool isDetected;
+    bool isRepositioning = false;
 
     NavMeshAgent agent;
+    NavMeshHit hit;
     // [SerializeField] NavMeshSurface surface;
     // NavMeshData data;
     // bool inBounds;
@@ -73,10 +76,7 @@ public class DashEnemy : MonoBehaviour
         switch (currentState)
         {
             case EnemyState.idle:
-            //IDLE STATE. Randomise points within a radius and have enemy roam it.
-            
-            //Debug.Log("Entered Idle");
-            //isActive = false;
+
             meshRenderer.material.color = Color.gray;
             roamTimer += Time.deltaTime;
 
@@ -96,12 +96,10 @@ public class DashEnemy : MonoBehaviour
             break;
 
             case EnemyState.detected:
-            //IF player is wihtin a radius have the enemy detect the player and go into attack/dash mode
-            //Future iterations change radius around player to vision cone
 
             if(isDetected)
             {
-                meshRenderer.material.color = Color.red;
+                meshRenderer.material.color = Color.yellow;
                 currentState = EnemyState.dash;
                 playerLastPos = player.transform.position;
             }
@@ -109,6 +107,8 @@ public class DashEnemy : MonoBehaviour
             break;
 
             case EnemyState.dash:
+
+            meshRenderer.material.color = Color.red;
             agent.speed = enemyDashSpeed;
 
             if(isDetected && distance <= detectionRadius)
@@ -117,7 +117,8 @@ public class DashEnemy : MonoBehaviour
 
                 if(transform.position.x == playerLastPos.x && transform.position.z == playerLastPos.z)
                 {
-                    playerLastPos = player.transform.position;
+                    isRepositioning = false;
+                    currentState = EnemyState.reposition;
                 }
             }
             else if(distance > detectionRadius)
@@ -127,7 +128,34 @@ public class DashEnemy : MonoBehaviour
                 currentState = EnemyState.idle;
             }
             break;
-            default:
+
+            case EnemyState.reposition:
+
+            meshRenderer.material.color = Color.blue;
+            agent.speed = enemySpeed;
+
+            if(!isRepositioning)
+            {
+                setPos(repositionRadius);
+                isRepositioning = true;
+            }
+
+            if(isDetected && distance <= detectionRadius)
+            {
+                agent.SetDestination(roamPoint);
+
+                if(transform.position.x == roamPoint.x && transform.position.z == roamPoint.z)
+                {
+                    playerLastPos = player.transform.position;
+                    currentState = EnemyState.dash;
+                }
+            }
+            else if(distance > detectionRadius)
+            {
+                isDetected = false;
+                agent.speed = enemySpeed;
+                currentState = EnemyState.idle;
+            }
             break;
         }
     }
@@ -176,28 +204,28 @@ public class DashEnemy : MonoBehaviour
     //     return inBounds;
     // }
 
-    private IEnumerator MovetoPos(Vector3 targetPos)
-    {
-        isActive = true;
-        playerLastPos = player.transform.position;
+    // private IEnumerator MovetoPos(Vector3 targetPos)
+    // {
+    //     isActive = true;
+    //     playerLastPos = player.transform.position;
 
-        while(!Physics.CheckSphere(playerLastPos, 0.5f, 3))
-        {
-            agent.SetDestination(playerLastPos);
-        }
-        yield return null;
+    //     while(!Physics.CheckSphere(playerLastPos, 0.5f, 3))
+    //     {
+    //         agent.SetDestination(playerLastPos);
+    //     }
+    //     yield return null;
 
-        if(currentState == EnemyState.dash)
-        {
-            Debug.Log("Exiting Dash");
-            currentState = EnemyState.reposition;
-        }
-        else if(currentState == EnemyState.reposition)
-        {
-            currentState = EnemyState.dash;
-        }
-        isActive = false;
-    }  
+    //     if(currentState == EnemyState.dash)
+    //     {
+    //         Debug.Log("Exiting Dash");
+    //         currentState = EnemyState.reposition;
+    //     }
+    //     else if(currentState == EnemyState.reposition)
+    //     {
+    //         currentState = EnemyState.dash;
+    //     }
+    //     isActive = false;
+    // }  
 
     void OnTriggerEnter(Collider collider)
     {
@@ -206,7 +234,15 @@ public class DashEnemy : MonoBehaviour
             if(player != null)
             {
                 Debug.Log("Tagged Player");
+                player.HandlePlayerDamage(enemyDMG);
             }
         }
+    }
+
+    void OnDrawGizmos()
+    {
+        // Draw a cyan wirecircle at the transform's position
+        Handles.color = Color.red;
+        Handles.DrawWireDisc(transform.position, Vector3.up, detectionRadius);
     }
 }
