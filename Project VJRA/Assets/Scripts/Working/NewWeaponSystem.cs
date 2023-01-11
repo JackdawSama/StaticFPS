@@ -16,23 +16,28 @@ public class NewWeaponSystem : MonoBehaviour
         public bool _plasmaIsFull = false;
         public bool _plasmaIsEmpty = false;
         public bool canFire = false;
+        public bool goldenGun = false;
         public string tag;
-        public Bullet(bool isTypePlasma)
+        public Bullet(string ammo)
         {
 
-            if(isTypePlasma)
+            if(ammo == "Plasma")
             {
-                _isPlasma = true;
+                //_isPlasma = true;
                 shieldsDamage = 8f;
                 healthDamage = 3f;
                 tag = "Plasma";
             }
-            else if(!isTypePlasma)
+            else if(ammo == "Kinetic")
             {
-                _isPlasma = false;
+                //_isPlasma = false;
                 shieldsDamage = 20f;
                 healthDamage = 40f;
                 tag = "Kinetic";
+            }
+            else if(ammo == "GoldenGun")
+            {
+                tag = "GoldenGun";
             }
         }
 
@@ -115,11 +120,11 @@ public class NewWeaponSystem : MonoBehaviour
 
         if(Magazine[0] != null)
         {
-            if(Magazine[0]._isPlasma)
+            if(Magazine[0].tag == "Plasma")
             {
                 fireCD = plasmaCD;
             }
-            else if(!Magazine[0]._isPlasma)
+            else if(Magazine[0].tag == "Kinetic")
             {
                 fireCD = kineticCD;
             }
@@ -156,7 +161,7 @@ public class NewWeaponSystem : MonoBehaviour
             {
                 if(Magazine[i] != null)
                 {
-                Debug.Log("Bullet No. " + (i+1) + ". " + Magazine[i]._isPlasma);
+                Debug.Log("Bullet No. " + (i+1) + ". " + Magazine[i].tag);
                 }
             }
             if(Magazine[0].tag == "Plasma")
@@ -176,9 +181,9 @@ public class NewWeaponSystem : MonoBehaviour
             return;
         }
         
-        CheckBulletType();
+        //CheckBulletType();
 
-        if(isTypePlasma)
+        if(Magazine[0].tag == "Plasma")
         {
             Debug.Log("Fired Plasma");
             if(!Magazine[0]._plasmaIsEmpty)
@@ -217,7 +222,7 @@ public class NewWeaponSystem : MonoBehaviour
             }
 
         }
-        else if(!isTypePlasma)
+        else if(Magazine[0].tag == "Kinetic")
         {
             Debug.Log("Fired Kinetic");
             RaycastHit hit;
@@ -261,12 +266,12 @@ public class NewWeaponSystem : MonoBehaviour
 
     void HandlePlasmaChecks()
     {
-        if(Magazine[0] != null && Magazine[0]._isPlasma)
+        if(Magazine[0] != null && Magazine[0].tag == "Plasma")
         {
             Magazine[0].EmptyCheck();
         }
 
-        if(Magazine[0] != null && Magazine[0]._isPlasma && Magazine[0]._plasmaIsEmpty)
+        if(Magazine[0] != null && Magazine[0].tag == "Plasma" && Magazine[0]._plasmaIsEmpty)
         {
             RemovefromMag();
             Debug.Log("Removed Plasma");
@@ -281,7 +286,7 @@ public class NewWeaponSystem : MonoBehaviour
 
             if(reloadTimer > reloadCD)
             {
-                AddtoMag(new Bullet(true));
+                AddtoMag(new Bullet("Plasma"));
                 magCursor++;
                 Debug.Log("Added Plasma");
                 reloadTimer = 0;
@@ -294,7 +299,7 @@ public class NewWeaponSystem : MonoBehaviour
         //TODO : LEFT SHIFT IS HARDCODED HERE BUT NOT IN DASHING SCRIPT! REMEMBER TO PROPERLY SET THIS UP IN FUTURE!
         if(Input.GetKeyDown(KeyCode.LeftShift))
         {
-            AddtoMag(new Bullet(false));
+            AddtoMag(new Bullet("Kinetic"));
             magCursor++;
             Debug.Log("Added Kinetic");
         }
