@@ -82,7 +82,7 @@ public class DashEnemy : MonoBehaviour
 
             if(roamTimer > roamCD)
             {
-                Debug.Log("Entered Roam Reset");
+                //Debug.Log("Entered Roam Reset");
                 setPos(roamRadius);
                 agent.SetDestination(roamPoint);
                 roamTimer = 0;
@@ -162,6 +162,7 @@ public class DashEnemy : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        Debug.Log("Enemy Taking DMG");
         enemyHP -= damage;
         
         if(enemyHP <= 0)
@@ -182,13 +183,13 @@ public class DashEnemy : MonoBehaviour
         float xPos = Random.Range(-nearRadius, nearRadius);
         float zPos = Random.Range(-nearRadius, nearRadius);
 
-        Debug.Log(" X: " + xPos);
-        Debug.Log(" Z: " + zPos);
+        //Debug.Log(" X: " + xPos);
+        //Debug.Log(" Z: " + zPos);
 
         Vector3 roamPos = new Vector3(xPos, transform.position.y, zPos);
         roamPoint = roamPos;
 
-        Debug.Log(roamPoint);
+        //Debug.Log(roamPoint);
 
         return roamPoint;
     }
