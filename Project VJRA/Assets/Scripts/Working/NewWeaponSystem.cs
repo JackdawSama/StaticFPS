@@ -16,7 +16,6 @@ public class NewWeaponSystem : MonoBehaviour
         public bool _plasmaIsFull = false;
         public bool _plasmaIsEmpty = false;
         public bool canFire = false;
-        public bool goldenGun = false;
         public string tag;
         public Bullet(string ammo)
         {
@@ -90,10 +89,16 @@ public class NewWeaponSystem : MonoBehaviour
     [SerializeField] AudioClip kineticSound;
     [SerializeField] ParticleSystem muzzleFlash;
 
+    //GOLDENGUN Variables
+    [SerializeField] bool enableGg = false;
+    [SerializeField] TrailRenderer bulletTrail_GG;
+
+
     //PLAYER variables
     [SerializeField] PlayerController player;
     [SerializeField] Camera playerCam;
     [SerializeField] Transform projectileSpawn;
+    [SerializeField] PlayerDash dashData;
 
 
     // Start is called before the first frame update
@@ -104,6 +109,7 @@ public class NewWeaponSystem : MonoBehaviour
 
         //gets a reference to the PlayerController component
         player = GetComponent<PlayerController>();
+        dashData = GetComponent<PlayerDash>();
 
         audioSource = GetComponent<AudioSource>();
 
@@ -128,6 +134,24 @@ public class NewWeaponSystem : MonoBehaviour
             {
                 fireCD = kineticCD;
             }
+            else if(Magazine[0].tag == "GoldenGun")
+            {
+                fireCD = kineticCD;
+            }
+        }
+
+        if(dashData.GGisActive)
+        {
+            enableGg = true;
+            if(enableGg)
+            {
+                HandleGoldenGunReload();
+            }
+        }
+
+        if(Magazine[0] == null)
+        {
+            enableGg = false;
         }
 
         if(Input.GetMouseButton(0) && fireTimer > fireCD)
@@ -139,7 +163,7 @@ public class NewWeaponSystem : MonoBehaviour
 
         DebugCheck();
 
-        if(!magIsFull)
+        if(!magIsFull && !enableGg)
         {
             HandlePlasmaRelod();
             HandleKineticReload();
@@ -178,6 +202,7 @@ public class NewWeaponSystem : MonoBehaviour
         if(Magazine[0] == null)
         {
             Debug.Log("Mag is EMPTY");
+            //enableGg = false;
             return;
         }
         
@@ -262,6 +287,47 @@ public class NewWeaponSystem : MonoBehaviour
             magCursor--;
             fireTimer = 0;
         }
+
+        else if(Magazine[0].tag == "GoldenGun")
+        {
+            Debug.Log("Fired GoldenGun");
+            RaycastHit hit;
+            if(Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hit, kineticRange))
+            {
+                EnemyController enemy = hit.transform.GetComponent<EnemyController>();
+                EnemyAI critterEnemy = hit.transform.GetComponent<EnemyAI>();
+                DashEnemy dashEnemy = hit.transform.GetComponent<DashEnemy>();
+
+
+                if(enemy != null)
+                {
+                    enemy.Die();
+                    Debug.Log("Enemy KILLED");
+                }
+                else if(critterEnemy != null)
+                {
+                    critterEnemy.Die();
+                    Debug.Log("Critter KILLED");
+                }
+                else if(dashEnemy != null)
+                {
+                    dashEnemy.Die();
+                    Debug.Log("Dasher KILLED");
+                }
+
+            }
+
+            audioSource.PlayOneShot(kineticSound);
+            muzzleFlash.Play();
+
+            TrailRenderer trail = Instantiate(bulletTrail_GG, projectileSpawn.position, Quaternion.identity);
+            StartCoroutine(Projectile(trail,hit));
+
+            RemovefromMag();
+            Debug.Log("Removed GG");
+            magCursor--;
+            fireTimer = 0;
+        }
     }
 
     void HandlePlasmaChecks()
@@ -305,9 +371,24 @@ public class NewWeaponSystem : MonoBehaviour
         }
     }
 
-    void HandleGoldenGun()
+    void FlushMag()
+    {
+        for(int i = 0; i < magSize; i++)
+        {
+            Magazine[i] = null;
+        }
+    }
+
+    void HandleGoldenGunReload()
     {
         //TODO Add Golden Gun functionality.
+        FlushMag();
+        for(int i = 0; i < 4; i++)
+        {
+            AddtoMag(new Bullet("GoldenGun"));
+            Debug.Log("Added GoldenGun");
+        }
+        dashData.GGisActive = false;
     }
 
     void CheckBulletType()
@@ -333,7 +414,7 @@ public class NewWeaponSystem : MonoBehaviour
                 magCursor = i;
                 break;
             }
-            else if(Magazine[i].tag == "Kinetic" || Magazine[i].tag == "Plasma")
+            else if(Magazine[i].tag == "Kinetic" || Magazine[i].tag == "Plasma" || Magazine[i].tag == "GoldenGun")
             {
                 magCursor++;
             }

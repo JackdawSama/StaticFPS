@@ -7,6 +7,7 @@ public class NewUI : MonoBehaviour
 {
     [SerializeField] GameObject[] MagazineUI_Plasma;
     [SerializeField] GameObject[] MagazineUI_Kinetic;
+    [SerializeField] GameObject[] MagazineUI_GG;
     [SerializeField] NewWeaponSystem Gun;
     [SerializeField] Slider plasmaSlider;
 
@@ -21,6 +22,7 @@ public class NewUI : MonoBehaviour
         {
             MagazineUI_Kinetic[i].SetActive(false);
             MagazineUI_Plasma[i].SetActive(false);
+            MagazineUI_GG[i].SetActive(false);
         }
 
     }
@@ -71,16 +73,26 @@ public class NewUI : MonoBehaviour
             {
                 MagazineUI_Plasma[i].SetActive(false);
                 MagazineUI_Kinetic[i].SetActive(true);
+                MagazineUI_GG[i].SetActive(false);
             }
             else if(RefMag[i] == "Plasma")
             {
                 MagazineUI_Plasma[i].SetActive(true);
                 MagazineUI_Kinetic[i].SetActive(false);
+                MagazineUI_GG[i].SetActive(false);
+            }
+            else if(RefMag[i] == "GoldenGun")
+            {
+                MagazineUI_Plasma[i].SetActive(false);
+                MagazineUI_Kinetic[i].SetActive(false);
+                MagazineUI_GG[i].SetActive(true);
+
             }
             else if(RefMag[i] == "Null")
             {
                 MagazineUI_Plasma[i].SetActive(false);
                 MagazineUI_Kinetic[i].SetActive(false);
+                MagazineUI_GG[i].SetActive(false);
             }
         }
     }

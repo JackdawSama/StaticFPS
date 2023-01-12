@@ -24,10 +24,11 @@ public class PlayerDash : MonoBehaviour
     AudioSource audioSource;
 
     [Header("Golden Gun")]
-    bool GGisActive;
-    bool perfectDodge;
+    public bool GGisActive;
+    public bool perfectDodge;
     [SerializeField] float perfectDodgeRadius;
     [SerializeField] LayerMask dodgeLayer;
+    [SerializeField] AudioClip dodgeAudio;
 
 
 
@@ -144,6 +145,8 @@ public class PlayerDash : MonoBehaviour
         if(perfectDodge && player.isDashing)
         {
             Debug.Log("Perfect Dodge");
+            audioSource.PlayOneShot(dodgeAudio);
+            GGisActive = true;
         }
     }
 
