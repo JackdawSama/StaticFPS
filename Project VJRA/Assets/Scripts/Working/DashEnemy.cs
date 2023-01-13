@@ -10,8 +10,9 @@ public class DashEnemy : MonoBehaviour
     [SerializeField] float enemyDMG;
     [SerializeField] float enemySpeed;
     [SerializeField] float enemyDashSpeed;
-    [SerializeField] PlayerController player;
+    [SerializeField] public PlayerController player;
     [SerializeField] Vector3 playerLastPos;
+    EnemySpawner spawner;
 
     [SerializeField] float roamRadius;
     [SerializeField] float repositionRadius;
@@ -46,15 +47,24 @@ public class DashEnemy : MonoBehaviour
 
     [SerializeField] public EnemyState currentState;
 
+    int firstno;
 
     // Start is called before the first frame update
     void Start()
     {
+        firstno = 0;
         agent = GetComponent<NavMeshAgent>();
         enemySpeed = agent.speed;
         currentState = EnemyState.idle;
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.material.color = Color.gray;
+        spawner = FindObjectOfType<EnemySpawner>();
+        player = spawner.player;
+
+        if(player == null)
+        {
+            Debug.Log("Object not found");
+        }
 
         //data = surface.navMeshData;
         setPos(roamRadius);
@@ -67,7 +77,16 @@ public class DashEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        distance = Vector3.Distance(player.transform.position, transform.position);
+        // if(firstno == 0)
+        // {
+        //     player = FindObjectOfType<PlayerController>();
+        //     firstno++;
+        //     Debug.Log("Ran Once");
+        // }
+        if(player != null)
+        {
+            distance = Vector3.Distance(player.transform.position, transform.position);
+        }
         StateHandler();
     }
 
