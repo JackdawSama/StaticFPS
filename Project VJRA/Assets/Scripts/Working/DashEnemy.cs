@@ -58,8 +58,8 @@ public class DashEnemy : MonoBehaviour
         currentState = EnemyState.idle;
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.material.color = Color.gray;
-        spawner = FindObjectOfType<EnemySpawner>();
-        player = spawner.player;
+        player = FindObjectOfType<PlayerController>();
+        // player = spawner.player;
 
         if(player == null)
         {

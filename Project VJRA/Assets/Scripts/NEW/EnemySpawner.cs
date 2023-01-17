@@ -26,8 +26,7 @@ public class EnemySpawner : MonoBehaviour
     // List for Spawn Points
     [SerializeField] GameObject[] spawnPoint;
     [SerializeField] public PlayerController player;
-    int dasherPoint;
-    int projectilePoint;
+    int spawingPoint;
 
     // List for type 1 enemy
     // List for type 2 enemy
@@ -35,8 +34,7 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dasherPoint = 0;
-        projectilePoint = 0;
+        spawingPoint = 0;
     }
 
     // Update is called once per frame
@@ -52,11 +50,11 @@ public class EnemySpawner : MonoBehaviour
 
         if(timer1 > dasherSpawnCD)
         {
-            Instantiate(dasherType, spawnPoint[dasherPoint].transform.position, transform.rotation);
-            dasherPoint++;
-            if(dasherPoint > 0)
+            Instantiate(dasherType, spawnPoint[spawingPoint].transform.position, transform.rotation);
+            spawingPoint++;
+            if(spawingPoint > spawnPoint.Length)
             {
-                dasherPoint = 0;
+                spawingPoint = 0;
             }
 
             Debug.Log("Dasher Spawn");
@@ -64,13 +62,13 @@ public class EnemySpawner : MonoBehaviour
 
         }
 
-        else if(timer2 > projectileSpawnCD)
+        else if(timer2 > spawnPoint.Length)
         {
-            Instantiate(projectileType,  spawnPoint[projectilePoint].transform.position, transform.rotation);
-            projectilePoint++;
-            if(projectilePoint > 0)
+            Instantiate(projectileType,  spawnPoint[spawingPoint].transform.position, transform.rotation);
+            spawingPoint++;
+            if(spawingPoint > 0)
             {
-                projectilePoint = 0;
+                spawingPoint = 0;
             }
 
             Debug.Log("Projectile Spawn");

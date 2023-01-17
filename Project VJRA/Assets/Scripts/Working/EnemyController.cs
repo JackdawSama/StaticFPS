@@ -32,7 +32,7 @@ public class EnemyController : MonoBehaviour
     //ENEMY VARIABLES
     [SerializeField] float turnRate = 5f;
     NavMeshAgent agent;
-    public GameObject player;
+    public PlayerController player;
     [SerializeField] float safeDistance;
     float distance;
 
@@ -52,6 +52,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        player = FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame
