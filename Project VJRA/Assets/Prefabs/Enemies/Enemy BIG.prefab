@@ -652,8 +652,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 25
   shields: 25
-  maxShields: 50
-  shieldRegenRate: 5
+  maxShields: 25
+  shieldRegenRate: 2
   Shields: {fileID: 1142270331}
   shieldsActive: 1
   detectionRadius: 45
@@ -662,10 +662,10 @@ MonoBehaviour:
   noDamagerTimer: 0
   noDamagerCD: 3
   fireTimer: 0
-  fireCD: 0.25
+  fireCD: 0.35
   projectile: {fileID: 1364946420933588566, guid: 044b0d03ae793d545a487384eebd2ab8, type: 3}
   projectileSpawn: {fileID: 1299780844}
-  turnRate: 40
+  turnRate: 35
   player: {fileID: 0}
   safeDistance: 0
   weaponSystem: {fileID: 0}
@@ -673,10 +673,10 @@ MonoBehaviour:
   killPoints: 75
   ggBonusPoints: 100
   meshRenderer: {fileID: 5916678848489827958}
-  blinkIntensity: 0
-  blinkDuration: 0
+  blinkIntensity: 10
+  blinkDuration: 0.15
   moveToTimer: 0
-  maxMoveTimer: 1
+  maxMoveTimer: 0.1
 --- !u!195 &1525906211
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -687,10 +687,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 12
-  m_Acceleration: 8
+  m_Speed: 30
+  m_Acceleration: 25
   avoidancePriority: 50
-  m_AngularSpeed: 270
+  m_AngularSpeed: 540
   m_StoppingDistance: 25
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -698,7 +698,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 0
 --- !u!54 &1525906212
 Rigidbody:
   m_ObjectHideFlags: 0

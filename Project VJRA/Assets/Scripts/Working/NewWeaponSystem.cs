@@ -24,13 +24,13 @@ public class NewWeaponSystem : MonoBehaviour
             {
                 //_isPlasma = true;
                 shieldsDamage = 8f;
-                healthDamage = 3f;
+                healthDamage = 5f;
                 tag = "Plasma";
             }
             else if(ammo == "Kinetic")
             {
                 //_isPlasma = false;
-                shieldsDamage = 20f;
+                shieldsDamage = 32f;
                 healthDamage = 40f;
                 tag = "Kinetic";
             }

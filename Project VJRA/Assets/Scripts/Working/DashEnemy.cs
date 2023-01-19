@@ -35,6 +35,10 @@ public class DashEnemy : MonoBehaviour
     NavMeshAgent agent;
     NavMeshHit hit;
 
+    public float blinkTimer;
+    public float blinkDuration;
+    public float blinkIntensity;
+
     float distance;
 
     public enum EnemyState
@@ -54,7 +58,6 @@ public class DashEnemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        firstno = 0;
         agent = GetComponent<NavMeshAgent>();
         enemySpeed = agent.speed;
         currentState = EnemyState.idle;
@@ -69,7 +72,7 @@ public class DashEnemy : MonoBehaviour
             Debug.Log("Object not found");
         }
 
-        setPos(roamRadius);
+        setPos(transform.position, roamRadius);
 
         agent.SetDestination(roamPoint);
 
@@ -84,6 +87,8 @@ public class DashEnemy : MonoBehaviour
             distance = Vector3.Distance(player.transform.position, transform.position);
         }
         StateHandler();
+
+        BlinkOnDamage();
     }
 
     void StateHandler()
@@ -98,7 +103,7 @@ public class DashEnemy : MonoBehaviour
             if(roamTimer > roamCD)
             {
                 //Debug.Log("Entered Roam Reset");
-                setPos(roamRadius);
+                setPos(transform.position, roamRadius);
                 agent.SetDestination(roamPoint);
                 roamTimer = 0;
             }
@@ -152,7 +157,7 @@ public class DashEnemy : MonoBehaviour
             if(!isRepositioning)
             {
                 isRepositioning = true;
-                setPos(repositionRadius);
+                setPos(transform.position, repositionRadius);
             }
 
             if(isDetected && distance <= detectionRadius)
@@ -186,6 +191,8 @@ public class DashEnemy : MonoBehaviour
 
             Die();
         }
+
+        blinkTimer = blinkDuration;
     }
 
     public void Die()
@@ -204,15 +211,22 @@ public class DashEnemy : MonoBehaviour
         }
     }
 
-    void setPos(float nearRadius)
+    void setPos(Vector3 center, float radius)
     {
-        float xPos = Random.Range(-nearRadius, nearRadius);
-        float zPos = Random.Range(-nearRadius, nearRadius);
+        float angle = Random.Range(0, 2f * Mathf.PI);
 
-        Vector3 roamPos = new Vector3(xPos, transform.position.y, zPos);
+        Vector3 roamPos = center + new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
         roamPoint = roamPos;
 
         //return roamPoint;
+    }
+
+    void BlinkOnDamage()
+    {
+        blinkTimer -= Time.deltaTime;
+        float lerp = Mathf.Clamp01(blinkTimer/blinkDuration);
+        float intensity = lerp * blinkIntensity + 1f;
+        meshRenderer.material.color = meshRenderer.material.color * intensity;
     }
 
     void OnTriggerEnter(Collider collider)
@@ -227,10 +241,10 @@ public class DashEnemy : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
-    {
-        // Draw a cyan wirecircle at the transform's position
-        Handles.color = Color.red;
-        Handles.DrawWireDisc(transform.position, Vector3.up, detectionRadius);
-    }
+    // void OnDrawGizmos()
+    // {
+    //     // Draw a cyan wirecircle at the transform's position
+    //     Handles.color = Color.red;
+    //     Handles.DrawWireDisc(transform.position, Vector3.up, detectionRadius);
+    // }
 }

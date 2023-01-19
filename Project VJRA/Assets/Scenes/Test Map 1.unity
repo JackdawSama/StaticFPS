@@ -2023,50 +2023,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 404410395}
-    - target: {fileID: 1525906211, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: m_Speed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1525906211, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: m_Acceleration
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1525906211, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: m_AngularSpeed
-      value: 540
-      objectReference: {fileID: 0}
-    - target: {fileID: 1525906211, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: m_ObstacleAvoidanceType
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 7222508859386211124}
-    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: turnRate
-      value: 35
-      objectReference: {fileID: 0}
-    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: maxMoveTimer
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: meshRenderer
-      value: 
-      objectReference: {fileID: 1184607474}
-    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: blinkDuration
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: blinkIntensity
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5916678848684467505, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: detectionRadius
-      value: 45
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 620391924245665902}
     - target: {fileID: 5916678848684467506, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -2115,17 +2075,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy BIG (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 5916678848684467507, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
---- !u!23 &1184607474 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5916678848489827958, guid: 87753f71d9260194ca00d4dfcae263f9, type: 3}
-  m_PrefabInstance: {fileID: 1184607473}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1259461808
 Mesh:
   m_ObjectHideFlags: 0
