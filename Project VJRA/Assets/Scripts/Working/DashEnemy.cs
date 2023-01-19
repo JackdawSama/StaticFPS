@@ -19,7 +19,12 @@ public class DashEnemy : MonoBehaviour
     [SerializeField] Vector3 roamPoint;
     [SerializeField] float roamTimer;
     [SerializeField] float roamCD;
-    //bool isActive = false;
+
+    //POINTS VARIABLES
+    [SerializeField] NewWeaponSystem weaponSystem;
+    [SerializeField] Points points;
+    [SerializeField] float killPoints;
+    [SerializeField] float ggBonusPoints;
 
 
     public float detectionRadius;
@@ -29,9 +34,6 @@ public class DashEnemy : MonoBehaviour
 
     NavMeshAgent agent;
     NavMeshHit hit;
-    // [SerializeField] NavMeshSurface surface;
-    // NavMeshData data;
-    // bool inBounds;
 
     float distance;
 
@@ -59,14 +61,14 @@ public class DashEnemy : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.material.color = Color.gray;
         player = FindObjectOfType<PlayerController>();
-        // player = spawner.player;
+        weaponSystem = FindObjectOfType<NewWeaponSystem>();
+        points = FindObjectOfType<Points>();
 
         if(player == null)
         {
             Debug.Log("Object not found");
         }
 
-        //data = surface.navMeshData;
         setPos(roamRadius);
 
         agent.SetDestination(roamPoint);
@@ -77,12 +79,6 @@ public class DashEnemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if(firstno == 0)
-        // {
-        //     player = FindObjectOfType<PlayerController>();
-        //     firstno++;
-        //     Debug.Log("Ran Once");
-        // }
         if(player != null)
         {
             distance = Vector3.Distance(player.transform.position, transform.position);
@@ -155,8 +151,8 @@ public class DashEnemy : MonoBehaviour
 
             if(!isRepositioning)
             {
-                setPos(repositionRadius);
                 isRepositioning = true;
+                setPos(repositionRadius);
             }
 
             if(isDetected && distance <= detectionRadius)
@@ -194,58 +190,30 @@ public class DashEnemy : MonoBehaviour
 
     public void Die()
     {
-        Destroy(gameObject);
+        if(weaponSystem.enableGg)
+        {
+            points.KillTotal(killPoints + ggBonusPoints);
+            Destroy(gameObject);
+            return;
+        }
+        if(!weaponSystem.enableGg)
+        {
+            points.KillTotal(killPoints);
+            Destroy(gameObject);
+            return;
+        }
     }
 
-    Vector3 setPos(float nearRadius)
+    void setPos(float nearRadius)
     {
         float xPos = Random.Range(-nearRadius, nearRadius);
         float zPos = Random.Range(-nearRadius, nearRadius);
 
-        //Debug.Log(" X: " + xPos);
-        //Debug.Log(" Z: " + zPos);
-
         Vector3 roamPos = new Vector3(xPos, transform.position.y, zPos);
         roamPoint = roamPos;
 
-        //Debug.Log(roamPoint);
-
-        return roamPoint;
+        //return roamPoint;
     }
-
-    // bool checkBounds(Vector3 position)
-    // {
-    //     if(position.x <= data.sourceBounds.max.x && position.x >= data.sourceBounds.min.x && position.z <= data.sourceBounds.max.z && position.z >= data.sourceBounds.min.z)
-    //     {
-    //         inBounds = true;
-    //     }
-    //     else inBounds = false;
-
-    //     return inBounds;
-    // }
-
-    // private IEnumerator MovetoPos(Vector3 targetPos)
-    // {
-    //     isActive = true;
-    //     playerLastPos = player.transform.position;
-
-    //     while(!Physics.CheckSphere(playerLastPos, 0.5f, 3))
-    //     {
-    //         agent.SetDestination(playerLastPos);
-    //     }
-    //     yield return null;
-
-    //     if(currentState == EnemyState.dash)
-    //     {
-    //         Debug.Log("Exiting Dash");
-    //         currentState = EnemyState.reposition;
-    //     }
-    //     else if(currentState == EnemyState.reposition)
-    //     {
-    //         currentState = EnemyState.dash;
-    //     }
-    //     isActive = false;
-    // }  
 
     void OnTriggerEnter(Collider collider)
     {
@@ -259,10 +227,10 @@ public class DashEnemy : MonoBehaviour
         }
     }
 
-    // void OnDrawGizmos()
-    // {
-    //     // Draw a cyan wirecircle at the transform's position
-    //     Handles.color = Color.red;
-    //     Handles.DrawWireDisc(transform.position, Vector3.up, detectionRadius);
-    // }
+    void OnDrawGizmos()
+    {
+        // Draw a cyan wirecircle at the transform's position
+        Handles.color = Color.red;
+        Handles.DrawWireDisc(transform.position, Vector3.up, detectionRadius);
+    }
 }

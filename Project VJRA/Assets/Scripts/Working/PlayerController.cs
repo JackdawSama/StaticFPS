@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
     //SECTION END
 
     //SECTION : PLAYER VARIABLES
+    [SerializeField] public bool isAlive = true;
     [SerializeField] Transform orientation;
     private float standHeight;
     [SerializeField] float crouchHeight;
@@ -223,6 +224,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleDeath()
     {
+        isAlive = false;
         gameObject.SetActive(false);
     }
     //END OF SECTION

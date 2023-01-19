@@ -147,6 +147,7 @@ public class PlayerDash : MonoBehaviour
             Debug.Log("Perfect Dodge");
             audioSource.PlayOneShot(dodgeAudio);
             GGisActive = true;
+            Debug.Log(GGisActive);
         }
     }
 

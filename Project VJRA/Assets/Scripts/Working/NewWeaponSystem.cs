@@ -90,7 +90,7 @@ public class NewWeaponSystem : MonoBehaviour
     [SerializeField] ParticleSystem muzzleFlash;
 
     //GOLDENGUN Variables
-    [SerializeField] bool enableGg = false;
+    [SerializeField] public bool enableGg = false;
     [SerializeField] TrailRenderer bulletTrail_GG;
 
 
@@ -146,6 +146,9 @@ public class NewWeaponSystem : MonoBehaviour
             if(enableGg)
             {
                 HandleGoldenGunReload();
+                dashData.GGisActive = false;
+                Debug.Log(dashData.GGisActive);
+                dashData.perfectDodge = false;
             }
         }
 
@@ -388,7 +391,7 @@ public class NewWeaponSystem : MonoBehaviour
             AddtoMag(new Bullet("GoldenGun"));
             Debug.Log("Added GoldenGun");
         }
-        dashData.GGisActive = false;
+        //dashData.GGisActive = false;
     }
 
     void CheckBulletType()

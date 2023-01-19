@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEditor;
 
 public class EnemyController : MonoBehaviour
 {
@@ -36,6 +37,12 @@ public class EnemyController : MonoBehaviour
     [SerializeField] float safeDistance;
     float distance;
 
+    //POINTS VARIABLES
+    [SerializeField] NewWeaponSystem weaponSystem;
+    [SerializeField] Points points;
+    [SerializeField] float killPoints;
+    [SerializeField] float ggBonusPoints;
+
     [SerializeField] MeshRenderer meshRenderer;
     public float blinkIntensity;
     public float blinkDuration;
@@ -53,6 +60,8 @@ public class EnemyController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         player = FindObjectOfType<PlayerController>();
+        weaponSystem = FindObjectOfType<NewWeaponSystem>();
+        points = FindObjectOfType<Points>();
     }
 
     // Update is called once per frame
@@ -168,7 +177,18 @@ public class EnemyController : MonoBehaviour
 
     public void Die() 
     {
-        Destroy(gameObject);
+        if(weaponSystem.enableGg)
+        {
+            points.KillTotal(killPoints + ggBonusPoints);
+            Destroy(gameObject);
+            return;
+        }
+        if(!weaponSystem.enableGg)
+        {
+            points.KillTotal(killPoints);
+            Destroy(gameObject);
+            return;
+        }
     }
 
     void Fire()
@@ -186,6 +206,13 @@ public class EnemyController : MonoBehaviour
         float lerp = Mathf.Clamp01(blinkTimer/blinkDuration);
         float intensity = lerp * blinkIntensity + 1f;
         meshRenderer.material.color = Color.red * intensity;
+    }
+
+    void OnDrawGizmos()
+    {
+        // Draw a cyan wirecircle at the transform's position
+        Handles.color = Color.red;
+        Handles.DrawWireDisc(transform.position, Vector3.up, detectionRadius);
     }
 
 }

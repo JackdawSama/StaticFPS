@@ -9,9 +9,11 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI healthText;
 
     [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] TextMeshProUGUI pointsText;
 
     [SerializeField] PlayerController player;
     [SerializeField] EnemySpawner spawner;
+    [SerializeField] Points points;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,5 +31,6 @@ public class PlayerUI : MonoBehaviour
     {
         healthText.text = "HP : " + player.playerHP;
         timerText.text = "Timer : " + spawner.timer;
+        pointsText.text = "Points : " + points.totalPoints;
     }
 }

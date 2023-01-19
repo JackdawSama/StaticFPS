@@ -35,11 +35,18 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         spawingPoint = 0;
+        player = FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!player.isAlive)
+        {
+            Debug.Log("Player is dead");
+            return;
+        }
+
         globalTimer += Time.deltaTime;
         dasherTimer += Time.deltaTime;
         projectileTimer += Time.deltaTime;
@@ -48,30 +55,28 @@ public class EnemySpawner : MonoBehaviour
         timer1 = Mathf.RoundToInt(dasherTimer);
         timer2 = Mathf.RoundToInt(projectileTimer);
 
-        if(timer1 > dasherSpawnCD)
+        if(dasherTimer > dasherSpawnCD)
         {
             Instantiate(dasherType, spawnPoint[spawingPoint].transform.position, transform.rotation);
             spawingPoint++;
+            Debug.Log("Spawing Point: " + ".Dasher Spawn");
             if(spawingPoint > spawnPoint.Length)
             {
                 spawingPoint = 0;
             }
-
-            Debug.Log("Dasher Spawn");
             dasherTimer = 0;
 
         }
 
-        else if(timer2 > spawnPoint.Length)
+        else if(projectileTimer > projectileSpawnCD)
         {
             Instantiate(projectileType,  spawnPoint[spawingPoint].transform.position, transform.rotation);
             spawingPoint++;
+            Debug.Log("Spawing Point: " + ".Projectile Spawn");
             if(spawingPoint > 0)
             {
                 spawingPoint = 0;
             }
-
-            Debug.Log("Projectile Spawn");
             projectileTimer = 0;
         }    
     }

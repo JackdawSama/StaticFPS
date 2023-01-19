@@ -656,7 +656,7 @@ MonoBehaviour:
   shieldRegenRate: 5
   Shields: {fileID: 1142270331}
   shieldsActive: 1
-  detectionRadius: 40
+  detectionRadius: 45
   isTurning: 0
   isTakingFire: 0
   noDamagerTimer: 0
@@ -668,6 +668,10 @@ MonoBehaviour:
   turnRate: 40
   player: {fileID: 0}
   safeDistance: 0
+  weaponSystem: {fileID: 0}
+  points: {fileID: 0}
+  killPoints: 75
+  ggBonusPoints: 100
   meshRenderer: {fileID: 5916678848489827958}
   blinkIntensity: 0
   blinkDuration: 0
