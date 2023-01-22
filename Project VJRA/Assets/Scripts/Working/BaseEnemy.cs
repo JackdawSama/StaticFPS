@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class BaseEnemy : MonoBehaviour
 {
+    [SerializeField]float roamingRadius;
     public enum State
     {
         idle,
         reposition,
+        engage,
         dodge,
         attack,
         dead
@@ -24,6 +26,14 @@ public class BaseEnemy : MonoBehaviour
                 //* Choose random point within a radius and move enemy to it *//
                 //* After point selected make enemy turn towards point and then move *//
                 //* When enemy is near the target point have the enemy select another point *//
+                SetPointToMove(transform.position, roamingRadius);
+                break;
+            case State.engage:
+                //* Enemy should engage with player *//
+                //* In this state other enemies shouldn't be attacking player *//
+                //* When transitioning to engage all other activity must cease *//
+                //* engage must always lead to an attack *//
+
                 break;
             case State.reposition:
                 //* In case  enemy is within attacking radius *//
@@ -58,4 +68,6 @@ public class BaseEnemy : MonoBehaviour
         Vector3 newPosition = center + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * radius;
         return newPosition;                                         
     }
+
+    //function to blink before attacking
 }
