@@ -1,9 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BaseEnemy : MonoBehaviour
 {
+
+    //ENEMY VARIABLES
+    [SerializeField] float currentHP;
+    [SerializeField] float maxHP;
+    [SerializeField] float damage;
+    [SerializeField] MeshRenderer meshRenderer;
+    [SerializeField] float engageRadius;
+    [SerializeField] NavMeshAgent agent;
+    [SerializeField] Vector3 interestPoint;
+    //END OF ENEMY VARIABLES
+
+    //IDLE VARIABLES
+    [SerializeField] bool isIdleMoving = false;
+    [SerializeField] bool isIdleLooking = false;
+    [SerializeField] float idleDistance;
+    //END OF IDLE VARIABLES
+
+    //BLINK VARIABLES
+    [SerializeField] float blinkTimer;
+    [SerializeField] float blinkDuration;
+    [SerializeField] float blinkIntensity;
+    //END OF BLINK VARIABLES
+
+
     [SerializeField]float roamingRadius;
     public enum State
     {
@@ -26,7 +51,23 @@ public class BaseEnemy : MonoBehaviour
                 //* Choose random point within a radius and move enemy to it *//
                 //* After point selected make enemy turn towards point and then move *//
                 //* When enemy is near the target point have the enemy select another point *//
-                SetPointToMove(transform.position, roamingRadius);
+
+                if(!isIdleMoving)
+                {
+                    isIdleLooking = false;
+                    interestPoint = SetPointToMove(transform.position, roamingRadius);
+                    isIdleMoving = true;
+                    idleDistance = CalculateDistance(interestPoint);
+                }
+                
+                if(isIdleMoving)
+                {
+                    agent.SetDestination(interestPoint);
+                    if(idleDistance < 2)
+                    {
+                        interestPoint = SetPointToMove(transform.position, roamingRadius);
+                    }
+                }
                 break;
             case State.engage:
                 //* Enemy should engage with player *//
@@ -70,4 +111,20 @@ public class BaseEnemy : MonoBehaviour
     }
 
     //function to blink before attacking
+    void Blink()
+    {
+        blinkTimer -= Time.deltaTime;
+        float lerp = Mathf.Clamp01(blinkTimer/blinkDuration);
+        float intensity = lerp * blinkIntensity + 1f;
+        meshRenderer.material.color = meshRenderer.material.color * intensity;
+    }
+
+    float CalculateDistance(Vector3 point)
+    {
+        //function to calculate distance between enemy and point/player
+
+        float distance = Vector3.Distance(transform.position, point);
+
+        return distance;
+    }
 }
